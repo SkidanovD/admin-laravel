@@ -4,43 +4,27 @@ import Vue from 'vue';
 Vue.use(vueRouter);
 
 import Index from './views/Index'
-// import User from './views/User'
-// import UserList from './views/UserList'
-// import EditUser from './views/EditUser'
-// import AllMeetings from './views/AllMeetings'
-// import Meeting from './views/Meeting'
-// import EditMeeting from './views/EditMeeting'
+import Register from './views/auth/Register'
+import Login from './views/auth/Login'
+import UsersList from './views/UsersList'
 
 const routes = [
     {
         path: '/',
-        title: 'Home',
-        component: Index
+        component: Index,
     },
-    // {
-    //     path: '/user',
-    //     component: User
-    // },
-    // {
-    //     path: '/user-list',
-    //     component: UserList
-    // },
-    // {
-    //     path: '/edit-user/:id',
-    //     component: EditUser
-    // },
-    // {
-    //     path: '/all-meetings',
-    //     component: AllMeetings
-    // },
-    // {
-    //     path: '/meeting/:id',
-    //     component: Meeting
-    // },
-    // {
-    //     path: '/edit-meeting/:id',
-    //     component: EditMeeting
-    // }
+    {
+        path: '/login',
+        component: Login
+    },
+    {
+        path: '/register',
+        component: Register,
+    },
+    {
+        path: '/users-list',
+        component: UsersList,
+    },
 ];
 
 export default new vueRouter({

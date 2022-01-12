@@ -9,10 +9,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-   <link rel="shortcut icon" type="image/png" href="{{ asset('img/favicon.png') }}"/>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <link rel="shortcut icon" type="image/png" href="{{ asset('img/favicon.png') }}"/>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

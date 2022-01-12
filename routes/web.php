@@ -17,10 +17,13 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/login', function() {
+    return view('index');
+})->name('login');
 
-Route::get('/{any}', function() {
+Route::middleware('auth:sanctum')->get('/{any}', function() {
     return view('index');
 })->where('any', '.*');
