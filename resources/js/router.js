@@ -7,6 +7,7 @@ import Index from './views/Index'
 import Register from './views/auth/Register'
 import Login from './views/auth/Login'
 import UsersList from './views/UsersList'
+import EditUser from './views/EditUser'
 
 const routes = [
     {
@@ -24,6 +25,10 @@ const routes = [
     {
         path: '/users-list',
         component: UsersList,
+    },
+    {
+        path: '/edit-user/:id',
+        component: EditUser,
     },
 ];
 

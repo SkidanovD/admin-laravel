@@ -27,7 +27,7 @@
          links: [
             {
                title: 'Home',
-               href: '/'
+               href: '/'  
             },
             {
                title: 'Register',

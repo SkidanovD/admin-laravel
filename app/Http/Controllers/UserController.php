@@ -18,6 +18,7 @@ class UserController extends Controller
     public function actionAddUser(Request $request)
     {
         $validator =  Validator::make($request->all(), [
+            'photo' => 'image|nullable|max:2048',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'role' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -28,6 +29,15 @@ class UserController extends Controller
                 'messages' => $validator->messages(),
                 'form_field' => $request->all()
             ];
+        }
+        dd($request->hasFile('photo'));
+
+        if($request->hasFile('photo')) {
+            $filenameWithExt = $request->file('photo')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extention = $request->file('photo')->getClientOriginalExtension();
+            $fileNameToStore = "photo".DIRECTORY_SEPARATOR.$filename."_".time().".".$extention;
+            $path = $request->file('photo')->storeAs('public', $fileNameToStore);
         }
         
         $hash_password = md5($request->password);
@@ -50,6 +60,19 @@ class UserController extends Controller
         if (!empty($auth_user) && $auth_user->role === 'admin') {
             return User::all();
         }
+
+    }
+
+    public function getUser($id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Post not found',
+            ])->setStatusCode(404);
+        }
+        return $user;
 
     }
 }

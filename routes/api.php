@@ -23,16 +23,17 @@ use App\Http\Controllers\UserController;
 
 Route::post('/actionLogin', [LoginController::class, 'login'])->name('actionLogin');
 Route::post('/actionLogout ', [LoginController::class, 'logout'])->name('logout');
-Route::post('/actionRegister', [RegisterController::class, 'create'])->name('actionRegister');
+// Route::post('/actionRegister', [RegisterController::class, 'create'])->name('actionRegister');
 Route::get('/getCSRFToken', [PageController::class, 'getCSRFToken'])->name('getCSRFToken');
 Route::get('/getPageLogin', [LoginController::class, 'showLoginForm'])->name('getPageLogin');
 Route::get('/getPageRegister', [PageController::class, 'showRegisterForm'])->name('getPageRegister');
 
 // User API
 
+Route::get('/getAuthUser', [UserController::class, 'getAuthUser'])->name('getAuthUser');
 Route::middleware('auth:sanctum')->post('/actionAddUser', [UserController::class, 'actionAddUser'])->name('actionAddUser');
-Route::middleware('auth:sanctum')->get('/getAuthUser', [UserController::class, 'getAuthUser'])->name('getAuthUser');
 Route::middleware('auth:sanctum')->get('/getAllUsers', [UserController::class, 'getAllUsers'])->name('getAllUsers');
+Route::middleware('auth:sanctum')->get('/getUser/{user}', [UserController::class, 'getUser'])->name('getUser');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

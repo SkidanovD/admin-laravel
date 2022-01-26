@@ -12,6 +12,8 @@
                      <th>User post</th>
                      <th>Email</th>
                      <th>Role</th>
+                     <th>Edit link</th>
+                     <th>Delete link</th>
                   </tr>
                </thead>
                <tbody>
@@ -22,6 +24,12 @@
                      <td>{{ user.user_post }}</td>
                      <td>{{ user.email }}</td>
                      <td>{{ user.role }}</td>
+                     <td>
+                        <router-link :to="'/edit-user/'+user.id">Edit user</router-link>
+                     </td>
+                     <td>
+                        <router-link :to="'/delete-user/'+user.id">Edit user</router-link>
+                     </td>
                   </tr>
                </tbody>
             </table>

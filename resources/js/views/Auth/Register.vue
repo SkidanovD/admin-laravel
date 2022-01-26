@@ -2,7 +2,7 @@
    <main class="site-main register-main">
       <div class="site-main-wrapper register-main-wrapper">
          <h1>Register page</h1>
-         <form method="POST" :action="pageData.register_route">
+         <form method="POST" :action="pageData.register_route" enctype="multipart/form-data">
             <input type="hidden" name="_token" :value="pageData.csrf_token">
             <p>
                <input type="text" id="first_name" name="first_name" placeholder="First name">
