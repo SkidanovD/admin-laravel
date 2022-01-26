@@ -1,9 +1,9 @@
 <template>
-   <main class="site-main users-list-main">
-      <div class="site-main-wrapper users-list-main-wrapper">
-         <h1>Users list</h1>
+   <main class="users-list-main">
+      <div class="users-list-main__wrapper wrapper">
+         <h1 class="users-list-main__title title">Users list</h1>
          <div>
-            <table>
+            <table class="table">
                <thead>
                   <tr>
                      <th>First name</th>
@@ -28,7 +28,7 @@
                         <router-link :to="'/edit-user/'+user.id">Edit user</router-link>
                      </td>
                      <td>
-                        <router-link :to="'/delete-user/'+user.id">Edit user</router-link>
+                        <router-link :to="'/delete-user/'+user.id">Delete user</router-link>
                      </td>
                   </tr>
                </tbody>
@@ -37,15 +37,6 @@
       </div>
    </main>
 </template>
-
-<style scoped>
-   td,
-   th {
-      padding: 0.5em;
-      border: 1px solid #333333;
-   }
-</style>
-
 <script>
    export default {
       name: 'UsersList',

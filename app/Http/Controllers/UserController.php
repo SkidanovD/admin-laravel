@@ -30,7 +30,6 @@ class UserController extends Controller
                 'form_field' => $request->all()
             ];
         }
-        dd($request->hasFile('photo'));
 
         if($request->hasFile('photo')) {
             $filenameWithExt = $request->file('photo')->getClientOriginalName();
@@ -51,7 +50,7 @@ class UserController extends Controller
             'password' => $hash_password,
         ]);
     
-        return ['status' => 'succes'];
+        return ['status' => 'success'];
     }
 
     public function getAllUsers()
