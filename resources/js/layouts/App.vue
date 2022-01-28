@@ -1,5 +1,5 @@
 <template>
-   <div class="page-wrapper">
+   <div class="main">
       <vueHeader></vueHeader>
       <router-view></router-view>
       <vueFooter></vueFooter>

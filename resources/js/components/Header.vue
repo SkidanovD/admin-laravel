@@ -1,66 +1,27 @@
 <template>
-   <header class="site-header">
-      <div class="site-header-wrapper">
-      <div class="logo">
-         <h1>Invoice generator</h1>
-      </div>
-      <nav>
-         <ul>
-            <li v-for="link in links">
-               <router-link :to="link.href">{{link.title}}</router-link>
-            </li>
-            <li>
-               <form method="POST" action="/api/actionLogout">
-                  <input type="hidden" name="_token" :value="csrfToken">
-                  <button type="submit">Logout</button>
-               </form>
-            </li>
-         </ul>
-      </nav>
-      </div>
-   </header>
+    <header class="header">
+        <div class="header__wrapper wrapper">
+            <div class="header__content">
+                <div class="row align-items-center">
+                    <div class="col-2">
+                        <div class="header__logo logo"><img src="img/logo.svg"  alt="logo" /></div>
+                    </div>
+                    <div class="col-10">
+                        <vueNav></vueNav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 </template>
 
 <script>
-   export default {
-      data: () => ({
-         links: [
-            {
-               title: 'Home',
-               href: '/'  
-            },
-            {
-               title: 'Register',
-               href: '/register'
-            },
-            {
-               title: 'Login',
-               href: '/login'
-            },
-            {
-               title: 'Users list',
-               href: '/users-list'
-            },
-         ],
-         csrfToken: [],
-         authUser: [],
-      }),
-      mounted() {
-         this.getCSRFToken();
-         this.getAuthUser();
-      },
-      methods: {
-         getCSRFToken() {
-            axios.get('/api/getCSRFToken').then(res => {
-               this.csrfToken = res.data
-            })
-         },
-         getAuthUser() {
-            axios.get('/api/getAuthUser').then(res => {
-               this.authUser = res.data
-            })
-         },
-      }
-   }
+import vueNav from './../components/Nav';
+
+export default {
+    components: {
+        vueNav,
+    },
+}
 </script>
 
