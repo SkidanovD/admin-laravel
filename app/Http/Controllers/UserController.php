@@ -37,13 +37,14 @@ class UserController extends Controller
             $extention = $request->file('photo')->getClientOriginalExtension();
             $fileNameToStore = "photo".DIRECTORY_SEPARATOR.$filename."_".time().".".$extention;
             $path = $request->file('photo')->storeAs('public', $fileNameToStore);
+            $finalPath = storage_path('app'). '/' . $path;
         }
         
         $hash_password = md5($request->password);
         $user = User::create([
             'first_name' => !empty($request->first_name) ? $request->first_name : '',
             'last_name' => !empty($request->last_name) ? $request->last_name : '',
-            'photo' => !empty($request->photo) ? $request->photo : '',
+            'photo' => !empty($finalPath) ? $finalPath : '',
             'user_post' => !empty($request->user_post) ? $request->user_post : '',
             'email' => $request->email,
             'role' => !empty($data['role']) ? $data['role'] : 'user',
