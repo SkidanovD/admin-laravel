@@ -5645,8 +5645,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -5726,11 +5724,36 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Register',
   data: function data() {
     return {
-      pageData: []
+      headers: {
+        'content-type': 'multipart/form-data'
+      },
+      pageData: [],
+      contacts: {
+        role: '',
+        photo: '',
+        first_name: '',
+        last_name: '',
+        user_post: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
+      },
+      messages: {
+        photo: '',
+        email: '',
+        password: ''
+      },
+      form_sent: false
     };
   },
   mounted: function mounted() {
@@ -5744,9 +5767,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _this.pageData = res.data;
       });
     },
+    onChange: function onChange() {
+      this.contacts.photo = this.$refs.form.photo.files[0];
+    },
     onFormSubmit: function onFormSubmit() {
+      var _this2 = this;
+
       var formData = new FormData(this.$refs['form']);
-      var data = {};
+      var form_data = new FormData();
 
       var _iterator = _createForOfIteratorHelper(formData.entries()),
           _step;
@@ -5757,7 +5785,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               key = _step$value[0],
               val = _step$value[1];
 
-          Object.assign(data, _defineProperty({}, key, val));
+          form_data.append(key, val);
         }
       } catch (err) {
         _iterator.e(err);
@@ -5765,9 +5793,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _iterator.f();
       }
 
-      console.log(formData);
-      axios.post(this.pageData.register_route, data).then(function (res) {
-        return console.log(res.request.response);
+      form_data.append('photo', this.contacts.photo, this.contacts.photo.name);
+      axios({
+        method: 'post',
+        url: this.pageData.register_route,
+        data: form_data,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (res) {
+        if (res.data.status == 'success') {
+          _this2.form_sent = true;
+        } else {
+          for (var key in res.data.messages) {
+            _this2.messages[key] = res.data.messages[key][0];
+          }
+        }
       });
     }
   }
@@ -29485,7 +29526,9 @@ var render = function () {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(user.last_name))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.photo))]),
+                _c("td", [
+                  _c("img", { attrs: { src: user.photo, alt: "photo" } }),
+                ]),
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(user.user_post))]),
                 _vm._v(" "),
@@ -29685,45 +29728,119 @@ var render = function () {
         _vm._v("Register page"),
       ]),
       _vm._v(" "),
-      _c(
-        "form",
-        {
-          ref: "form",
-          staticClass: "form",
-          attrs: {
-            method: "POST",
-            action: _vm.pageData.register_route,
-            enctype: "multipart/form-data",
-          },
-          on: {
-            submit: function ($event) {
-              $event.preventDefault()
-              return _vm.onFormSubmit.apply(null, arguments)
+      !_vm.form_sent
+        ? _c(
+            "form",
+            {
+              ref: "form",
+              staticClass: "form",
+              on: {
+                submit: function ($event) {
+                  $event.preventDefault()
+                  return _vm.onFormSubmit.apply(null, arguments)
+                },
+              },
             },
-          },
-        },
-        [
-          _c("input", {
-            staticClass: "form__input",
-            attrs: { type: "hidden", name: "_token" },
-            domProps: { value: _vm.pageData.csrf_token },
-          }),
-          _vm._v(" "),
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._m(1),
-          _vm._v(" "),
-          _vm._m(2),
-          _vm._v(" "),
-          _vm._m(3),
-          _vm._v(" "),
-          _vm._m(4),
-          _vm._v(" "),
-          _vm._m(5),
-          _vm._v(" "),
-          _vm._m(6),
-        ]
-      ),
+            [
+              _c("input", {
+                staticClass: "form__input",
+                attrs: { type: "hidden", name: "_token" },
+                domProps: { value: _vm.pageData.csrf_token },
+              }),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "form__row" }, [
+                _c("div", { staticClass: "form__field" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form__label", attrs: { for: "photo" } },
+                    [_vm._v("Photo")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    attrs: { id: "photo", type: "file", name: "photo" },
+                    on: { change: _vm.onChange },
+                  }),
+                  _vm._v(" "),
+                  _vm.messages.photo
+                    ? _c("span", { staticClass: "form__field-error" }, [
+                        _vm._v(_vm._s(_vm.messages.photo)),
+                      ])
+                    : _vm._e(),
+                ]),
+              ]),
+              _vm._v(" "),
+              _vm._m(1),
+              _vm._v(" "),
+              _vm._m(2),
+              _vm._v(" "),
+              _c("div", { staticClass: "form__row" }, [
+                _c("div", { staticClass: "form__field" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form__label", attrs: { for: "email" } },
+                    [_vm._v("Email")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "form__input",
+                    attrs: {
+                      type: "email",
+                      id: "email",
+                      name: "email",
+                      placeholder: "mail@gmail.com",
+                      required: "",
+                    },
+                  }),
+                  _vm._v(" "),
+                  _vm.messages.email
+                    ? _c("span", { staticClass: "form__field-error" }, [
+                        _vm._v(_vm._s(_vm.messages.email)),
+                      ])
+                    : _vm._e(),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form__row" }, [
+                _c("div", { staticClass: "form__field" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form__label", attrs: { for: "password" } },
+                    [_vm._v("Password")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "form__input",
+                    attrs: {
+                      type: "password",
+                      id: "password",
+                      name: "password",
+                      placeholder: "* * * * * * * *",
+                      required: "",
+                    },
+                  }),
+                  _vm._v(" "),
+                  _vm.messages.password
+                    ? _c("span", { staticClass: "form__field-error" }, [
+                        _vm._v(_vm._s(_vm.messages.password)),
+                      ])
+                    : _vm._e(),
+                ]),
+                _vm._v(" "),
+                _vm._m(3),
+              ]),
+              _vm._v(" "),
+              _vm._m(4),
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.form_sent
+        ? _c("div", { staticClass: "form-message title" }, [
+            _vm._v("User created successfully"),
+          ])
+        : _vm._e(),
     ]),
   ])
 }
@@ -29750,20 +29867,6 @@ var staticRenderFns = [
             _c("option", { attrs: { value: "user" } }, [_vm._v("User")]),
           ]
         ),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "photo" } }, [
-          _vm._v("Photo"),
-        ]),
-        _vm._v(" "),
-        _c("input", { attrs: { id: "photo", type: "file", name: "photo" } }),
       ]),
     ])
   },
@@ -29837,67 +29940,23 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "email" } }, [
-          _vm._v("Email"),
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form__input",
-          attrs: {
-            type: "email",
-            id: "email",
-            name: "email",
-            placeholder: "mail@gmail.com",
-            required: "",
-          },
-        }),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c(
-          "label",
-          { staticClass: "form__label", attrs: { for: "password" } },
-          [_vm._v("Password")]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form__input",
-          attrs: {
-            type: "password",
-            id: "password",
-            name: "password",
-            placeholder: "* * * * * * * *",
-            required: "",
-          },
-        }),
-      ]),
+    return _c("div", { staticClass: "form__field" }, [
+      _c(
+        "label",
+        { staticClass: "form__label", attrs: { for: "password-confirm" } },
+        [_vm._v("Confirm password")]
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "form__field" }, [
-        _c(
-          "label",
-          { staticClass: "form__label", attrs: { for: "password-confirm" } },
-          [_vm._v("Confirm password")]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form__input",
-          attrs: {
-            id: "password-confirm",
-            type: "password",
-            name: "password_confirmation",
-            placeholder: "* * * * * * * *",
-            required: "",
-          },
-        }),
-      ]),
+      _c("input", {
+        staticClass: "form__input",
+        attrs: {
+          id: "password-confirm",
+          type: "password",
+          name: "password_confirmation",
+          placeholder: "* * * * * * * *",
+          required: "",
+        },
+      }),
     ])
   },
   function () {
