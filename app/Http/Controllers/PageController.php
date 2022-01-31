@@ -21,4 +21,12 @@ class PageController extends Controller
             'csrf_token' => csrf_token(),
         ];
     }
+
+    public function getPageEditUser()
+    {
+        return [
+            'edit_user_route' => route('actionEditUser'),
+            'csrf_token' => csrf_token(),
+        ];
+    }
 }

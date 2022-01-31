@@ -32,8 +32,10 @@ Route::get('/getPageRegister', [PageController::class, 'showRegisterForm'])->nam
 
 Route::get('/getAuthUser', [UserController::class, 'getAuthUser'])->name('getAuthUser');
 Route::middleware('auth:sanctum')->post('/actionAddUser', [UserController::class, 'actionAddUser'])->name('actionAddUser');
+Route::middleware('auth:sanctum')->post('/actionEditUser', [UserController::class, 'actionEditUser'])->name('actionEditUser');
 Route::middleware('auth:sanctum')->get('/getAllUsers', [UserController::class, 'getAllUsers'])->name('getAllUsers');
 Route::middleware('auth:sanctum')->get('/getUser/{user}', [UserController::class, 'getUser'])->name('getUser');
+Route::middleware('auth:sanctum')->get('/getPageEditUser', [PageController::class, 'getPageEditUser'])->name('getPageEditUser');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
