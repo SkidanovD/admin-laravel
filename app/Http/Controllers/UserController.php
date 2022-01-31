@@ -37,7 +37,8 @@ class UserController extends Controller
             $extention = $request->file('photo')->getClientOriginalExtension();
             $fileNameToStore = "photo".DIRECTORY_SEPARATOR.$filename."_".time().".".$extention;
             $path = $request->file('photo')->storeAs('public', $fileNameToStore);
-            $finalPath = storage_path('app'). '/' . $path;
+            // $finalPath = storage_path('app'). '/' . $path;
+            $finalPath = '/storage/photo/' .$filename."_".time().".".$extention;
         }
         
         $hash_password = md5($request->password);
