@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
@@ -42,7 +43,7 @@ class UserController extends Controller
             $finalPath = '/storage/photo/' .$filename."_".time().".".$extention;
         }
         
-        $hash_password = md5($request->password);
+        $hash_password = Hash::make($request->password);
         $user = User::create([
             'first_name' => !empty($request->first_name) ? $request->first_name : '',
             'last_name' => !empty($request->last_name) ? $request->last_name : '',
@@ -106,7 +107,7 @@ class UserController extends Controller
         }
 
         if (!empty($query_data['password'])) {
-            $query_data['password'] = md5($query_data['password']);
+            $query_data['password'] = Hash::make($query_data['password']);
             unset($query_data['password_confirmation']);
         }
 
