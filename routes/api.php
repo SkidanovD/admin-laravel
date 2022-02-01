@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
+use App\Models\Company;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,7 @@ Route::get('/getCSRFToken', [PageController::class, 'getCSRFToken'])->name('getC
 Route::get('/getPageLogin', [LoginController::class, 'showLoginForm'])->name('getPageLogin');
 Route::get('/getPageRegister', [PageController::class, 'showRegisterForm'])->name('getPageRegister');
 
+
 // User API
 
 Route::get('/getAuthUser', [UserController::class, 'getAuthUser'])->name('getAuthUser');
@@ -38,6 +40,14 @@ Route::middleware('auth:sanctum')->get('/getAllUsers', [UserController::class, '
 Route::middleware('auth:sanctum')->get('/getUser/{user}', [UserController::class, 'getUser'])->name('getUser');
 Route::middleware('auth:sanctum')->get('/getPageEditUser', [PageController::class, 'getPageEditUser'])->name('getPageEditUser');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+// Company API
+
+Route::middleware('auth:sanctum')->post('/actionAddCompany', [CompanyController::class, 'actionAddCompany'])->name('actionAddCompany');
+
+
+
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
