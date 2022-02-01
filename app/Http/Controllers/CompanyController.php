@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
@@ -52,10 +53,17 @@ class CompanyController extends Controller
 
     public function actionEditCompany(Request $request)
     {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => 'User not authorized'
+            ];
+        }
         $company_old_data = Company::find($request->id, ['name', 'company_name', 'address', 'post_code', 'city', 'phone', 'siret', 'rcs', 'tva', 'note']);
         $query_data = [];
         foreach ($request->all() as $key => $item) {
-            if ($request->$key !== $item) {
+            if ($company_old_data->$key !== $item) {
                 $query_data[$key] = $item;
             }
         }
@@ -100,6 +108,13 @@ class CompanyController extends Controller
 
     public function actionDeleteCompany(Request $request)
     {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => 'User not authorized'
+            ];
+        }
         $company = Company::find($request->id);
         if (empty($company)) {
             return [
@@ -117,6 +132,50 @@ class CompanyController extends Controller
         return [
             'status' => 'success',
             'message' => 'Company deleted successfully'
+        ];
+    }
+
+    public function getAllCompanies()
+    {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => 'User not authorized'
+            ];
+        }
+        $all_companies = Company::all();
+        if (empty($all_companies)) {
+            return [
+                'status' => 'error',
+                'message' => 'Companies not found.',
+            ];
+        }
+        return [
+            'status' => 'success',
+            'all_companies' => $all_companies,
+        ];
+    }
+
+    public function getCompany($id)
+    {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => 'User not authorized'
+            ];
+        }
+        $company = Company::find($id);
+        if (empty($company)) {
+            return [
+                'status' => 'error',
+                'message' => 'Company not found.',
+            ];
+        }
+        return [
+            'status' => 'success',
+            'company' => $company,
         ];
     }
 }
