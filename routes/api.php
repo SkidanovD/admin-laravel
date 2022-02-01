@@ -33,6 +33,7 @@ Route::get('/getPageRegister', [PageController::class, 'showRegisterForm'])->nam
 Route::get('/getAuthUser', [UserController::class, 'getAuthUser'])->name('getAuthUser');
 Route::middleware('auth:sanctum')->post('/actionAddUser', [UserController::class, 'actionAddUser'])->name('actionAddUser');
 Route::middleware('auth:sanctum')->post('/actionEditUser', [UserController::class, 'actionEditUser'])->name('actionEditUser');
+Route::middleware('auth:sanctum')->post('/actionDeleteUser', [UserController::class, 'actionDeleteUser'])->name('actionDeleteUser');
 Route::middleware('auth:sanctum')->get('/getAllUsers', [UserController::class, 'getAllUsers'])->name('getAllUsers');
 Route::middleware('auth:sanctum')->get('/getUser/{user}', [UserController::class, 'getUser'])->name('getUser');
 Route::middleware('auth:sanctum')->get('/getPageEditUser', [PageController::class, 'getPageEditUser'])->name('getPageEditUser');

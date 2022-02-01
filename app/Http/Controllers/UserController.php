@@ -39,7 +39,6 @@ class UserController extends Controller
             $extention = $request->file('photo')->getClientOriginalExtension();
             $fileNameToStore = "photo".DIRECTORY_SEPARATOR.$filename."_".time().".".$extention;
             $path = $request->file('photo')->storeAs('public', $fileNameToStore);
-            // $finalPath = storage_path('app'). '/' . $path;
             $finalPath = '/storage/photo/' .$filename."_".time().".".$extention;
         }
         
@@ -122,6 +121,28 @@ class UserController extends Controller
         ];
     }
 
+    public function actionDeleteUser(Request $request)
+    {
+        $user = User::find($request->id);
+        if (empty($user)) {
+            return [
+                'status' => 'error',
+                'message' => 'There is no user with this id.',
+            ];
+        }
+        $result = $user->delete();
+        if (empty($result)) {
+            return [
+                'status' => 'error',
+                'message' => 'The user has not been deleted'
+            ];
+        }
+        return [
+            'status' => 'success',
+            'message' => 'User deleted successfully'
+        ];
+    }
+
     public function getAllUsers()
     {
         $auth_user = Auth::user();
@@ -141,6 +162,5 @@ class UserController extends Controller
             ])->setStatusCode(404);
         }
         return $user;
-
     }
 }
