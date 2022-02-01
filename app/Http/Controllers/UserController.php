@@ -69,7 +69,7 @@ class UserController extends Controller
             'role' => 'nullable|string|max:255',
         ];
         foreach ($request->all() as $key => $item) {
-            if (!empty($user_old_data->$key) && $item !== $user_old_data->$key) {
+            if ($item !== $user_old_data->$key) {
                 $query_data[$key] = $item;
             }
         }
@@ -117,6 +117,7 @@ class UserController extends Controller
         $user_new = User::find($request->id);
         return [
             'status' => 'success',
+            'message' => 'Data updated successfully.',
             'form_field' => $user_new,
         ];
     }

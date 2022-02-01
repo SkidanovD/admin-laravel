@@ -44,6 +44,9 @@ Route::middleware('auth:sanctum')->get('/getPageEditUser', [PageController::clas
 // Company API
 
 Route::middleware('auth:sanctum')->post('/actionAddCompany', [CompanyController::class, 'actionAddCompany'])->name('actionAddCompany');
+Route::middleware('auth:sanctum')->post('/actionEditCompany', [CompanyController::class, 'actionEditCompany'])->name('actionEditCompany');
+Route::middleware('auth:sanctum')->post('/actionDeleteCompany', [CompanyController::class, 'actionDeleteCompany'])->name('actionDeleteCompany');
+Route::middleware('auth:sanctum')->get('/getAllCompany', [CompanyController::class, 'getAllCompany'])->name('getAllCompany');
 
 
 
