@@ -19,6 +19,19 @@ class UserController extends Controller
 
     public function actionAddUser(Request $request)
     {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
+        if ($auth_user->role !== 'admin') {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authorization'),
+            ];
+        }
         $validator =  Validator::make($request->all(), [
             'photo' => 'image|nullable|max:2048',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -53,11 +66,22 @@ class UserController extends Controller
             'password' => $hash_password,
         ]);
     
-        return ['status' => 'success'];
+        return [
+            'status' => 'success',
+            'message' => trans('success.added', 'User'),
+            'user' => $user,
+        ];
     }
 
     public function actionEditUser(Request $request)
     {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
         $user_old_data = User::find($request->id, ['first_name', 'last_name', 'photo', 'user_post', 'email', 'role']);
         $query_data = [];
         $query_validator = [
@@ -81,7 +105,7 @@ class UserController extends Controller
         if (empty($query_data)) {
             return [
                 'status' => 'error',
-                'messages' => 'None of the fields have been changed.',
+                'messages' => trans('error.notChanged'),
                 'form_field' => $request->all(),
             ];
         }
@@ -117,51 +141,96 @@ class UserController extends Controller
         $user_new = User::find($request->id);
         return [
             'status' => 'success',
-            'message' => 'Data updated successfully.',
+            'message' => trans('success.update'),
             'form_field' => $user_new,
         ];
     }
 
     public function actionDeleteUser(Request $request)
     {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
+        if ($auth_user->role !== 'admin') {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authorization'),
+            ];
+        }
         $user = User::find($request->id);
         if (empty($user)) {
             return [
                 'status' => 'error',
-                'message' => 'There is no user with this id.',
+                'message' => trans('error.notId', ['model' => 'user']),
             ];
         }
         $result = $user->delete();
         if (empty($result)) {
             return [
                 'status' => 'error',
-                'message' => 'The user has not been deleted'
+                'message' => trans('error.notDelete', ['model' => 'user']),
             ];
         }
         return [
             'status' => 'success',
-            'message' => 'User deleted successfully'
+            'message' => trans('succes.delete', ['model' => 'User']),
         ];
     }
 
     public function getAllUsers()
     {
         $auth_user = Auth::user();
-        if (!empty($auth_user) && $auth_user->role === 'admin') {
-            return User::all();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
         }
+        if ($auth_user->role !== 'admin') {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authorization'),
+            ];
+        }
+        $all_users = User::all();
+
+        if (empty($all_users)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notFound', ['model' => 'Users']),
+            ];
+        }
+        return [
+            'status' => 'success',
+            'all_users' => $all_users,
+        ];
 
     }
 
     public function getUser($id)
     {
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Post not found',
-            ])->setStatusCode(404);
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
         }
-        return $user;
+        $user = User::find($id);
+        
+        if (empty($user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notFound', ['model' => 'User']),
+            ];
+        }
+        return [
+            'status' => 'success',
+            'user' => $user,
+        ];
     }
 }

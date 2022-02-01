@@ -12,6 +12,13 @@ class CompanyController extends Controller
 {
     public function actionAddCompany(Request $request)
     {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
         $validator = Validator::make($request->all(), [
             'name' => 'string|nullable',
             'company_name' => 'required|string',
@@ -47,7 +54,8 @@ class CompanyController extends Controller
         
         return [
             'status' => 'success',
-            'message' => 'Сompany established successfully'
+            'message' => trans('success.added', 'Company'),
+            'company' => $company,
         ];
     }
 
@@ -57,7 +65,7 @@ class CompanyController extends Controller
         if (empty($auth_user)) {
             return [
                 'status' => 'error',
-                'message' => 'User not authorized'
+                'message' => trans('error.authentication'),
             ];
         }
         $company_old_data = Company::find($request->id, ['name', 'company_name', 'address', 'post_code', 'city', 'phone', 'siret', 'rcs', 'tva', 'note']);
@@ -70,7 +78,7 @@ class CompanyController extends Controller
         if (empty($query_data)) {
             return [
                 'status' => 'error',
-                'messages' => 'None of the fields have been changed.',
+                'messages' => trans('error.notChanged'),
                 'form_field' => $request->all(),
             ];
         }
@@ -101,7 +109,7 @@ class CompanyController extends Controller
         $company_new = Company::find($request->id);
         return [
             'status' => 'success',
-            'message' => 'Data updated successfully.',
+            'message' => trans('success.update'),
             'form_field' => $company_new,
         ];
     }
@@ -112,26 +120,26 @@ class CompanyController extends Controller
         if (empty($auth_user)) {
             return [
                 'status' => 'error',
-                'message' => 'User not authorized'
+                'message' => trans('error.authentication'),
             ];
         }
         $company = Company::find($request->id);
         if (empty($company)) {
             return [
                 'status' => 'error',
-                'message' => 'There is no company with this id.',
+                'message' => trans('error.notId', ['model' => 'company']),
             ];
         }
         $result = $company->delete();
         if (empty($result)) {
             return [
                 'status' => 'error',
-                'message' => 'The company has not been deleted'
+                'message' => trans('error.notDelete', ['model' => 'company']),
             ];
         }
         return [
             'status' => 'success',
-            'message' => 'Company deleted successfully'
+            'message' => trans('succes.delete', ['model' => 'Company']),
         ];
     }
 
@@ -141,14 +149,14 @@ class CompanyController extends Controller
         if (empty($auth_user)) {
             return [
                 'status' => 'error',
-                'message' => 'User not authorized'
+                'message' => trans('error.authentication'),
             ];
         }
         $all_companies = Company::all();
         if (empty($all_companies)) {
             return [
                 'status' => 'error',
-                'message' => 'Companies not found.',
+                'message' => trans('error.notFound', 'Companies'),
             ];
         }
         return [
@@ -163,14 +171,14 @@ class CompanyController extends Controller
         if (empty($auth_user)) {
             return [
                 'status' => 'error',
-                'message' => 'User not authorized'
+                'message' => trans('error.authentication')
             ];
         }
         $company = Company::find($id);
         if (empty($company)) {
             return [
                 'status' => 'error',
-                'message' => 'Company not found.',
+                'message' => trans('error.notFound', 'Company'),
             ];
         }
         return [

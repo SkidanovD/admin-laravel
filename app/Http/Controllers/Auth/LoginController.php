@@ -43,8 +43,6 @@ class LoginController extends Controller
 
     public function showLoginForm(Request $request)
     {
-        // $token = csrf_token();
-        // dd($token);
         return [
             'login_route' => route('actionLogin'),
             'csrf_token' => csrf_token(),
