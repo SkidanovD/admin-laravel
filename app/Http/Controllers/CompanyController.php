@@ -54,7 +54,7 @@ class CompanyController extends Controller
         
         return [
             'status' => 'success',
-            'message' => trans('success.added', 'Company'),
+            'message' => trans('success.added', ['model' => 'Company']),
             'company' => $company,
         ];
     }
@@ -71,7 +71,10 @@ class CompanyController extends Controller
         $company_old_data = Company::find($request->id, ['name', 'company_name', 'address', 'post_code', 'city', 'phone', 'siret', 'rcs', 'tva', 'note']);
         $query_data = [];
         foreach ($request->all() as $key => $item) {
-            if ($company_old_data->$key !== $item) {
+            if ($item === null) {
+                $item = '';
+            }
+            if (isset($company_old_data->$key) && $company_old_data->$key !== $item) {
                 $query_data[$key] = $item;
             }
         }
@@ -82,7 +85,7 @@ class CompanyController extends Controller
                 'form_field' => $request->all(),
             ];
         }
-        $validator = Validator::make($query_data(), [
+        $validator = Validator::make($query_data, [
             'name' => 'string|nullable',
             'company_name' => 'string',
             'address' => 'string|nullable',
@@ -139,7 +142,7 @@ class CompanyController extends Controller
         }
         return [
             'status' => 'success',
-            'message' => trans('succes.delete', ['model' => 'Company']),
+            'message' => trans('success.delete', ['model' => 'Company']),
         ];
     }
 
@@ -153,15 +156,15 @@ class CompanyController extends Controller
             ];
         }
         $all_companies = Company::all();
-        if (empty($all_companies)) {
+        if (empty($all_companies->all())) {
             return [
                 'status' => 'error',
-                'message' => trans('error.notFound', 'Companies'),
+                'message' => trans('error.notFound', ['model' => 'Companies']),
             ];
         }
         return [
             'status' => 'success',
-            'all_companies' => $all_companies,
+            'all_companies' => $all_companies->all(),
         ];
     }
 

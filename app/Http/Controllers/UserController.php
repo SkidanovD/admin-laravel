@@ -68,7 +68,7 @@ class UserController extends Controller
     
         return [
             'status' => 'success',
-            'message' => trans('success.added', 'User'),
+            'message' => trans('success.added', ['model' => 'User']),
             'user' => $user,
         ];
     }
@@ -93,10 +93,14 @@ class UserController extends Controller
             'role' => 'nullable|string|max:255',
         ];
         foreach ($request->all() as $key => $item) {
-            if ($item !== $user_old_data->$key) {
+            if ($item === null) {
+                $item = '';
+            }
+            if (isset($user_old_data->$key) && $user_old_data->$key !== $item) {
                 $query_data[$key] = $item;
             }
         }
+
         if (!empty($request->password)) {
             $query_data['password'] = $request->password;
             $query_data['password_confirmation'] = $request->password_confirmation;
@@ -197,8 +201,7 @@ class UserController extends Controller
             ];
         }
         $all_users = User::all();
-
-        if (empty($all_users)) {
+        if (empty($all_users->all())) {
             return [
                 'status' => 'error',
                 'message' => trans('error.notFound', ['model' => 'Users']),
@@ -206,7 +209,7 @@ class UserController extends Controller
         }
         return [
             'status' => 'success',
-            'all_users' => $all_users,
+            'all_users' => $all_users->all(),
         ];
 
     }
