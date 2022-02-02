@@ -43,12 +43,36 @@ class LoginController extends Controller
 
     public function showLoginForm(Request $request)
     {
-        // $token = csrf_token();
-        // dd($token);
         return [
             'login_route' => route('actionLogin'),
             'csrf_token' => csrf_token(),
         ];
+    }
+
+    /**
+     * Send the response after the user was authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+
+        $this->clearLoginAttempts($request);
+
+        if ($response = $this->authenticated($request, $this->guard()->user())) {
+            return $response;
+        }
+
+        return [
+            'status' => 'success',
+            'redirect' => $this->redirectPath(),
+        ];
+
+        // return $request->wantsJson()
+        //             ? new JsonResponse([], 204)
+        //             : redirect()->intended($this->redirectPath());
     }
     
     /**
