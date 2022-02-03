@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
 
@@ -48,6 +49,11 @@ Route::middleware('auth:sanctum')->post('/actionEditCompany', [CompanyController
 Route::middleware('auth:sanctum')->post('/actionDeleteCompany', [CompanyController::class, 'actionDeleteCompany'])->name('actionDeleteCompany');
 Route::middleware('auth:sanctum')->get('/getAllCompanies', [CompanyController::class, 'getAllCompanies'])->name('getAllCompanies');
 Route::middleware('auth:sanctum')->get('/getCompany/{company}', [CompanyController::class, 'getCompany'])->name('getCompany');
+
+
+// Invoice API
+
+Route::middleware('auth:sanctum')->post('/actionAddInvoice', [InvoiceController::class, 'actionAddInvoice'])->name('actionAddInvoice');
 
 
 
