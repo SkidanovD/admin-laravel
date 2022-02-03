@@ -24,4 +24,14 @@ class Invoice extends Model
         'status',
         'creation_status',
     ];
+
+    public function invoiceCompany()
+    {
+        return $this->hasOne(InvoiceCompany::class);
+    }
+
+    public function invoiceDetail()
+    {
+        return $this->hasMany(InvoiceDetail::class);
+    }
 }
