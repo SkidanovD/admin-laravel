@@ -20,6 +20,7 @@ class CreateInvoiceDetailsTable extends Migration
             $table->text('description');
             $table->integer('quantity')->unsigned();
             $table->integer('price')->unsigned();
+            $table->timestamps();
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
         });
     }

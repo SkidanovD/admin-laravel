@@ -181,7 +181,7 @@ class CompanyController extends Controller
         if (empty($company)) {
             return [
                 'status' => 'error',
-                'message' => trans('error.notFound', 'Company'),
+                'message' => trans('error.notFound', ['model' =>'Company']),
             ];
         }
         return [

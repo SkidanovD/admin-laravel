@@ -30,7 +30,7 @@ class Invoice extends Model
         return $this->hasOne(InvoiceCompany::class);
     }
 
-    public function invoiceDetail()
+    public function invoiceDetails()
     {
         return $this->hasMany(InvoiceDetail::class);
     }

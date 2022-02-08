@@ -26,6 +26,7 @@ class CreateInvoiceCompaniesTable extends Migration
             $table->string('rcs')->nullable();
             $table->string('tva')->nullable();
             $table->string('note')->nullable();
+            $table->timestamps();
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
         });
     }

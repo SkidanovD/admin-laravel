@@ -54,6 +54,8 @@ Route::middleware('auth:sanctum')->get('/getCompany/{company}', [CompanyControll
 // Invoice API
 
 Route::middleware('auth:sanctum')->post('/actionAddInvoice', [InvoiceController::class, 'actionAddInvoice'])->name('actionAddInvoice');
+Route::middleware('auth:sanctum')->post('/actionEditInvoice', [InvoiceController::class, 'actionEditInvoice'])->name('actionEditInvoice');
+Route::middleware('auth:sanctum')->get('/getInvoice/{invoice}', [InvoiceController::class, 'getInvoice'])->name('getInvoice');
 
 
 
