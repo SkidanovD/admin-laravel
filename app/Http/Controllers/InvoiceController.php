@@ -391,7 +391,7 @@ class InvoiceController extends Controller
             $all_invoices = Invoice::$orderBy($order)->get()->toArray();
         }
 
-        if (empty($all_invoices)) {
+        if (!count($all_invoices)) {
             return [
                 'status' => 'error',
                 'message' => trans('error.notFound', ['model' => 'Invoices']),
