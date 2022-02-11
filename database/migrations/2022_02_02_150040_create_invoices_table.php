@@ -18,6 +18,7 @@ class CreateInvoicesTable extends Migration
             $table->integer('invoice_number');
             $table->date('invoice_date');
             $table->integer('author');
+            $table->string('company')->nullable();
             $table->integer('vat');
             $table->integer('total_tax')->nullable();
             $table->date('received_date')->nullable();

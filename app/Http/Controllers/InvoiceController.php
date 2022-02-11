@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\InvoiceCompany;
 use App\Models\InvoiceDetail;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -23,17 +24,11 @@ class InvoiceController extends Controller
             ];
         }
 
-        $invoice_max_number = Invoice::orderByDesc('invoice_number')->take(1)->get();
-        $invoice_number = 1;
-        if (!empty($invoice_max_number->all())) {
-            $invoice_number = $invoice_max_number[0]->invoice_number + 1;
-        }
-
         $now_time = Carbon::now();
         $invoice_date = $now_time->toDateTimeString();
         
         $new_invoice = Invoice::create([
-            'invoice_number' => $invoice_number,
+            'invoice_number' => 0,
             'invoice_date' => $invoice_date,
             'author' => $auth_user->id,
             'vat' => 0,
@@ -95,6 +90,12 @@ class InvoiceController extends Controller
         }
 
         $invoice = Invoice::find($request->id);
+        if ($invoice->creation_status === 'public' && $auth_user->role !== 'admin') {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authorization'),
+            ];
+        }
         $invoice_company = Invoice::find($request->id)->invoiceCompany;
 
         if (empty($invoice_company)) {
@@ -188,12 +189,226 @@ class InvoiceController extends Controller
         Invoice::where('id', $request->id)->update([
             'invoice_number' => (int) $request->invoice_number,
             'invoice_date' => $request->invoice_date,
+            'company' => $request->company_name,
             'vat' => (int) $request->vat,
             'total_tax' => (int) $request->total_tax,
         ]);
 
         return $this->getInvoice($request->id);
 
+    }
+
+    public function actionDeleteInvoice(Request $request)
+    {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
+
+        $invoice = Invoice::find($request->id);
+        if (empty($invoice)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notId', ['model' => 'invoice']),
+            ];
+        }
+
+        if ($invoice->creation_status === 'public') {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notDeletePublic', ['model' => 'invoices']),
+            ];
+        }
+
+        $result = $invoice->delete();
+        if (empty($result)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notDelete', ['model' => 'invoice']),
+            ];
+        }
+        return [
+            'status' => 'success',
+            'message' => trans('success.delete', ['model' => 'Invoice']),
+        ];
+
+    }
+
+    public function actionPublicInvoice(Request $request)
+    {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
+
+        $invoice_max_number = Invoice::orderByDesc('invoice_number')->take(1)->get();
+        $invoice_number = 1;
+        if (!empty($invoice_max_number->all())) {
+            $invoice_number = $invoice_max_number[0]->invoice_number + 1;
+        }
+
+        $result = Invoice::where('id', $request->id)->update([
+            'invoice_number' => $invoice_number,
+            'status' => 'to_be_sent',
+            'creation_status' => 'public',
+        ]);
+        if (empty($result)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notUpdate', ['model' => 'Invoice creation status']),
+            ];
+        }
+        return [
+            'status' => 'success',
+            'message' => trans('success.update', ['model' => 'Invoice creation status']),
+            'invoice' => $this->getInvoice($request->id),
+        ];
+    }
+
+    public function actionEditStatus(Request $request)
+    {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'numeric|required',
+            'received_date' => 'date|nullable',
+            'status' => 'string|required',
+        ]);
+        if ($validator->fails()) {
+            return [
+                'status' => 'error',
+                'messages' => $validator->messages(),
+                'form_field' => $request->all()
+            ];
+        }
+
+        $result = Invoice::where('id', $request->id)->update([
+            'status' => $request->status,
+            'received_date' => $request->received_date,
+        ]);
+        if (empty($result)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notUpdate', ['model' => 'Invoice status']),
+            ];
+        }
+
+        return [
+            'status' => 'success',
+            'message' => trans('success.update', ['model' => 'Invoice status']),
+            'invoice' => $this->getInvoice($request->id),
+        ];
+    }
+
+    public function getAllInvoices(Request $request)
+    {
+        // dd($request->all());
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
+
+        $all_invoices = [];
+
+        $order = 'invoice_number';
+        if (!empty($request->sort['order'])) {
+            $order = $request->sort['order'];
+        }
+
+        $orderBy = 'orderByDesc';
+        if (!empty($request->sort['orderBy'])) {
+            if ($request->sort['orderBy'] === 'asc') {
+                $orderBy = 'orderBy';
+            }
+            if ($request->sort['orderBy'] === 'desc') {
+                $orderBy = 'orderByDesc';
+            }
+        }
+
+        $where_default = '';
+        if (!empty($request->filter) && is_array($request->filter)) {
+            $query_counter = 1;
+            foreach ($request->filter as $filter_key => $filter_val) {
+                if ($query_counter > 1) {
+                    $where_default .= 'AND ';
+                }
+                if ($filter_key === 'invoice_date') {
+                    $str_count = 1;
+                    $where_default .= '(';
+                    
+                    if (!empty($filter_val['min'])) {
+                        $where_default .= '`' . $filter_key . '` >= "' . $filter_val['min'] . '" ';
+                    }
+
+                    if (!empty($filter_val['min']) && !empty($filter_val['max'])) {
+                        $where_default .= 'AND ';
+                    }
+
+                    if (!empty($filter_val['max'])) {
+                        $where_default .= '`' . $filter_key . '` <= "' . $filter_val['max'] . '" ';
+                    }
+
+                    $where_default .= ') ';
+                } else {
+                    $string = '';
+                    $str_count = 1;
+                    foreach ($filter_val as $str_val) {
+                        if ($str_count === 1) {
+                            $string .= '(';
+                        } elseif ($str_count > 1) {
+                            $string .= 'OR ';
+                        }
+                        $string .= '`' . $filter_key . '` = "' . $str_val . '" ';
+                        if ($str_count === count($filter_val)) {
+                            $string .= ') ';
+                        }
+                        $str_count++;
+                    }
+                    $where_default .= $string;
+                }
+                $query_counter++;
+            }
+        }
+
+        if (!empty($where_default)) {
+            $all_invoices = Invoice::whereRaw($where_default)->$orderBy($order)->get();
+        } else {
+            $all_invoices = Invoice::$orderBy($order)->get()->toArray();
+        }
+
+        if (empty($all_invoices)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notFound', ['model' => 'Invoices']),
+            ];
+        }
+
+        foreach ($all_invoices as $key => $invoice) {
+            $author = User::find($invoice['author']);
+            if (!empty($author)) {
+                $all_invoices[$key]['author'] = $author->toArray();
+            }
+        }
+
+        return [
+            'status' => 'success',
+            'all_invoices' => $all_invoices,
+        ];
     }
 
     public function getInvoice($id)
@@ -221,8 +436,9 @@ class InvoiceController extends Controller
 
         $invoice = $invoice_obj->attributesToArray();
 
-        $invoice_company = $invoice_obj->invoiceCompany->attributesToArray();
+        $invoice_company = $invoice_obj->invoiceCompany;
         if (!empty($invoice_company)) {
+            $invoice_company = $invoice_company->attributesToArray();
             foreach ($delete_attrs as $delete_attr) {
                 unset($invoice_company[$delete_attr]);
             }
@@ -237,10 +453,21 @@ class InvoiceController extends Controller
                 }
                 $invoice['details'][] = $invoice_detail;
             }
+        } else {
+            $invoice['details'] = [];
         }
         return [
             'status' => 'success',
             'invoice' => $invoice,
         ];
+    }
+
+    public function arrangeFormData(Request $request)
+    {
+        $data = $request->all();
+        if (empty($data['invoice_date']['min']) && empty($data['invoice_date']['max'])) {
+            unset($data['invoice_date']);
+        }
+        return $data;
     }
 }
