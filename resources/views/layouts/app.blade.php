@@ -20,7 +20,7 @@
     <link href="{{ asset('css/bootstrap-grid.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="site-body">
     @yield('content')
     <script src="/js/app.js"></script>
 </body>

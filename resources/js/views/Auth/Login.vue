@@ -1,21 +1,22 @@
 <template>
-    <main class="login-main">
-        <div class="login-main__wrapper wrapper">
-            <h1 class="login-main__title title">Sign In to Invoice Creator</h1>
-            <form class="login-main__form form" method="POST" :action="pageData.login_route">
-                <input type="hidden" name="_token" :value="pageData.csrf_token">
-
-                <div class="form__field">
-                    <label class="form__label" for="email">Email</label>
-                    <input class="form__input" type="email" id="email" name="email" placeholder="mail@gmail.com" required>
+    <main class="site-main login-main">
+        <div class="site-main-wrapper login-main-wrapper width-container">
+            <h1 class="page-title login-page-title">Sign In to Invoice Generator</h1>
+            <form class="form login-form" ref="form" @submit.prevent="actionLogin">
+                <div class="form-item-wrapper form-item-email-wrapper">
+                    <div class="form-input-wrapper form-input-email-wrapper icon-email">
+                        <input class="form-input form-input-email" id="email" name="email" type="email" placeholder="Email">
+                    </div>
                 </div>
-                <div class="form__field">
-                    <label class="form__label" for="password">Password</label>
-                    <input class="form__input" type="password" id="password" name="password" placeholder="* * * * * * * *" required>
+                <div class="form-item-wrapper form-item-password-wrapper">
+                    <div class="form-input-wrapper form-input-password-wrapper icon-password">
+                        <input class="form-input form-input-password" id="password" name="password" type="password" placeholder="Password">
+                    </div>
                 </div>
-
-                <div class="form__submit-wrap">
-                    <button class="form__submit btn" type="submit">Login</button>
+                <div class="button-wrapper">
+                    <div class="button-hover">
+                        <button class="button button-submit" type="submit">Log in</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -36,7 +37,35 @@ export default {
             axios.get('/api/getPageLogin').then(res => {
                 this.pageData = res.data
             })
-        }
+        },
+        actionLogin() {
+            const formData = new FormData(this.$refs['form']);
+            const form_data = new FormData();
+
+            for (let [key, val] of formData.entries()) {
+                form_data.append(key, val)
+            }
+            axios({
+                method: 'post',
+                url: '/api/actionLogin',
+                data: form_data,
+            }).then(
+                res => {
+                    if (res.data.status === 'success') {
+                        this.isAuth = true;
+                        this.$router.push('/');
+                    }
+                    
+                    // if(res.data.status == 'success') {
+                    //     this.form_sent = true
+                    // } else {
+                    //     for(let key in res.data.messages) {
+                    //         this.messages[key] = res.data.messages[key][0];
+                    //     }
+                    // }
+                }
+            )
+        },
     }
 }
 </script>

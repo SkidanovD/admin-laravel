@@ -93,8 +93,17 @@ class LoginController extends Controller
             return $response;
         }
 
-        return $request->wantsJson()
-            ? new JsonResponse([], 204)
-            : redirect('/');
+        if ($request->wantsJson()) {
+            return [
+                'status' => 'success'
+            ];
+        }
+
+        return [
+            'status' => 'error'
+        ];
+        // return $request->wantsJson()
+        //         ? new JsonResponse([], 204)
+        //         : redirect('/');
     }
 }

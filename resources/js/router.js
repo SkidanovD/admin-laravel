@@ -8,6 +8,11 @@ import Register from './views/auth/Register'
 import Login from './views/auth/Login'
 import UsersList from './views/UsersList'
 import EditUser from './views/EditUser'
+import CompaniesList from './views/Companies/CompaniesList'
+import AddCompany from './views/Companies/AddCompany'
+import EditCompany from './views/Companies/EditCompany'
+import AddInvoice from './views/Invoices/AddInvoice'
+import EditInvoice from './views/Invoices/EditInvoice'
 
 const routes = [
     {
@@ -29,6 +34,26 @@ const routes = [
     {
         path: '/edit-user/:id',
         component: EditUser,
+    },
+    {
+        path: '/companies-list',
+        component: CompaniesList,
+    },
+    {
+        path: '/add-company',
+        component: AddCompany,
+    },
+    {
+        path: '/edit-company/:id',
+        component: EditCompany,
+    },
+    {
+        path: '/add-invoice',
+        component: AddInvoice,
+    },
+    {
+        path: '/edit-invoice/:id',
+        component: EditInvoice,
     },
 ];
 

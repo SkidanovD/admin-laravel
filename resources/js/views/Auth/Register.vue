@@ -106,14 +106,17 @@ export default {
         onChange() {
             this.contacts.photo = this.$refs.form.photo.files[0];
         },
-        onFormSubmit() {              
+        onFormSubmit() {      
             const formData = new FormData(this.$refs['form']);
             const form_data = new FormData();
 
             for (let [key, val] of formData.entries()) {
                 form_data.append(key, val)
             }
-            form_data.append('photo', this.contacts.photo, this.contacts.photo.name);
+            if (this.contacts.photo.name) {
+                form_data.append('photo', this.contacts.photo, this.contacts.photo.name);
+            }
+            
 
             axios({
                 method: 'post',

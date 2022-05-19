@@ -49,7 +49,10 @@
       methods: {
          loadPageData() {
             axios.get('/api/getAllUsers').then(res => {
-               this.usersList = res.data
+               if (res.data.status === 'success') {
+                  this.usersList = res.data.all_users
+               }
+               
             })
          }
       }

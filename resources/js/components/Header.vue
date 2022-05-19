@@ -1,27 +1,70 @@
 <template>
-    <header class="header">
-        <div class="header__wrapper wrapper">
-            <div class="header__content">
-                <div class="row align-items-center">
-                    <div class="col-2">
-                        <div class="header__logo logo"><img src="img/logo.svg"  alt="logo" /></div>
-                    </div>
-                    <div class="col-10">
-                        <vueNav></vueNav>
-                    </div>
-                </div>
-            </div>
+    <header class="site-header">
+        <div class="site-header-wrapper width-container">
+            <router-link class="site-logo-link" to="/" v-if="isAuth">
+                <img class="site-logo" src="img/logo.png"  alt="Bato Invoices">
+            </router-link>
+            <router-link class="site-logo-link" to="/login" v-else>
+                <img src="img/logo.png"  alt="Bato Invoices">
+            </router-link>
+            <nav class="main-navigation">
+                <ul class="main-nav-list">
+                    <li class="main-nav-item" v-if="isAuth">
+                        <router-link class="main-nav-link" to="/">Home</router-link>
+                    </li>
+                    <li class="main-nav-item" v-if="isAuth">
+                        <router-link class="main-nav-link" to="/companies-list">Companies list</router-link>
+                    </li>
+                    <li class="main-nav-item" v-if="isAuth && authUser.role == 'admin'">
+                        <router-link class="main-nav-link" to="/users-list">Users list</router-link>
+                    </li>
+                    <li class="main-nav-item" v-if="isAuth">
+                        <router-link class="main-nav-link" to="/">My account</router-link>
+                    </li>
+                    <li class="main-nav-item logout" v-if="isAuth">
+                        <a href="#" class="main-nav-link" @click.prevent="actionLogOut">Log out</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </header>
 </template>
 
 <script>
-import vueNav from './../components/Nav';
 
-export default {
-    components: {
-        vueNav,
-    },
-}
+    export default {
+        components: {},
+        data: () => ({
+            authUser: [],
+            isAuth: false,
+        }),
+        mounted() {
+            this.getAuthUser();
+        },
+        methods: {
+            getAuthUser() {
+                axios.get('/api/getAuthUser').then(res => {
+                    this.authUser = res.data;
+                    if(Object.keys(res.data).length) {
+                        this.isAuth = true;
+                    }
+                })
+            },
+            actionLogOut() {
+                axios({
+                    method: 'post',
+                    url: '/api/actionLogout',
+                    data: {},
+                }).then(
+                    res => {
+                        if (res.data.status === 'success') {
+                            this.isAuth = false;
+                            this.$router.push('/login');
+                        }
+                    }
+                )
+            }
+        },
+    }
 </script>
 
