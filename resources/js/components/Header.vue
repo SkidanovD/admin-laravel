@@ -5,7 +5,7 @@
                 <img class="site-logo" src="img/logo.png"  alt="Bato Invoices">
             </router-link>
             <router-link class="site-logo-link" to="/login" v-else>
-                <img src="img/logo.png"  alt="Bato Invoices">
+                <img class="site-logo" src="img/logo.png"  alt="Bato Invoices">
             </router-link>
             <nav class="main-navigation">
                 <ul class="main-nav-list">
@@ -13,10 +13,10 @@
                         <router-link class="main-nav-link" to="/">Home</router-link>
                     </li>
                     <li class="main-nav-item" v-if="isAuth">
-                        <router-link class="main-nav-link" to="/companies-list">Companies list</router-link>
+                        <router-link class="main-nav-link" to="/companies-list">Companies</router-link>
                     </li>
                     <li class="main-nav-item" v-if="isAuth && authUser.role == 'admin'">
-                        <router-link class="main-nav-link" to="/users-list">Users list</router-link>
+                        <router-link class="main-nav-link" to="/users-list">Users</router-link>
                     </li>
                     <li class="main-nav-item" v-if="isAuth">
                         <router-link class="main-nav-link" to="/">My account</router-link>

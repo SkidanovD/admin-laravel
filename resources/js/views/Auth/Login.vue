@@ -13,8 +13,8 @@
                         <input class="form-input form-input-password" id="password" name="password" type="password" placeholder="Password">
                     </div>
                 </div>
-                <div class="button-wrapper">
-                    <div class="button-hover">
+                <div class="button-wrapper button-submit-wrapper">
+                    <div class="button-hover button-submit-hover">
                         <button class="button button-submit" type="submit">Log in</button>
                     </div>
                 </div>
@@ -52,17 +52,9 @@ export default {
             }).then(
                 res => {
                     if (res.data.status === 'success') {
-                        this.isAuth = true;
-                        this.$router.push('/');
+                        location = '/';
+                        // this.$router.push('/');
                     }
-                    
-                    // if(res.data.status == 'success') {
-                    //     this.form_sent = true
-                    // } else {
-                    //     for(let key in res.data.messages) {
-                    //         this.messages[key] = res.data.messages[key][0];
-                    //     }
-                    // }
                 }
             )
         },

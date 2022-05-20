@@ -6025,10 +6025,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'Index',
   data: function data() {
     return {
-      invoicesList: []
+      invoicesList: [],
+      getInvoices: false
     };
   },
   mounted: function mounted() {
@@ -6039,6 +6049,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get('/api/getAllInvoices').then(function (res) {
+        _this.getInvoices = true;
+
         if (res.data.status === 'success') {
           _this.invoicesList = res.data.all_invoices;
         }
@@ -6073,8 +6085,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
 //
 //
 //
@@ -6280,6 +6290,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'UsersList',
   data: function data() {
@@ -6374,8 +6430,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     actionLogin: function actionLogin() {
-      var _this2 = this;
-
       var formData = new FormData(this.$refs['form']);
       var form_data = new FormData();
 
@@ -6402,17 +6456,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         data: form_data
       }).then(function (res) {
         if (res.data.status === 'success') {
-          _this2.isAuth = true;
-
-          _this2.$router.push('/');
-        } // if(res.data.status == 'success') {
-        //     this.form_sent = true
-        // } else {
-        //     for(let key in res.data.messages) {
-        //         this.messages[key] = res.data.messages[key][0];
-        //     }
-        // }
-
+          location = '/'; // this.$router.push('/');
+        }
       });
     }
   }
@@ -6643,9 +6688,6 @@ Vue.component('page-content', (__webpack_require__(/*! ./layouts/App.vue */ "./r
 
 var app = new Vue({
   el: '#app',
-  data: {
-    ds: 'Kolya'
-  },
   router: _router__WEBPACK_IMPORTED_MODULE_0__["default"]
 });
 
@@ -30229,6 +30271,7 @@ var render = function () {
               { staticClass: "site-logo-link", attrs: { to: "/login" } },
               [
                 _c("img", {
+                  staticClass: "site-logo",
                   attrs: { src: "img/logo.png", alt: "Bato Invoices" },
                 }),
               ]
@@ -30262,7 +30305,7 @@ var render = function () {
                         staticClass: "main-nav-link",
                         attrs: { to: "/companies-list" },
                       },
-                      [_vm._v("Companies list")]
+                      [_vm._v("Companies")]
                     ),
                   ],
                   1
@@ -30280,7 +30323,7 @@ var render = function () {
                         staticClass: "main-nav-link",
                         attrs: { to: "/users-list" },
                       },
-                      [_vm._v("Users list")]
+                      [_vm._v("Users")]
                     ),
                   ],
                   1
@@ -31340,84 +31383,117 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("main", { staticClass: "site-main home-main" }, [
-    _c("div", { staticClass: "home-main__wrapper wrapper" }, [
-      _c("h1", { staticClass: "title" }, [_vm._v("Homepage")]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "button-wrapper" },
-        [
-          _c(
-            "router-link",
-            { staticClass: "btn", attrs: { to: "/add-invoice" } },
-            [_vm._v("Add invoice")]
-          ),
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div", [
-        _c("table", { staticClass: "table" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.invoicesList, function (invoice, index) {
-              return _c("tr", { key: index }, [
-                _c("td", [_vm._v(_vm._s(invoice.invoice_number))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(invoice.invoice_date))]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(invoice.author.first_name) +
-                      " " +
-                      _vm._s(invoice.author.last_name)
-                  ),
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(invoice.company))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(invoice.total_tax))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(invoice.received_date))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(invoice.status))]),
+    _c(
+      "div",
+      { staticClass: "site-main-wrapper home-main-wrapper width-container" },
+      [
+        _c("h1", { staticClass: "page-title home-page-title" }, [
+          _vm._v("Invoice generator"),
+        ]),
+        _vm._v(" "),
+        _vm.getInvoices && _vm.invoicesList.length
+          ? _c("div", [
+              _c("table", { staticClass: "table" }, [
+                _vm._m(0),
                 _vm._v(" "),
                 _c(
-                  "td",
+                  "tbody",
+                  _vm._l(_vm.invoicesList, function (invoice, index) {
+                    return _c("tr", { key: index }, [
+                      _c("td", [_vm._v(_vm._s(invoice.invoice_number))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(invoice.invoice_date))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(invoice.author.first_name) +
+                            " " +
+                            _vm._s(invoice.author.last_name)
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(invoice.company))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(invoice.total_tax))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(invoice.received_date))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(invoice.status))]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c(
+                            "router-link",
+                            { attrs: { to: "/edit-invoice/" + invoice.id } },
+                            [_vm._v("Edit invoice")]
+                          ),
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#", "data-id": invoice.id },
+                            on: {
+                              click: function ($event) {
+                                $event.preventDefault()
+                                return _vm.deleteInvoice.apply(null, arguments)
+                              },
+                            },
+                          },
+                          [_vm._v("Delete invoice")]
+                        ),
+                      ]),
+                    ])
+                  }),
+                  0
+                ),
+              ]),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.getInvoices && !_vm.invoicesList.length
+          ? _c("div", { staticClass: "no-invoices" }, [
+              _c("div", { staticClass: "text message message-info" }, [
+                _vm._v(
+                  "No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button."
+                ),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "button-wrapper" }, [
+                _c(
+                  "div",
+                  { staticClass: "button-hover" },
                   [
                     _c(
                       "router-link",
-                      { attrs: { to: "/edit-invoice/" + invoice.id } },
-                      [_vm._v("Edit invoice")]
+                      { staticClass: "button", attrs: { to: "/add-invoice" } },
+                      [_vm._v("Add invoice")]
                     ),
                   ],
                   1
                 ),
                 _vm._v(" "),
-                _c("td", [
-                  _c(
-                    "a",
-                    {
-                      attrs: { href: "#", "data-id": invoice.id },
-                      on: {
-                        click: function ($event) {
-                          $event.preventDefault()
-                          return _vm.deleteInvoice.apply(null, arguments)
-                        },
-                      },
-                    },
-                    [_vm._v("Delete invoice")]
-                  ),
-                ]),
-              ])
-            }),
-            0
-          ),
-        ]),
-      ]),
-    ]),
+                _c(
+                  "div",
+                  { staticClass: "button-hover" },
+                  [
+                    _c(
+                      "router-link",
+                      { staticClass: "button", attrs: { to: "#" } },
+                      [_vm._v("Draft")]
+                    ),
+                  ],
+                  1
+                ),
+              ]),
+            ])
+          : _vm._e(),
+      ]
+    ),
   ])
 }
 var staticRenderFns = [
@@ -31470,16 +31546,25 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("main", { staticClass: "add-invoice-main" }, [
-    _c("div", { staticClass: "add-invoice-main__wrapper wrapper" }, [
-      _c("h1", { staticClass: "add-invoice-main__title title title_center" }, [
-        _vm._v("Edit invoice"),
-      ]),
-      _vm._v(" "),
-      _vm.errorMessage
-        ? _c("div", { staticClass: "form-message title" })
-        : _vm._e(),
-    ]),
+  return _c("main", { staticClass: "site-main add-invoice-main" }, [
+    _c(
+      "div",
+      {
+        staticClass:
+          "site-main-wrapper add-invoice-main-wrapper width-container",
+      },
+      [
+        _c("h1", { staticClass: "page-title add-invoice-page-title" }, [
+          _vm._v("Add invoice"),
+        ]),
+        _vm._v(" "),
+        _vm.errorMessage
+          ? _c("div", { staticClass: "message message-error" }, [
+              _vm._v(_vm._s(_vm.errorMessage)),
+            ])
+          : _vm._e(),
+      ]
+    ),
   ])
 }
 var staticRenderFns = []
@@ -31703,92 +31788,197 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("main", { staticClass: "users-list-main" }, [
-    _c("div", { staticClass: "users-list-main__wrapper wrapper" }, [
-      _c("h1", { staticClass: "users-list-main__title title" }, [
-        _vm._v("Users list"),
-      ]),
-      _vm._v(" "),
-      _c("div", [
-        _c("table", { staticClass: "table" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.usersList, function (user, index) {
-              return _c("tr", { key: index }, [
-                _c("td", [_vm._v(_vm._s(user.first_name))]),
+  return _c("main", { staticClass: "site-main users-list-main" }, [
+    _c(
+      "div",
+      {
+        staticClass:
+          "site-main-wrapper users-list-main-wrapper width-container",
+      },
+      [
+        _c("h1", { staticClass: "page-title users-list-page-title" }, [
+          _vm._v("Users"),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "add-use-block" }, [
+          _c("div", { staticClass: "button-wrapper" }, [
+            _c(
+              "div",
+              { staticClass: "button-hover" },
+              [
+                _c(
+                  "router-link",
+                  { staticClass: "button", attrs: { to: "/register" } },
+                  [_vm._v("Add user")]
+                ),
+              ],
+              1
+            ),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "user-list" },
+          _vm._l(_vm.usersList, function (user, index) {
+            return _c("div", { key: index, staticClass: "user-item" }, [
+              _c("div", { staticClass: "photo-column" }, [
+                user.photo
+                  ? _c("div", { staticClass: "image-wrapper" }, [
+                      _c("img", {
+                        staticClass: "photo",
+                        attrs: {
+                          src: user.photo,
+                          alt: user.first_name + " " + user.last_name,
+                        },
+                      }),
+                    ])
+                  : _c("div", { staticClass: "image-wrapper default" }, [
+                      _c("img", {
+                        staticClass: "photo",
+                        attrs: {
+                          src: "img/icons/icon-incognito.svg",
+                          alt: user.first_name + " " + user.last_name,
+                        },
+                      }),
+                    ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "text-column" }, [
+                user.first_name || user.last_name
+                  ? _c("h2", { staticClass: "h4 name" }, [
+                      _vm._v(
+                        _vm._s(user.first_name) + " " + _vm._s(user.last_name)
+                      ),
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.last_name))]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("img", { attrs: { src: user.photo, alt: "photo" } }),
+                _c("a", { staticClass: "email", attrs: { href: "mailto:" } }, [
+                  _vm._v(_vm._s(user.email)),
                 ]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.user_post))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.email))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.role))]),
-                _vm._v(" "),
+                _c("div", { staticClass: "role" }, [_vm._v(_vm._s(user.role))]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "action-column" }, [
                 _c(
-                  "td",
+                  "div",
+                  { staticClass: "btn-wrapper btn-edit-wrapper" },
                   [
                     _c(
                       "router-link",
-                      { attrs: { to: "/edit-user/" + user.id } },
-                      [_vm._v("Edit user")]
+                      {
+                        staticClass: "btn btn-edit",
+                        attrs: { to: "/edit-user/" + user.id },
+                      },
+                      [
+                        _c(
+                          "svg",
+                          {
+                            attrs: {
+                              "enable-background": "new 0 0 32 32",
+                              height: "32px",
+                              id: "Layer_1",
+                              version: "1.1",
+                              viewBox: "0 0 32 32",
+                              width: "32px",
+                              "xml:space": "preserve",
+                              xmlns: "http://www.w3.org/2000/svg",
+                              "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                            },
+                          },
+                          [
+                            _c("path", {
+                              attrs: {
+                                d: "M29.395,2.58C27.75,0.937,25.584,0,23.449,0c-1.801,0-3.459,0.668-4.67,1.877l-4.867,4.904  c-0.015,0.014-0.032,0.023-0.047,0.038c-0.008,0.008-0.013,0.019-0.021,0.026l0.002,0.002L3.517,17.256  c-0.476,0.473-0.821,1.062-1.013,1.705l-2.349,8.508C0.153,27.492,0,28.16,0,28.5C0,30.432,1.569,32,3.504,32  c0.385,0,1.13-0.184,1.157-0.188l8.478-2.229c0.644-0.191,1.229-0.539,1.705-1.016l15.263-15.383  C32.883,10.406,32.57,5.75,29.395,2.58z M16.014,23.795c-0.082-0.902-0.337-1.787-0.719-2.627l9.455-9.454  c0.578,1.826,0.281,3.736-0.986,5.004c-0.008,0.008-0.018,0.013-0.025,0.021l0.014,0.013l-7.728,7.79  C16.025,24.293,16.037,24.049,16.014,23.795z M14.793,20.256c-0.373-0.613-0.797-1.205-1.322-1.729  c-0.611-0.611-1.312-1.09-2.044-1.492l9.532-9.532c0.748,0.332,1.465,0.805,2.098,1.438c0.541,0.539,0.959,1.143,1.281,1.771  L14.793,20.256z M10.486,16.562c-0.926-0.373-1.896-0.586-2.868-0.599l7.703-7.762c1.179-1.15,2.896-1.481,4.587-1.062  L10.486,16.562z M4.167,29.873C4.058,29.898,3.719,29.984,3.489,30C2.667,29.99,2,29.322,2,28.5  c0.012-0.168,0.079-0.457,0.102-0.562l1.053-3.814c1.143-0.031,2.373,0.414,3.34,1.383c0.982,0.98,1.444,2.234,1.394,3.391  L4.167,29.873z M8.874,28.637c-0.024-1.342-0.57-2.738-1.672-3.838C6.16,23.756,4.796,23.154,3.436,23.1l0.996-3.607  c0.072-0.24,0.215-0.477,0.391-0.684c2.006-1.436,5.091-1.012,7.234,1.133c2.267,2.266,2.617,5.586,0.871,7.568  c-0.116,0.061-0.233,0.119-0.359,0.156L8.874,28.637z M28.691,11.772l-1.684,1.697c0-0.226,0.027-0.443,0.006-0.674  c-0.176-1.935-1.078-3.806-2.543-5.269c-1.629-1.63-3.789-2.565-5.928-2.571l1.656-1.67C21.027,2.458,22.184,2,23.449,2  c1.609,0,3.262,0.728,4.533,1.995c1.193,1.191,1.904,2.671,2.006,4.168C30.082,9.56,29.621,10.841,28.691,11.772z",
+                                fill: "#676767",
+                                id: "pen",
+                              },
+                            }),
+                          ]
+                        ),
+                      ]
                     ),
                   ],
                   1
                 ),
                 _vm._v(" "),
-                _c(
-                  "td",
-                  [
-                    _c(
-                      "router-link",
-                      { attrs: { to: "/delete-user/" + user.id } },
-                      [_vm._v("Delete user")]
-                    ),
-                  ],
-                  1
-                ),
-              ])
-            }),
-            0
-          ),
-        ]),
-      ]),
-    ]),
+                _c("div", { staticClass: "btn-wrapper btn-delete-wrapper" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-delete",
+                      attrs: { type: "button" },
+                      on: { click: _vm.actionDeleteUser },
+                    },
+                    [
+                      _c(
+                        "svg",
+                        {
+                          attrs: {
+                            height: "32px",
+                            id: "Layer_1",
+                            version: "1.1",
+                            viewBox: "0 0 32 32",
+                            width: "32px",
+                            "xml:space": "preserve",
+                            xmlns: "http://www.w3.org/2000/svg",
+                            "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                          },
+                        },
+                        [
+                          _c("g", { attrs: { id: "trash" } }, [
+                            _c("path", {
+                              attrs: {
+                                "clip-rule": "evenodd",
+                                d: "M29.98,6.819c-0.096-1.57-1.387-2.816-2.98-2.816h-3v-1V3.001   c0-1.657-1.344-3-3-3H11c-1.657,0-3,1.343-3,3v0.001v1H5c-1.595,0-2.885,1.246-2.981,2.816H2v1.183v1c0,1.104,0.896,2,2,2l0,0v17   c0,2.209,1.791,4,4,4h16c2.209,0,4-1.791,4-4v-17l0,0c1.104,0,2-0.896,2-2v-1V6.819H29.98z M10,3.002c0-0.553,0.447-1,1-1h10   c0.553,0,1,0.447,1,1v1H10V3.002z M26,28.002c0,1.102-0.898,2-2,2H8c-1.103,0-2-0.898-2-2v-17h20V28.002z M28,8.001v1H4v-1V7.002   c0-0.553,0.447-1,1-1h22c0.553,0,1,0.447,1,1V8.001z",
+                                fill: "#676767",
+                                "fill-rule": "evenodd",
+                              },
+                            }),
+                            _vm._v(" "),
+                            _c("path", {
+                              attrs: {
+                                "clip-rule": "evenodd",
+                                d: "M9,28.006h2c0.553,0,1-0.447,1-1v-13c0-0.553-0.447-1-1-1H9   c-0.553,0-1,0.447-1,1v13C8,27.559,8.447,28.006,9,28.006z M9,14.005h2v13H9V14.005z",
+                                fill: "#676767",
+                                "fill-rule": "evenodd",
+                              },
+                            }),
+                            _vm._v(" "),
+                            _c("path", {
+                              attrs: {
+                                "clip-rule": "evenodd",
+                                d: "M15,28.006h2c0.553,0,1-0.447,1-1v-13c0-0.553-0.447-1-1-1h-2   c-0.553,0-1,0.447-1,1v13C14,27.559,14.447,28.006,15,28.006z M15,14.005h2v13h-2V14.005z",
+                                fill: "#676767",
+                                "fill-rule": "evenodd",
+                              },
+                            }),
+                            _vm._v(" "),
+                            _c("path", {
+                              attrs: {
+                                "clip-rule": "evenodd",
+                                d: "M21,28.006h2c0.553,0,1-0.447,1-1v-13c0-0.553-0.447-1-1-1h-2   c-0.553,0-1,0.447-1,1v13C20,27.559,20.447,28.006,21,28.006z M21,14.005h2v13h-2V14.005z",
+                                fill: "#676767",
+                                "fill-rule": "evenodd",
+                              },
+                            }),
+                          ]),
+                        ]
+                      ),
+                    ]
+                  ),
+                ]),
+              ]),
+            ])
+          }),
+          0
+        ),
+      ]
+    ),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("First name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Last name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Photo")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("User post")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Email")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Role")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Edit link")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Delete link")]),
-      ]),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -31901,8 +32091,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "button-wrapper" }, [
-      _c("div", { staticClass: "button-hover" }, [
+    return _c("div", { staticClass: "button-wrapper button-submit-wrapper" }, [
+      _c("div", { staticClass: "button-hover button-submit-hover" }, [
         _c(
           "button",
           { staticClass: "button button-submit", attrs: { type: "submit" } },

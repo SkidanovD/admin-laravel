@@ -1,12 +1,8 @@
 <template>
     <main class="site-main home-main">
-        <div class="home-main__wrapper wrapper">
-            <h1 class="title">Homepage</h1>
-            <div class="button-wrapper">
-                <router-link to="/add-invoice" class="btn">Add invoice</router-link>
-            </div>
-            
-            <div>
+        <div class="site-main-wrapper home-main-wrapper width-container">
+            <h1 class="page-title home-page-title">Invoice generator</h1>
+            <div v-if="getInvoices && invoicesList.length">
                 <table class="table">
                     <thead>
                         <tr>
@@ -42,13 +38,27 @@
                     </tbody>
                 </table>
             </div>
+            <div class="no-invoices" v-if="getInvoices && !invoicesList.length">
+                <div class="text message message-info">No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button.</div>
+                <div class="button-wrapper">
+                    <div class="button-hover">
+                        <router-link to="/add-invoice" class="button">Add invoice</router-link>
+                    </div>
+                    <div class="button-hover">
+                        <router-link to="#" class="button">Draft</router-link>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </main>
 </template>
 <script>
     export default {
+        name: 'Index',
         data: () => ({
             invoicesList: [],
+            getInvoices: false
         }),
         mounted() {
             this.loadPageData();
@@ -56,6 +66,7 @@
         methods: {
             loadPageData() {
                 axios.get('/api/getAllInvoices').then(res => {
+                    this.getInvoices = true;
                     if (res.data.status === 'success') {
                         this.invoicesList = res.data.all_invoices
                     }

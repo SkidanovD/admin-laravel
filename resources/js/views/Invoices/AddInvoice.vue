@@ -1,10 +1,8 @@
 <template>
-    <main class="add-invoice-main">
-        <div class="add-invoice-main__wrapper wrapper">
-            <h1 class="add-invoice-main__title title title_center">Edit invoice</h1>
-            <div class="form-message title" v-if="errorMessage">
-            
-            </div>
+    <main class="site-main add-invoice-main">
+        <div class="site-main-wrapper add-invoice-main-wrapper width-container">
+            <h1 class="page-title add-invoice-page-title">Add invoice</h1>
+            <div class="message message-error" v-if="errorMessage">{{errorMessage}}</div>
         </div>
     </main>
 </template>
