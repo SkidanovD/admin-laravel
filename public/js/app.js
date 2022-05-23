@@ -6304,43 +6304,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'UsersList',
   data: function data() {
     return {
-      usersList: []
+      usersList: [],
+      deleteUserMessage: {
+        "class": '',
+        message: ''
+      }
     };
   },
   mounted: function mounted() {
@@ -6353,6 +6325,25 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/getAllUsers').then(function (res) {
         if (res.data.status === 'success') {
           _this.usersList = res.data.all_users;
+        }
+      });
+    },
+    actionDeleteUser: function actionDeleteUser(e) {
+      var _this2 = this;
+
+      var id = e.target.dataset.user;
+      axios({
+        method: 'post',
+        url: '/api/actionDeleteUser',
+        data: {
+          id: id
+        }
+      }).then(function (res) {
+        _this2.deleteUserMessage["class"] = res.data.status;
+        _this2.deleteUserMessage.message = res.data.message;
+
+        if (res.data.status === 'success') {
+          _this2.loadPageData();
         }
       });
     }
@@ -6561,15 +6552,25 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Register',
   data: function data() {
     return {
+      selectVisibility: false,
+      selectValue: '',
+      selectClass: '',
       headers: {
         'content-type': 'multipart/form-data'
       },
       pageData: [],
-      contacts: {
+      formData: {
         role: '',
         photo: '',
         first_name: '',
@@ -6579,12 +6580,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         password: '',
         password_confirmation: ''
       },
-      messages: {
-        photo: '',
-        email: '',
-        password: ''
-      },
-      form_sent: false
+      validate: {},
+      formMessage: {
+        "class": '',
+        message: ''
+      }
     };
   },
   mounted: function mounted() {
@@ -6599,9 +6599,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     onChange: function onChange() {
-      this.contacts.photo = this.$refs.form.photo.files[0];
+      this.formData.photo = this.$refs.form.photo.files[0];
     },
-    onFormSubmit: function onFormSubmit() {
+    showOptions: function showOptions(e) {
+      this.selectVisibility = !this.selectVisibility;
+
+      if (this.selectClass === '') {
+        this.selectClass = 'opened';
+      } else {
+        this.selectClass = '';
+      }
+    },
+    selectRole: function selectRole(e) {
+      this.formData.role = e.target.dataset.role;
+    },
+    actionAddUser: function actionAddUser() {
       var _this2 = this;
 
       var formData = new FormData(this.$refs['form']);
@@ -6624,27 +6636,59 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _iterator.f();
       }
 
-      if (this.contacts.photo.name) {
-        form_data.append('photo', this.contacts.photo, this.contacts.photo.name);
+      if (this.formData.photo.name) {
+        form_data.append('photo', this.formData.photo, this.formData.photo.name);
       }
 
+      console.log(this.formData);
       axios({
         method: 'post',
-        url: this.pageData.register_route,
+        url: '/api/actionAddUser',
         data: form_data,
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (res) {
-        if (res.data.status == 'success') {
-          _this2.form_sent = true;
-        } else {
+        if (res.data.status === 'not validated') {
           for (var key in res.data.messages) {
-            _this2.messages[key] = res.data.messages[key][0];
+            _this2.$set(_this2.validate, key, res.data.messages[key]);
           }
+        } else {
+          _this2.formMessage["class"] = res.data.status;
+          _this2.formMessage.message = res.data.message;
         }
       });
-    }
+    } // onFormSubmit() {      
+    //     const formData = new FormData(this.$refs['form']);
+    //     const form_data = new FormData();
+    //     for (let [key, val] of formData.entries()) {
+    //         form_data.append(key, val)
+    //     }
+    //     if (this.contacts.photo.name) {
+    //         form_data.append('photo', this.contacts.photo, this.contacts.photo.name);
+    //     }
+    //     axios({
+    //         method: 'post',
+    //         url: this.pageData.register_route, 
+    //         data: form_data, 
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data'
+    //         }
+    //     }).then(
+    //         res => {
+    //             console.log(res.data);
+    //             if(res.data.status == 'success') {
+    //                 this.form_sent = true
+    //             } else {
+    //                 for(let key in res.data.messages) {
+    //                     this.messages[key] = res.data.messages[key][0];
+    //                 }
+    //                 console.log(this.messages);
+    //             }
+    //         }
+    //     )
+    // }
+
   }
 });
 
@@ -31817,6 +31861,14 @@ var render = function () {
           ]),
         ]),
         _vm._v(" "),
+        _vm.deleteUserMessage.message
+          ? _c(
+              "div",
+              { class: "message message-" + _vm.deleteUserMessage.class },
+              [_vm._v(_vm._s(_vm.deleteUserMessage.message))]
+            )
+          : _vm._e(),
+        _vm._v(" "),
         _c(
           "div",
           { staticClass: "user-list" },
@@ -31908,7 +31960,7 @@ var render = function () {
                     "button",
                     {
                       staticClass: "btn btn-delete",
-                      attrs: { type: "button" },
+                      attrs: { type: "button", "data-user": user.id },
                       on: { click: _vm.actionDeleteUser },
                     },
                     [
@@ -32124,126 +32176,261 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("main", { staticClass: "register-main" }, [
-    _c("div", { staticClass: "register-main__wrapper wrapper" }, [
-      _c("h1", { staticClass: "register-main__title title title_center" }, [
-        _vm._v("Register page"),
-      ]),
-      _vm._v(" "),
-      !_vm.form_sent
-        ? _c(
-            "form",
-            {
-              ref: "form",
-              staticClass: "form",
-              on: {
-                submit: function ($event) {
-                  $event.preventDefault()
-                  return _vm.onFormSubmit.apply(null, arguments)
+  return _c("main", { staticClass: "site-main register-main" }, [
+    _c(
+      "div",
+      {
+        staticClass: "site-main-wrapper register-main-wrapper width-container",
+      },
+      [
+        _c("h1", { staticClass: "page-title users-list-page-title" }, [
+          _vm._v("Add user"),
+        ]),
+        _vm._v(" "),
+        _vm.formMessage.message
+          ? _c(
+              "div",
+              { class: "text message message-" + _vm.formMessage.class },
+              [_vm._v(_vm._s(_vm.formMessage.message))]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.formMessage.class && _vm.formMessage.class === "success"
+          ? _c(
+              "div",
+              { staticClass: "return-user-list-button button-wrapper" },
+              [
+                _c(
+                  "div",
+                  { staticClass: "button-hover" },
+                  [
+                    _c(
+                      "router-link",
+                      { staticClass: "button", attrs: { to: "/users-list" } },
+                      [_vm._v("Back to user list")]
+                    ),
+                  ],
+                  1
+                ),
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.formMessage.class !== "success"
+          ? _c(
+              "form",
+              {
+                ref: "form",
+                staticClass: "form register-form",
+                on: {
+                  submit: function ($event) {
+                    $event.preventDefault()
+                    return _vm.actionAddUser.apply(null, arguments)
+                  },
                 },
               },
-            },
-            [
-              _c("input", {
-                staticClass: "form__input",
-                attrs: { type: "hidden", name: "_token" },
-                domProps: { value: _vm.pageData.csrf_token },
-              }),
-              _vm._v(" "),
-              _vm._m(0),
-              _vm._v(" "),
-              _c("div", { staticClass: "form__row" }, [
-                _c("div", { staticClass: "form__field" }, [
-                  _c(
-                    "label",
-                    { staticClass: "form__label", attrs: { for: "photo" } },
-                    [_vm._v("Photo")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    attrs: { id: "photo", type: "file", name: "photo" },
-                    on: { change: _vm.onChange },
-                  }),
-                  _vm._v(" "),
-                  _vm.messages.photo
-                    ? _c("span", { staticClass: "form__field-error" }, [
-                        _vm._v(_vm._s(_vm.messages.photo)),
-                      ])
-                    : _vm._e(),
-                ]),
-              ]),
-              _vm._v(" "),
-              _vm._m(1),
-              _vm._v(" "),
-              _vm._m(2),
-              _vm._v(" "),
-              _c("div", { staticClass: "form__row" }, [
-                _c("div", { staticClass: "form__field" }, [
-                  _c(
-                    "label",
-                    { staticClass: "form__label", attrs: { for: "email" } },
-                    [_vm._v("Email")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form__input",
-                    attrs: {
-                      type: "email",
-                      id: "email",
-                      name: "email",
-                      placeholder: "mail@gmail.com",
-                      required: "",
-                    },
-                  }),
-                  _vm._v(" "),
-                  _vm.messages.email
-                    ? _c("span", { staticClass: "form__field-error" }, [
-                        _vm._v(_vm._s(_vm.messages.email)),
-                      ])
-                    : _vm._e(),
-                ]),
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form__row" }, [
-                _c("div", { staticClass: "form__field" }, [
-                  _c(
-                    "label",
-                    { staticClass: "form__label", attrs: { for: "password" } },
-                    [_vm._v("Password")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form__input",
-                    attrs: {
-                      type: "password",
-                      id: "password",
-                      name: "password",
-                      placeholder: "* * * * * * * *",
-                      required: "",
-                    },
-                  }),
-                  _vm._v(" "),
-                  _vm.messages.password
-                    ? _c("span", { staticClass: "form__field-error" }, [
-                        _vm._v(_vm._s(_vm.messages.password)),
-                      ])
-                    : _vm._e(),
-                ]),
+              [
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-role-wrapper" },
+                  [
+                    _c(
+                      "div",
+                      {
+                        class:
+                          "form-input-wrapper form-select-wrapper form-select-role-wrapper icon-email " +
+                          _vm.selectClass,
+                        on: { click: _vm.showOptions },
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.formData.role,
+                              expression: "formData.role",
+                            },
+                          ],
+                          staticClass:
+                            "form-input form-input-role form-custom-select",
+                          attrs: {
+                            id: "role",
+                            name: "role",
+                            type: "text",
+                            placeholder: "User role",
+                          },
+                          domProps: { value: _vm.formData.role },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.formData,
+                                "role",
+                                $event.target.value
+                              )
+                            },
+                          },
+                        }),
+                        _vm._v(" "),
+                        _vm.selectVisibility
+                          ? _c("ul", { staticClass: "select-option-list" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "select-option",
+                                  attrs: { "data-role": "admin" },
+                                  on: { click: _vm.selectRole },
+                                },
+                                [_vm._v("Admin")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "select-option",
+                                  attrs: { "data-role": "user" },
+                                  on: { click: _vm.selectRole },
+                                },
+                                [_vm._v("User")]
+                              ),
+                            ])
+                          : _vm._e(),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.validate.role
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.role, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
                 _vm._v(" "),
-                _vm._m(3),
-              ]),
-              _vm._v(" "),
-              _vm._m(4),
-            ]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.form_sent
-        ? _c("div", { staticClass: "form-message title" }, [
-            _vm._v("User created successfully"),
-          ])
-        : _vm._e(),
-    ]),
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-photo-wrapper" },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "form-input-wrapper form-input-photo-wrapper icon-photo",
+                      },
+                      [
+                        _c("input", {
+                          staticClass: "form-input form-input-photo",
+                          attrs: { id: "photo", type: "file", name: "photo" },
+                          on: { change: _vm.onChange },
+                        }),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.validate.photo
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.photo, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._m(1),
+                _vm._v(" "),
+                _vm._m(2),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-email-wrapper" },
+                  [
+                    _vm._m(3),
+                    _vm._v(" "),
+                    _vm.validate.email
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.email, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "form-item-wrapper form-item-password-wrapper",
+                  },
+                  [
+                    _vm._m(4),
+                    _vm._v(" "),
+                    _vm.validate.password
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(
+                            _vm.validate.password,
+                            function (message, index) {
+                              return _c(
+                                "p",
+                                { key: index, staticClass: "message-item" },
+                                [_vm._v(_vm._s(message))]
+                              )
+                            }
+                          ),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(5),
+                _vm._v(" "),
+                _vm._m(6),
+              ]
+            )
+          : _vm._e(),
+      ]
+    ),
   ])
 }
 var staticRenderFns = [
@@ -32251,126 +32438,173 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
+    return _c(
+      "div",
+      { staticClass: "form-item-wrapper form-item-first-name-wrapper" },
+      [
         _c(
-          "select",
+          "div",
           {
-            staticClass: "form__input",
-            attrs: { id: "role", name: "role", required: "" },
+            staticClass:
+              "form-input-wrapper form-input-first-name-wrapper icon-email",
           },
           [
-            _c("option", { attrs: { value: "", selected: "" } }, [
-              _vm._v("User Role"),
-            ]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "admin" } }, [_vm._v("Admin")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "user" } }, [_vm._v("User")]),
+            _c("input", {
+              staticClass: "form-input form-input-first-name",
+              attrs: {
+                id: "first_name",
+                name: "first_name",
+                type: "text",
+                placeholder: "First name",
+              },
+            }),
           ]
         ),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
+    return _c(
+      "div",
+      { staticClass: "form-item-wrapper form-item-last-name-wrapper" },
+      [
         _c(
-          "label",
-          { staticClass: "form__label", attrs: { for: "first_name" } },
-          [_vm._v("First Name")]
+          "div",
+          {
+            staticClass:
+              "form-input-wrapper form-input-last-name-wrapper icon-email",
+          },
+          [
+            _c("input", {
+              staticClass: "form-input form-input-last-name",
+              attrs: {
+                id: "last_name",
+                name: "last_name",
+                type: "text",
+                placeholder: "Last name",
+              },
+            }),
+          ]
         ),
-        _vm._v(" "),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-item-wrapper form-item-post-name-wrapper" },
+      [
+        _c(
+          "div",
+          {
+            staticClass:
+              "form-input-wrapper form-input-post-name-wrapper icon-email",
+          },
+          [
+            _c("input", {
+              staticClass: "form-input form-input-post-name",
+              attrs: {
+                id: "user_post",
+                name: "user_post",
+                type: "text",
+                placeholder: "User post",
+              },
+            }),
+          ]
+        ),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "form-input-wrapper form-input-email-wrapper icon-email" },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-input-email",
           attrs: {
-            type: "text",
-            id: "first_name",
-            name: "first_name",
-            placeholder: "Vasyl",
+            id: "email",
+            name: "email",
+            type: "email",
+            placeholder: "Email",
           },
         }),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form__field" }, [
-        _c(
-          "label",
-          { staticClass: "form__label", attrs: { for: "last_name" } },
-          [_vm._v("Last Name")]
-        ),
-        _vm._v(" "),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "form-input-wrapper form-input-password-wrapper icon-password",
+      },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-input-password",
           attrs: {
-            type: "text",
-            id: "last_name",
-            name: "last_name",
-            placeholder: "Stus",
+            id: "password",
+            name: "password",
+            type: "password",
+            placeholder: "Password",
           },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
+    return _c(
+      "div",
+      { staticClass: "form-item-wrapper form-item-password-wrapper" },
+      [
         _c(
-          "label",
-          { staticClass: "form__label", attrs: { for: "user_post" } },
-          [_vm._v("User Post")]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form__input",
-          attrs: {
-            type: "text",
-            id: "user_post",
-            name: "user_post",
-            placeholder: "Ukrainskiy poet, politzaklyuchenniy",
+          "div",
+          {
+            staticClass:
+              "form-input-wrapper form-input-password-wrapper icon-password",
           },
-        }),
+          [
+            _c("input", {
+              staticClass: "form-input form-input-password",
+              attrs: {
+                id: "password_confirmation",
+                name: "password_confirmation",
+                type: "password",
+                placeholder: "Confirm password",
+              },
+            }),
+          ]
+        ),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "button-wrapper button-submit-wrapper" }, [
+      _c("div", { staticClass: "button-hover button-submit-hover" }, [
+        _c(
+          "button",
+          { staticClass: "button button-submit", attrs: { type: "submit" } },
+          [_vm._v("Add user")]
+        ),
       ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__field" }, [
-      _c(
-        "label",
-        { staticClass: "form__label", attrs: { for: "password-confirm" } },
-        [_vm._v("Confirm password")]
-      ),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form__input",
-        attrs: {
-          id: "password-confirm",
-          type: "password",
-          name: "password_confirmation",
-          placeholder: "* * * * * * * *",
-          required: "",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__submit-wrap" }, [
-      _c(
-        "button",
-        { staticClass: "form__submit btn", attrs: { type: "submit" } },
-        [_vm._v("Register")]
-      ),
     ])
   },
 ]

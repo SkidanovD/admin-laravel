@@ -577,6 +577,52 @@ li {
 .site-wrapper {
   background-color: var(--dark);
 }
+
+
+
+
+.site-background-block {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  padding: 15vh 15vw;
+}
+.site-background-block::before {
+  content: '';
+  position: absolute;
+  display: none;
+  background: radial-gradient(circle at 50%, #ffffffff 0%, #ffffff00 75%);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.site-background-block::after {
+  content: '';
+  position: absolute;
+  display: none;
+  background-color: #020102f0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.site-background-block svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  position: relative;
+  filter: drop-shadow(0 0 20px #fff) brightness(15%) contrast(115%) blur(10px);
+  transform: rotate(45deg);
+}
+.vue-wrapper {
+  position: relative;
+}
+
+
+
 .width-container {
   width: 80%;
   margin: 0 auto;
@@ -767,6 +813,7 @@ li {
   height: 100%;
   object-fit: contain;
   object-position: center center;
+  pointer-events: none;
 }
 .btn path {
   transition: fill 0.5s;
@@ -920,6 +967,9 @@ li {
 .form-input-wrapper.icon-password::before {
   background-image: url(../img/icons/icon-key.svg);
 }
+.form-input-wrapper.icon-photo::before {
+  background-image: url(../img/icons/icon-photo.svg);
+}
 .form-input {
   color: var(--white);
   font-family: var(--main-font);
@@ -947,6 +997,63 @@ li {
   display: block;
   width: 100%;
 }
+.form-select-wrapper {
+  position: relative;
+  z-index: 1;
+}
+.form-select-wrapper::after {
+  content: '';
+  position: absolute;
+  display: block;
+  border: 1px solid var(--white);
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(45deg);
+  width: 0.75em;
+  height: 0.75em;
+  top: 1.5em;
+  right: 1.5em;
+  transition: top 0.5s, border-color 0.5s;
+}
+.form-select-wrapper.opened::after {
+  border-top-color: var(--white);
+  border-left-color: var(--white);
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  top: 2.1em;
+}
+.form-custom-select {
+  pointer-events: none;
+}
+.select-option-list {
+  position: absolute;
+  top: calc(100% - 1px);
+  left: -1px;
+  background-color: #121212;
+  border: 1px solid var(--gray);
+  width: calc(100% + 2px);
+  max-height: 300px;
+  overflow: auto;
+  padding: 2em 2.5em;
+}
+.select-option {
+  color: var(--white);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.select-option:hover {
+  color: var(--primary);
+}
+.select-option:last-child {
+  margin-bottom: 0;
+}
+.message.form-validate-messages {
+  margin-bottom: 0;
+}
 
 
 /* --- Messages --- */
@@ -968,6 +1075,7 @@ li {
   height: 2em;
   top: -1em;
   left: 1em;
+  z-index: 1;
 }
 .message-info {
   color: var(--light-gray);
@@ -979,7 +1087,7 @@ li {
 }
 .message-error {
   color: var(--red);
-  background-color: #00ff0020;
+  background-color: #ff2b2b21;
   border: 1px solid var(--dark-red);
 }
 .message-error::before {
@@ -987,7 +1095,7 @@ li {
 }
 .message-warning {
   color: var(--yellow);
-  background-color: #00ff0020;
+  background-color: #e3e31811;
   border: 1px solid var(--dark-yellow);
 }
 .message-warning::before {
@@ -1088,4 +1196,11 @@ li {
 .add-use-block .button-wrapper {
   display: flex;
   justify-content: flex-end;
+}
+
+/* --- Add User Page --- */
+
+.return-user-list-button {
+  display: flex;
+  justify-content: center;
 }

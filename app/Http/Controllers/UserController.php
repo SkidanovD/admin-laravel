@@ -40,7 +40,7 @@ class UserController extends Controller
         ]);
         if ($validator->fails()) {
             return [
-                'status' => 'error',
+                'status' => 'not validated',
                 'messages' => $validator->messages(),
                 'form_field' => $request->all()
             ];
@@ -159,6 +159,12 @@ class UserController extends Controller
                 'message' => trans('error.authentication'),
             ];
         }
+        if ($auth_user->id === (int) $request->id) {
+            return [
+                'status' => 'warning',
+                'message' => trans('warning.re_login_for_delete'),
+            ];
+        }
         if ($auth_user->role !== 'admin') {
             return [
                 'status' => 'error',
@@ -181,7 +187,7 @@ class UserController extends Controller
         }
         return [
             'status' => 'success',
-            'message' => trans('succes.delete', ['model' => 'User']),
+            'message' => trans('success.delete', ['model' => 'User']),
         ];
     }
 

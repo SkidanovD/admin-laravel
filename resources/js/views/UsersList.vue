@@ -9,6 +9,7 @@
                </div>
             </div>
          </div>
+         <div :class="'message message-' + deleteUserMessage.class" v-if="deleteUserMessage.message">{{ deleteUserMessage.message }}</div>
          <div class="user-list">
             <div class="user-item" v-for="(user, index) in usersList" :key="index">
                <div class="photo-column">
@@ -33,7 +34,7 @@
                      </router-link>
                   </div>
                   <div class="btn-wrapper btn-delete-wrapper">
-                     <button type="button" @click="actionDeleteUser" class="btn btn-delete">
+                     <button type="button" @click="actionDeleteUser" class="btn btn-delete" :data-user="user.id">
                         <svg height="32px" id="Layer_1" version="1.1" viewBox="0 0 32 32" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                            <g id="trash">
                               <path clip-rule="evenodd" d="M29.98,6.819c-0.096-1.57-1.387-2.816-2.98-2.816h-3v-1V3.001   c0-1.657-1.344-3-3-3H11c-1.657,0-3,1.343-3,3v0.001v1H5c-1.595,0-2.885,1.246-2.981,2.816H2v1.183v1c0,1.104,0.896,2,2,2l0,0v17   c0,2.209,1.791,4,4,4h16c2.209,0,4-1.791,4-4v-17l0,0c1.104,0,2-0.896,2-2v-1V6.819H29.98z M10,3.002c0-0.553,0.447-1,1-1h10   c0.553,0,1,0.447,1,1v1H10V3.002z M26,28.002c0,1.102-0.898,2-2,2H8c-1.103,0-2-0.898-2-2v-17h20V28.002z M28,8.001v1H4v-1V7.002   c0-0.553,0.447-1,1-1h22c0.553,0,1,0.447,1,1V8.001z" fill="#676767" fill-rule="evenodd"/>
@@ -47,39 +48,6 @@
                </div>
             </div>
          </div>
-         
-         <!-- <div>
-            <table class="table"> 
-               <thead>
-                  <tr>
-                     <th>First name</th>
-                     <th>Last name</th>
-                     <th>Photo</th>
-                     <th>User post</th>
-                     <th>Email</th>
-                     <th>Role</th>
-                     <th>Edit link</th>
-                     <th>Delete link</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr v-for="(user, index) in usersList" :key="index">
-                     <td>{{ user.first_name }}</td>
-                     <td>{{ user.last_name }}</td>
-                     <td><img :src='user.photo' alt="photo"></td>
-                     <td>{{ user.user_post }}</td>
-                     <td>{{ user.email }}</td>
-                     <td>{{ user.role }}</td>
-                     <td>
-                        <router-link :to="'/edit-user/'+user.id">Edit user</router-link>
-                     </td>
-                     <td>
-                        <router-link :to="'/delete-user/'+user.id">Delete user</router-link>
-                     </td>
-                  </tr>
-               </tbody>
-            </table>
-         </div> -->
       </div>
    </main>
 </template>
@@ -88,6 +56,10 @@
       name: 'UsersList',
       data: () => ({
          usersList: [],
+         deleteUserMessage: {
+            class: '',
+            message: '',
+         },
       }),
       mounted() {
          this.loadPageData();
@@ -100,6 +72,25 @@
                }
                
             })
+         },
+         actionDeleteUser(e) {
+            var id = e.target.dataset.user;
+            
+            axios({
+               method: 'post',
+               url: '/api/actionDeleteUser',
+               data: {
+                  id: id,
+               },
+            }).then(
+               res => {
+                  this.deleteUserMessage.class = res.data.status;
+                  this.deleteUserMessage.message = res.data.message;
+                  if (res.data.status === 'success') {
+                     this.loadPageData();
+                  }
+               }
+            )
          }
       }
    }
