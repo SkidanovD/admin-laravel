@@ -1,7 +1,7 @@
 <template>
     <main class="site-main register-main">
         <div class="site-main-wrapper register-main-wrapper width-container">
-            <h1 class="page-title users-list-page-title">Add user</h1>
+            <h1 class="page-title register-page-title">Add user</h1>
             <div :class="'text message message-' + formMessage.class" v-if="formMessage.message">{{ formMessage.message }}</div>
             <div class="return-user-list-button button-wrapper" v-if="formMessage.class && formMessage.class === 'success'">
                <div class="button-hover">
@@ -10,7 +10,7 @@
             </div>
             <form ref="form" class="form register-form" @submit.prevent="actionAddUser" v-if="formMessage.class !== 'success'">
                 <div class="form-item-wrapper form-item-role-wrapper">
-                    <div :class="'form-input-wrapper form-select-wrapper form-select-role-wrapper icon-email ' + selectClass" @click="showOptions">
+                    <div :class="'form-input-wrapper form-select-wrapper form-select-role-wrapper icon-role ' + selectClass" @click="showOptions">
                         <input class="form-input form-input-role form-custom-select" id="role" name="role" type="text" v-model="formData.role" placeholder="User role">
                         <ul class="select-option-list" v-if="selectVisibility">
                             <div class="select-option" data-role="admin" v-on:click="selectRole">Admin</div>
@@ -23,25 +23,25 @@
                 </div>
                 <div class="form-item-wrapper form-item-photo-wrapper">
                     <div class="form-input-wrapper form-input-photo-wrapper icon-photo">
-
-                        <input class="form-input form-input-photo" id="photo" type="file" name="photo" v-on:change="onChange">
+                        <label for="photo" :class="'form-label form-label-file' + photoClass">{{ photoLabel }}</label>
+                        <input class="form-input form-input-file form-input-photo" id="photo" type="file" name="photo" v-on:change="onChange">
                     </div>
                     <div class="form-validate-messages message message-error" v-if="validate.photo">
                         <p class="message-item" v-for="(message, index) in validate.photo" :key="index">{{ message }}</p>
                     </div>
                 </div>
                 <div class="form-item-wrapper form-item-first-name-wrapper">
-                    <div class="form-input-wrapper form-input-first-name-wrapper icon-email">
+                    <div class="form-input-wrapper form-input-first-name-wrapper icon-name">
                         <input class="form-input form-input-first-name" id="first_name" name="first_name" type="text" placeholder="First name">
                     </div>
                 </div>
                 <div class="form-item-wrapper form-item-last-name-wrapper">
-                    <div class="form-input-wrapper form-input-last-name-wrapper icon-email">
+                    <div class="form-input-wrapper form-input-last-name-wrapper icon-name">
                         <input class="form-input form-input-last-name" id="last_name" name="last_name" type="text" placeholder="Last name">
                     </div>
                 </div>
                 <div class="form-item-wrapper form-item-post-name-wrapper">
-                    <div class="form-input-wrapper form-input-post-name-wrapper icon-email">
+                    <div class="form-input-wrapper form-input-post-name-wrapper icon-post">
                         <input class="form-input form-input-post-name" id="user_post" name="user_post" type="text" placeholder="User post">
                     </div>
                 </div>
@@ -84,6 +84,8 @@ export default {
             selectVisibility: false,
             selectValue: '',
             selectClass: '',
+            photoLabel: 'Photo',
+            photoClass: ' placeholder',
             headers: {
                 'content-type': 'multipart/form-data'
             },
@@ -114,8 +116,10 @@ export default {
                 this.pageData = res.data
             })
         },
-        onChange() {
+        onChange(e) {
             this.formData.photo = this.$refs.form.photo.files[0];
+            this.photoLabel = this.$refs.form.photo.files[0].name;
+            this.photoClass = '';
         },
         showOptions(e) {
             this.selectVisibility = !this.selectVisibility;
@@ -139,8 +143,6 @@ export default {
                 form_data.append('photo', this.formData.photo, this.formData.photo.name);
             }
 
-            console.log(this.formData);
-
             axios({
                 method: 'post',
                 url: '/api/actionAddUser', 
@@ -161,40 +163,6 @@ export default {
                 }
             )
         },
-        // onFormSubmit() {      
-        //     const formData = new FormData(this.$refs['form']);
-        //     const form_data = new FormData();
-
-        //     for (let [key, val] of formData.entries()) {
-        //         form_data.append(key, val)
-        //     }
-        //     if (this.contacts.photo.name) {
-        //         form_data.append('photo', this.contacts.photo, this.contacts.photo.name);
-        //     }
-            
-
-        //     axios({
-        //         method: 'post',
-        //         url: this.pageData.register_route, 
-        //         data: form_data, 
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data'
-        //         }
-        //     }).then(
-        //         res => {
-        //             console.log(res.data);
-        //             if(res.data.status == 'success') {
-        //                 this.form_sent = true
-        //             } else {
-        //                 for(let key in res.data.messages) {
-        //                     this.messages[key] = res.data.messages[key][0];
-        //                 }
-        //                 console.log(this.messages);
-                        
-        //             }
-        //         }
-        //     )
-        // }
     }
 }
 </script>

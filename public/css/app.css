@@ -970,6 +970,15 @@ li {
 .form-input-wrapper.icon-photo::before {
   background-image: url(../img/icons/icon-photo.svg);
 }
+.form-input-wrapper.icon-post::before {
+  background-image: url(../img/icons/icon-user-post.svg);
+}
+.form-input-wrapper.icon-name::before {
+  background-image: url(../img/icons/icon-name.svg);
+}
+.form-input-wrapper.icon-role::before {
+  background-image: url(../img/icons/icon-role.svg);
+}
 .form-input {
   color: var(--white);
   font-family: var(--main-font);
@@ -1023,6 +1032,7 @@ li {
   top: 2.1em;
 }
 .form-custom-select {
+  text-transform: capitalize;
   pointer-events: none;
 }
 .select-option-list {
@@ -1053,6 +1063,34 @@ li {
 }
 .message.form-validate-messages {
   margin-bottom: 0;
+}
+.form-input-file {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  z-index: -100;
+}
+.form-label-file {
+  color: var(--white);
+  display: block;
+  width: 100%;
+  padding: 1.4em 1.6em 1.4em 4.5em;
+  position: relative;
+  cursor: pointer;
+}
+.form-label-file.placeholder {
+  color: var(--gray);
+}
+.form-label-file::before {
+  content: '';
+  position: absolute;
+  display: block;
+  background: url(../img/icons/icon-download.svg) center center no-repeat;
+  background-size: contain;
+  width: 1.3em;
+  height: 1.3em;
+  top: 1.45em;
+  right: 1.3em;
 }
 
 
@@ -1198,9 +1236,33 @@ li {
   justify-content: flex-end;
 }
 
+
 /* --- Add User Page --- */
 
 .return-user-list-button {
   display: flex;
   justify-content: center;
+}
+
+
+/* --- Edit User Page --- */
+
+.edit-user-photo {
+  margin-bottom: 2.5em;
+}
+.edit-user-photo .image-wrapper {
+  margin: 0 auto;
+  width: 90%;
+  max-width: 350px;
+  height: 72vw;
+  max-height: 350px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.edit-user-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
 }

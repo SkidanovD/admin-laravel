@@ -109,14 +109,14 @@ class UserController extends Controller
         if (empty($query_data)) {
             return [
                 'status' => 'error',
-                'messages' => trans('error.notChanged'),
+                'message' => trans('error.notChanged'),
                 'form_field' => $request->all(),
             ];
         }
         $validator = Validator::make($query_data, $query_validator);
         if ($validator->fails()) {
             return [
-                'status' => 'error',
+                'status' => 'not validated',
                 'messages' => $validator->messages(),
                 'form_field' => $request->all()
             ];

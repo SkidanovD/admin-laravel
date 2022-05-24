@@ -2,6 +2,7 @@
     <main class="site-main login-main">
         <div class="site-main-wrapper login-main-wrapper width-container">
             <h1 class="page-title login-page-title">Sign In to Invoice Generator</h1>
+            <div :class="'text message message-' + formMessage.class" v-if="formMessage.message">{{ formMessage.message }}</div>
             <form class="form login-form" ref="form" @submit.prevent="actionLogin">
                 <div class="form-item-wrapper form-item-email-wrapper">
                     <div class="form-input-wrapper form-input-email-wrapper icon-email">
@@ -28,6 +29,10 @@ export default {
     name: 'Login',
     data: () => ({
         pageData: [],
+        formMessage: {
+            class: '',
+            message: '',
+        },
     }),
     mounted() {
         this.loadPageData();
@@ -54,6 +59,12 @@ export default {
                     if (res.data.status === 'success') {
                         location = '/';
                         // this.$router.push('/');
+                    } else {
+                        console.log(res.data);
+                        console.log(res.data.message);
+                        
+                        this.formMessage.class = 'error';
+                        this.formMessage.message = res.data.message;
                     }
                 }
             )

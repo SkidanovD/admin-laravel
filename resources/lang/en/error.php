@@ -10,5 +10,6 @@ return [
    'notFound' => ':model not found.',
    'notId' => 'There is no :model with this id.',
    'notUpdate' => ':model not found.',
+   'wrongOldPassword' => 'Wrong old password entered.'
 
 ];
