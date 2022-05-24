@@ -8,6 +8,7 @@ import Register from './views/auth/Register'
 import Login from './views/auth/Login'
 import UsersList from './views/Users/UsersList'
 import EditUser from './views/Users/EditUser'
+import MyAccount from './views/Users/MyAccount'
 import CompaniesList from './views/Companies/CompaniesList'
 import AddCompany from './views/Companies/AddCompany'
 import EditCompany from './views/Companies/EditCompany'
@@ -34,6 +35,10 @@ const routes = [
     {
         path: '/edit-user/:id',
         component: EditUser,
+    },
+    {
+        path: '/my-account/:id',
+        component: MyAccount,
     },
     {
         path: '/companies-list',

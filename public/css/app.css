@@ -1266,3 +1266,65 @@ li {
   object-fit: cover;
   object-position: center center;
 }
+
+
+/* --- My account page --- */
+
+.user-main-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2.5em;
+}
+.user-main-info .left-column {
+  width: 40%;
+}
+.user-main-info .user-photo .image-wrapper {
+  width: 100%;
+  height: 32vw;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.user-main-info .user-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+.user-main-info .right-column {
+  width: 50%;
+  padding-top: 1.5em;
+}
+.user-info-item {
+  margin-bottom: 2em;
+}
+.user-info-label {
+  color: var(--gray);
+  font-weight: 500;
+  margin-bottom: 0.5em;
+}
+.user-info-value {
+  margin-bottom: 0;
+  padding-left: 3rem;
+}
+.user-info-name {
+  font-family: var(--button-font);
+  font-weight: 600;
+  text-transform: none;
+}
+.user-info-post {
+  color: var(--light-gray);
+  text-transform: none;
+}
+.user-info-email {
+  color: var(--primary);
+  text-transform: none;
+}
+.user-info-role {
+  color: var(--light-gray);
+  text-transform: capitalize;
+}
+.account-button-block {
+  display: flex;
+  justify-content: flex-end;
+}

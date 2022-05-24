@@ -82,6 +82,12 @@ class UserController extends Controller
                 'message' => trans('error.authentication'),
             ];
         }
+        if ($auth_user->role === 'user' && $auth_user->id !== (int) $request->id) {
+            return [
+                'status' => 'warning',
+                'message' => trans('warning.cannot_change_data'),
+            ];
+        }
         $user_old_data = User::find($request->id, ['first_name', 'last_name', 'photo', 'user_post', 'email', 'role']);
         $query_data = [];
         $query_validator = [

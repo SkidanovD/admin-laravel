@@ -2,10 +2,10 @@
     <header class="site-header">
         <div class="site-header-wrapper width-container">
             <router-link class="site-logo-link" to="/" v-if="isAuth">
-                <img class="site-logo" src="img/logo.png"  alt="Bato Invoices">
+                <img class="site-logo" src="/img/logo.png"  alt="Bato Invoices">
             </router-link>
             <router-link class="site-logo-link" to="/login" v-else>
-                <img class="site-logo" src="img/logo.png"  alt="Bato Invoices">
+                <img class="site-logo" src="/img/logo.png"  alt="Bato Invoices">
             </router-link>
             <nav class="main-navigation">
                 <ul class="main-nav-list">
@@ -19,7 +19,7 @@
                         <router-link class="main-nav-link" to="/users-list">Users</router-link>
                     </li>
                     <li class="main-nav-item" v-if="isAuth">
-                        <router-link class="main-nav-link" to="/">My account</router-link>
+                        <router-link class="main-nav-link" :to="'/my-account/' + authUser.id">My account</router-link>
                     </li>
                     <li class="main-nav-item logout" v-if="isAuth">
                         <a href="#" class="main-nav-link" @click.prevent="actionLogOut">Log out</a>
