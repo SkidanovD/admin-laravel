@@ -6390,6 +6390,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'MyAccount',
   data: function data() {
@@ -32332,18 +32335,25 @@ var render = function () {
         _vm._v(" "),
         _c("div", { staticClass: "user-main-info" }, [
           _c("div", { staticClass: "left-column" }, [
-            _vm.user.photo
-              ? _c("div", { staticClass: "user-photo" }, [
-                  _c("div", { staticClass: "image-wrapper" }, [
+            _c("div", { staticClass: "user-photo" }, [
+              _vm.user.photo
+                ? _c("div", { staticClass: "image-wrapper" }, [
                     _c("img", {
                       attrs: {
                         src: _vm.user.photo,
-                        alt: _vm.user.first_name + _vm.user.last_name,
+                        alt: _vm.user.first_name + " " + _vm.user.last_name,
+                      },
+                    }),
+                  ])
+                : _c("div", { staticClass: "image-wrapper default" }, [
+                    _c("img", {
+                      attrs: {
+                        src: "/img/icons/icon-incognito.svg",
+                        alt: _vm.user.first_name + " " + _vm.user.last_name,
                       },
                     }),
                   ]),
-                ])
-              : _vm._e(),
+            ]),
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "right-column" }, [

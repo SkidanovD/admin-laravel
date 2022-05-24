@@ -1284,12 +1284,22 @@ li {
   border-radius: 50%;
   overflow: hidden;
 }
+.user-main-info .user-photo .image-wrapper.default {
+	border: 2px solid var(--gray);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 .user-main-info .user-photo img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center center;
+}
+.user-main-info .user-photo .default img {
+  width: 85%;
+  height: 85%;
 }
 .user-main-info .right-column {
   width: 50%;

@@ -4,9 +4,12 @@
             <h1 class="page-title account-page-title">My account</h1>
             <div class="user-main-info">
                 <div class="left-column">
-                    <div class="user-photo" v-if="user.photo">
-                        <div class="image-wrapper">
-                            <img :src="user.photo" :alt="user.first_name + user.last_name">
+                    <div class="user-photo">
+                        <div class="image-wrapper" v-if="user.photo">
+                            <img :src="user.photo" :alt="user.first_name + ' ' + user.last_name">
+                        </div>
+                        <div class="image-wrapper default" v-else>
+                            <img src="/img/icons/icon-incognito.svg" :alt="user.first_name + ' ' + user.last_name">
                         </div>
                     </div>
                 </div>
