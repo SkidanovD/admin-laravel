@@ -33,7 +33,7 @@ class CompanyController extends Controller
         ]);
         if ($validator->fails()) {
             return [
-                'status' => 'error',
+                'status' => 'not validated',
                 'messages' => $validator->messages(),
                 'form_field' => $request->all()
             ];

@@ -9,7 +9,7 @@
                </div>
             </div>
             <form ref="form" class="form register-form" @submit.prevent="actionAddUser" v-if="formMessage.class !== 'success'">
-                <div class="form-item-wrapper form-item-role-wrapper">
+                <div class="form-item-wrapper form-item-role-wrapper required">
                     <div :class="'form-input-wrapper form-select-wrapper form-select-role-wrapper icon-role ' + selectClass" @click="showOptions">
                         <input class="form-input form-input-role form-custom-select" id="role" name="role" type="text" v-model="formData.role" placeholder="User role">
                         <ul class="select-option-list" v-if="selectVisibility">
@@ -40,12 +40,12 @@
                         <input class="form-input form-input-last-name" id="last_name" name="last_name" type="text" placeholder="Last name">
                     </div>
                 </div>
-                <div class="form-item-wrapper form-item-post-name-wrapper">
+                <div class="form-item-wrapper form-item-post-wrapper">
                     <div class="form-input-wrapper form-input-post-name-wrapper icon-post">
                         <input class="form-input form-input-post-name" id="user_post" name="user_post" type="text" placeholder="User post">
                     </div>
                 </div>
-                <div class="form-item-wrapper form-item-email-wrapper">
+                <div class="form-item-wrapper form-item-email-wrapper required">
                     <div class="form-input-wrapper form-input-email-wrapper icon-email">
                         <input class="form-input form-input-email" id="email" name="email" type="email" placeholder="Email">
                     </div>
@@ -53,7 +53,7 @@
                         <p class="message-item" v-for="(message, index) in validate.email" :key="index">{{ message }}</p>
                     </div>
                 </div>
-                <div class="form-item-wrapper form-item-password-wrapper">
+                <div class="form-item-wrapper form-item-password-wrapper required">
                     <div class="form-input-wrapper form-input-password-wrapper icon-password">
                         <input class="form-input form-input-password" id="password" name="password" type="password" placeholder="Password">
                     </div>
@@ -61,7 +61,7 @@
                         <p class="message-item" v-for="(message, index) in validate.password" :key="index">{{ message }}</p>
                     </div>
                 </div>
-                <div class="form-item-wrapper form-item-password-wrapper">
+                <div class="form-item-wrapper form-item-password-wrapper required">
                     <div class="form-input-wrapper form-input-password-wrapper icon-password">
                         <input class="form-input form-input-password" id="password_confirmation" name="password_confirmation" type="password" placeholder="Confirm password">
                     </div>

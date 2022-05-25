@@ -5451,24 +5451,117 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AddCompany',
   data: function data() {
-    return {};
+    return {
+      validate: {},
+      formMessage: {
+        "class": '',
+        message: ''
+      }
+    };
   },
   // mounted() {
   //     this.loadPageData();
   // },
   methods: {
-    // loadPageData() {
-    //     axios.get('/api/getPageRegister').then(res => {
-    //         this.pageData = res.data
-    //     })
-    // },
-    // onChange() {
-    //     this.contacts.photo = this.$refs.form.photo.files[0];
-    // },
-    onFormSubmit: function onFormSubmit() {
+    actionAddCompany: function actionAddCompany() {
+      var _this = this;
+
       var formData = new FormData(this.$refs['form']);
       var form_data = new FormData();
 
@@ -5494,7 +5587,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         url: '/api/actionAddCompany',
         data: form_data
       }).then(function (res) {
-        console.log(res.data);
+        if (res.data.status === 'not validated') {
+          for (var key in res.data.messages) {
+            _this.$set(_this.validate, key, res.data.messages[key]);
+          }
+        } else {
+          _this.formMessage["class"] = res.data.status;
+          _this.formMessage.message = res.data.message;
+        }
       });
     }
   }
@@ -5563,11 +5663,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'CompaniesList',
   data: function data() {
     return {
-      companiesList: []
+      companiesList: [],
+      getAllCompanies: false
     };
   },
   mounted: function mounted() {
@@ -5578,6 +5718,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get('/api/getAllCompanies').then(function (res) {
+        _this.getAllCompanies = true;
+
         if (res.data.status === 'success') {
           _this.companiesList = res.data.all_companies;
         }
@@ -30716,49 +30858,347 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("main", { staticClass: "add-company-main" }, [
-    _c("div", { staticClass: "add-company-main__wrapper wrapper" }, [
-      _c("h1", { staticClass: "add-company-main__title title title_center" }, [
-        _vm._v("New company page"),
-      ]),
-      _vm._v(" "),
-      _c(
-        "form",
-        {
-          ref: "form",
-          staticClass: "form",
-          on: {
-            submit: function ($event) {
-              $event.preventDefault()
-              return _vm.onFormSubmit.apply(null, arguments)
-            },
-          },
-        },
-        [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._m(1),
-          _vm._v(" "),
-          _vm._m(2),
-          _vm._v(" "),
-          _vm._m(3),
-          _vm._v(" "),
-          _vm._m(4),
-          _vm._v(" "),
-          _vm._m(5),
-          _vm._v(" "),
-          _vm._m(6),
-          _vm._v(" "),
-          _vm._m(7),
-          _vm._v(" "),
-          _vm._m(8),
-          _vm._v(" "),
-          _vm._m(9),
-          _vm._v(" "),
-          _vm._m(10),
-        ]
-      ),
-    ]),
+  return _c("main", { staticClass: "site-main add-company-main" }, [
+    _c(
+      "div",
+      {
+        staticClass:
+          "site-main-wrapper add-company-main-wrapper width-container",
+      },
+      [
+        _c("h1", { staticClass: "page-title add-company-page-title" }, [
+          _vm._v("Add company"),
+        ]),
+        _vm._v(" "),
+        _vm.formMessage.message
+          ? _c(
+              "div",
+              { class: "text message message-" + _vm.formMessage.class },
+              [_vm._v(_vm._s(_vm.formMessage.message))]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.formMessage.class && _vm.formMessage.class === "success"
+          ? _c(
+              "div",
+              { staticClass: "return-company-list-button button-wrapper" },
+              [
+                _c(
+                  "div",
+                  { staticClass: "button-hover" },
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "button",
+                        attrs: { to: "/companies-list" },
+                      },
+                      [_vm._v("Back to company list")]
+                    ),
+                  ],
+                  1
+                ),
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.formMessage.class !== "success"
+          ? _c(
+              "form",
+              {
+                ref: "form",
+                staticClass: "form add-company-form",
+                on: {
+                  submit: function ($event) {
+                    $event.preventDefault()
+                    return _vm.actionAddCompany.apply(null, arguments)
+                  },
+                },
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-name-wrapper" },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _vm.validate.name
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.name, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-item-wrapper form-item-company-name-wrapper required",
+                  },
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _vm.validate.company_name
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(
+                            _vm.validate.company_name,
+                            function (message, index) {
+                              return _c(
+                                "p",
+                                { key: index, staticClass: "message-item" },
+                                [_vm._v(_vm._s(message))]
+                              )
+                            }
+                          ),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "form-item-wrapper form-item-address-wrapper",
+                  },
+                  [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _vm.validate.address
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(
+                            _vm.validate.address,
+                            function (message, index) {
+                              return _c(
+                                "p",
+                                { key: index, staticClass: "message-item" },
+                                [_vm._v(_vm._s(message))]
+                              )
+                            }
+                          ),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-item-wrapper form-item-post-code-wrapper",
+                  },
+                  [
+                    _vm._m(3),
+                    _vm._v(" "),
+                    _vm.validate.post_code
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(
+                            _vm.validate.post_code,
+                            function (message, index) {
+                              return _c(
+                                "p",
+                                { key: index, staticClass: "message-item" },
+                                [_vm._v(_vm._s(message))]
+                              )
+                            }
+                          ),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-city-wrapper" },
+                  [
+                    _vm._m(4),
+                    _vm._v(" "),
+                    _vm.validate.city
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.city, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-phone-wrapper" },
+                  [
+                    _vm._m(5),
+                    _vm._v(" "),
+                    _vm.validate.phone
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.phone, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-siret-wrapper" },
+                  [
+                    _vm._m(6),
+                    _vm._v(" "),
+                    _vm.validate.siret
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.siret, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-rcs-wrapper" },
+                  [
+                    _vm._m(7),
+                    _vm._v(" "),
+                    _vm.validate.rcs
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.rcs, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-tva-wrapper" },
+                  [
+                    _vm._m(8),
+                    _vm._v(" "),
+                    _vm.validate.tva
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.tva, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-item-wrapper form-item-note-wrapper" },
+                  [
+                    _vm._m(9),
+                    _vm._v(" "),
+                    _vm.validate.note
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-validate-messages message message-error",
+                          },
+                          _vm._l(_vm.validate.note, function (message, index) {
+                            return _c(
+                              "p",
+                              { key: index, staticClass: "message-item" },
+                              [_vm._v(_vm._s(message))]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(10),
+              ]
+            )
+          : _vm._e(),
+      ]
+    ),
   ])
 }
 var staticRenderFns = [
@@ -30766,227 +31206,215 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "name" } }, [
-          _vm._v("Name"),
-        ]),
-        _vm._v(" "),
+    return _c(
+      "div",
+      { staticClass: "form-input-wrapper form-input-name-wrapper icon-name" },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-input-name",
           attrs: {
-            type: "text",
             id: "name",
             name: "name",
+            type: "text",
             placeholder: "Name",
           },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c(
-          "label",
-          { staticClass: "form__label", attrs: { for: "company_name" } },
-          [_vm._v("Company Name")]
-        ),
-        _vm._v(" "),
+    return _c(
+      "div",
+      {
+        staticClass:
+          "form-input-wrapper form-input-company-name-wrapper icon-name",
+      },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-input-company-name",
           attrs: {
-            type: "text",
             id: "company_name",
             name: "company_name",
-            placeholder: "Company Name",
-            required: "",
+            type: "text",
+            placeholder: "Company name",
           },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "address" } }, [
-          _vm._v("Address"),
-        ]),
-        _vm._v(" "),
+    return _c(
+      "div",
+      {
+        staticClass: "form-input-wrapper form-input-address-wrapper icon-name",
+      },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-input-address",
           attrs: {
-            type: "text",
             id: "address",
             name: "address",
+            type: "text",
             placeholder: "Address",
           },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c(
-          "label",
-          { staticClass: "form__label", attrs: { for: "post_code" } },
-          [_vm._v("Post code")]
-        ),
-        _vm._v(" "),
+    return _c(
+      "div",
+      {
+        staticClass:
+          "form-input-wrapper form-input-post-code-wrapper icon-name",
+      },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-input-post-code",
           attrs: {
-            type: "text",
             id: "post_code",
             name: "post_code",
+            type: "text",
             placeholder: "Post code",
           },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "city" } }, [
-          _vm._v("City"),
-        ]),
-        _vm._v(" "),
+    return _c(
+      "div",
+      { staticClass: "form-input-wrapper form-input-city-wrapper icon-name" },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-input-city",
           attrs: {
-            type: "text",
             id: "city",
             name: "city",
+            type: "text",
             placeholder: "City",
           },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "phone" } }, [
-          _vm._v("Phone"),
-        ]),
-        _vm._v(" "),
+    return _c(
+      "div",
+      { staticClass: "form-input-wrapper form-input-phone-wrapper icon-name" },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-input-phone",
           attrs: {
-            type: "text",
             id: "phone",
             name: "phone",
-            placeholder: "Phone",
+            type: "text",
+            placeholder: "Telephone",
           },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "siret" } }, [
-          _vm._v("Siret"),
-        ]),
-        _vm._v(" "),
+    return _c(
+      "div",
+      { staticClass: "form-input-wrapper form-input-siret-wrapper icon-name" },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-input-siret",
           attrs: {
-            type: "text",
             id: "siret",
             name: "siret",
+            type: "text",
             placeholder: "Siret",
           },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "rcs" } }, [
-          _vm._v("RCS"),
-        ]),
-        _vm._v(" "),
+    return _c(
+      "div",
+      { staticClass: "form-input-wrapper form-input-rcs-wrapper icon-name" },
+      [
         _c("input", {
-          staticClass: "form__input",
-          attrs: { type: "text", id: "rcs", name: "rcs", placeholder: "RCS" },
+          staticClass: "form-input form-input-rcs",
+          attrs: { id: "rcs", name: "rcs", type: "text", placeholder: "RCS" },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "tva" } }, [
-          _vm._v("TVA"),
-        ]),
-        _vm._v(" "),
+    return _c(
+      "div",
+      { staticClass: "form-input-wrapper form-input-tva-wrapper icon-name" },
+      [
         _c("input", {
-          staticClass: "form__input",
-          attrs: { type: "text", id: "tva", name: "tva", placeholder: "TVA" },
+          staticClass: "form-input form-input-tva",
+          attrs: { id: "tva", name: "tva", type: "text", placeholder: "TVA" },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__row" }, [
-      _c("div", { staticClass: "form__field" }, [
-        _c("label", { staticClass: "form__label", attrs: { for: "note" } }, [
-          _vm._v("Note"),
-        ]),
-        _vm._v(" "),
+    return _c(
+      "div",
+      {
+        staticClass:
+          "form-input-wrapper form-textarea-wrapper form-textarea-note-wrapper icon-name",
+      },
+      [
         _c("input", {
-          staticClass: "form__input",
+          staticClass: "form-input form-textarea form-textarea-note",
           attrs: {
-            type: "textarea",
             id: "note",
             name: "note",
+            type: "textarea",
             placeholder: "Note",
           },
         }),
-      ]),
-    ])
+      ]
+    )
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form__submit-wrap" }, [
-      _c(
-        "button",
-        { staticClass: "form__submit btn", attrs: { type: "submit" } },
-        [_vm._v("Add")]
-      ),
+    return _c("div", { staticClass: "button-wrapper button-submit-wrapper" }, [
+      _c("div", { staticClass: "button-hover button-submit-hover" }, [
+        _c(
+          "button",
+          { staticClass: "button button-submit", attrs: { type: "submit" } },
+          [_vm._v("Add company")]
+        ),
+      ]),
     ])
   },
 ]
@@ -31012,123 +31440,272 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("main", { staticClass: "companies-list-main" }, [
-    _c("div", { staticClass: "companies-list-main__wrapper wrapper" }, [
-      _c("h1", { staticClass: "companies-list-main__title title" }, [
-        _vm._v("Companies list"),
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "button-wrapper" },
-        [
-          _c(
-            "router-link",
-            { staticClass: "btn", attrs: { to: "/add-company" } },
-            [_vm._v("Add company")]
-          ),
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div", [
-        _c("table", { staticClass: "table" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.companiesList, function (company, index) {
-              return _c("tr", { key: index }, [
-                _c("td", [_vm._v(_vm._s(company.name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.company_name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.address))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.post_code))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.city))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.phone))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.siret))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.rcs))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.tva))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.note))]),
-                _vm._v(" "),
+  return _c("main", { staticClass: "site-main companies-list-main" }, [
+    _c(
+      "div",
+      {
+        staticClass:
+          "site-main-wrapper companies-list-main-wrapper width-container",
+      },
+      [
+        _c("h1", { staticClass: "page-title companies-list-page-title" }, [
+          _vm._v("Companies"),
+        ]),
+        _vm._v(" "),
+        _vm.getAllCompanies && _vm.companiesList.length
+          ? _c("div", { staticClass: "companies-page-content" }, [
+              _c(
+                "div",
+                { staticClass: "button-wrapper add-company-button-wrapper" },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "button-hover" },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "button add-company-butto",
+                          attrs: { to: "/add-company" },
+                        },
+                        [_vm._v("Add company")]
+                      ),
+                    ],
+                    1
+                  ),
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "companies-list" }, [
                 _c(
-                  "td",
+                  "div",
+                  { staticClass: "companies-list-wrapper" },
+                  _vm._l(_vm.companiesList, function (company, index) {
+                    return _c(
+                      "router-link",
+                      {
+                        key: index,
+                        staticClass: "company-item",
+                        attrs: { to: /company/ + company.id },
+                      },
+                      [
+                        _c("div", { staticClass: "company-item-wrapper" }, [
+                          _c("div", { staticClass: "image-wrapper" }, [
+                            _c(
+                              "svg",
+                              {
+                                attrs: {
+                                  "data-name": "Layer 3",
+                                  id: "Layer_3",
+                                  viewBox: "0 0 32 32",
+                                  xmlns: "http://www.w3.org/2000/svg",
+                                },
+                              },
+                              [
+                                _c("line", {
+                                  staticClass: "cls-1",
+                                  staticStyle: {
+                                    "stroke-linecap": "round",
+                                    "stroke-linejoin": "round",
+                                    "stroke-width": "2px",
+                                  },
+                                  attrs: {
+                                    fill: "none",
+                                    stroke: "#676767",
+                                    x1: "6",
+                                    x2: "26",
+                                    y1: "26",
+                                    y2: "26",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("rect", {
+                                  staticClass: "cls-1",
+                                  staticStyle: {
+                                    "stroke-linecap": "round",
+                                    "stroke-linejoin": "round",
+                                    "stroke-width": "2px",
+                                  },
+                                  attrs: {
+                                    fill: "none",
+                                    stroke: "#676767",
+                                    height: "16",
+                                    width: "10",
+                                    x: "14",
+                                    y: "10",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("rect", {
+                                  staticClass: "cls-1",
+                                  staticStyle: {
+                                    "stroke-linecap": "round",
+                                    "stroke-linejoin": "round",
+                                    "stroke-width": "2px",
+                                  },
+                                  attrs: {
+                                    fill: "none",
+                                    stroke: "#676767",
+                                    height: "13",
+                                    width: "6",
+                                    x: "8",
+                                    y: "13",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("rect", {
+                                  staticClass: "cls-2",
+                                  attrs: {
+                                    fill: "#676767",
+                                    height: "13",
+                                    width: "2",
+                                    x: "12",
+                                    y: "13",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("line", {
+                                  staticClass: "cls-3",
+                                  staticStyle: { "stroke-miterlimit": "10" },
+                                  attrs: {
+                                    fill: "none",
+                                    stroke: "#676767",
+                                    x1: "11",
+                                    x2: "11",
+                                    y1: "13",
+                                    y2: "26",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("line", {
+                                  staticClass: "cls-4",
+                                  staticStyle: {
+                                    "stroke-linecap": "round",
+                                    "stroke-miterlimit": "10",
+                                  },
+                                  attrs: {
+                                    fill: "none",
+                                    stroke: "#676767",
+                                    x1: "15",
+                                    x2: "21",
+                                    y1: "13.5",
+                                    y2: "13.5",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("line", {
+                                  staticClass: "cls-4",
+                                  staticStyle: {
+                                    "stroke-linecap": "round",
+                                    "stroke-miterlimit": "10",
+                                  },
+                                  attrs: {
+                                    fill: "none",
+                                    stroke: "#676767",
+                                    x1: "15",
+                                    x2: "21",
+                                    y1: "16.5",
+                                    y2: "16.5",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("line", {
+                                  staticClass: "cls-4",
+                                  staticStyle: {
+                                    "stroke-linecap": "round",
+                                    "stroke-miterlimit": "10",
+                                  },
+                                  attrs: {
+                                    fill: "none",
+                                    stroke: "#676767",
+                                    x1: "15",
+                                    x2: "21",
+                                    y1: "19.5",
+                                    y2: "19.5",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("rect", {
+                                  staticClass: "cls-1",
+                                  staticStyle: {
+                                    "stroke-linecap": "round",
+                                    "stroke-linejoin": "round",
+                                    "stroke-width": "2px",
+                                  },
+                                  attrs: {
+                                    fill: "none",
+                                    stroke: "#676767",
+                                    height: "3",
+                                    width: "6",
+                                    x: "16",
+                                    y: "7",
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("line", {
+                                  staticClass: "cls-1",
+                                  staticStyle: {
+                                    "stroke-linecap": "round",
+                                    "stroke-linejoin": "round",
+                                    "stroke-width": "2px",
+                                  },
+                                  attrs: {
+                                    fill: "none",
+                                    stroke: "#676767",
+                                    x1: "19",
+                                    x2: "19",
+                                    y1: "7",
+                                    y2: "5",
+                                  },
+                                }),
+                              ]
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "text-wrapper" }, [
+                            _c("h2", { staticClass: "company-item-title h4" }, [
+                              _vm._v(_vm._s(company.company_name)),
+                            ]),
+                          ]),
+                        ]),
+                      ]
+                    )
+                  }),
+                  1
+                ),
+              ]),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.getAllCompanies && !_vm.companiesList.length
+          ? _c("div", { staticClass: "no-companies" }, [
+              _c("div", { staticClass: "text message message-info" }, [
+                _vm._v(
+                  "No company has been created yet. In order to create the first company, click the «Add invoice» button."
+                ),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "button-wrapper" }, [
+                _c(
+                  "div",
+                  { staticClass: "button-hover" },
                   [
                     _c(
                       "router-link",
-                      { attrs: { to: "/edit-company/" + company.id } },
-                      [_vm._v("Edit company")]
+                      { staticClass: "button", attrs: { to: "/add-company" } },
+                      [_vm._v("Add company")]
                     ),
                   ],
                   1
                 ),
-                _vm._v(" "),
-                _c("td", [
-                  _c(
-                    "a",
-                    {
-                      attrs: { href: "#", "data-id": company.id },
-                      on: {
-                        click: function ($event) {
-                          $event.preventDefault()
-                          return _vm.deleteCompany.apply(null, arguments)
-                        },
-                      },
-                    },
-                    [_vm._v("Delete company")]
-                  ),
-                ]),
-              ])
-            }),
-            0
-          ),
-        ]),
-      ]),
-    ]),
+              ]),
+            ])
+          : _vm._e(),
+      ]
+    ),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Company name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Address")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Post code")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("City")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Phone")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Siret")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("RCS")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("TVA")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Note")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Edit link")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Delete link")]),
-      ]),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -32867,7 +33444,10 @@ var render = function () {
               [
                 _c(
                   "div",
-                  { staticClass: "form-item-wrapper form-item-role-wrapper" },
+                  {
+                    staticClass:
+                      "form-item-wrapper form-item-role-wrapper required",
+                  },
                   [
                     _c(
                       "div",
@@ -33014,7 +33594,10 @@ var render = function () {
                 _vm._v(" "),
                 _c(
                   "div",
-                  { staticClass: "form-item-wrapper form-item-email-wrapper" },
+                  {
+                    staticClass:
+                      "form-item-wrapper form-item-email-wrapper required",
+                  },
                   [
                     _vm._m(3),
                     _vm._v(" "),
@@ -33041,7 +33624,8 @@ var render = function () {
                 _c(
                   "div",
                   {
-                    staticClass: "form-item-wrapper form-item-password-wrapper",
+                    staticClass:
+                      "form-item-wrapper form-item-password-wrapper required",
                   },
                   [
                     _vm._m(4),
@@ -33144,7 +33728,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "form-item-wrapper form-item-post-name-wrapper" },
+      { staticClass: "form-item-wrapper form-item-post-wrapper" },
       [
         _c(
           "div",
@@ -33216,7 +33800,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "form-item-wrapper form-item-password-wrapper" },
+      { staticClass: "form-item-wrapper form-item-password-wrapper required" },
       [
         _c(
           "div",
