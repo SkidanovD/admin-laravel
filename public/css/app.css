@@ -974,6 +974,10 @@ li {
   top: 50%;
   left: 1.5em;
 }
+.form-textarea-wrapper::before {
+  transform: translate(0, 0);
+  top: 1.1em;
+}
 .form-input-wrapper.icon-email::before {
   background-image: url(../img/icons/icon-mail.svg);
 }
@@ -991,6 +995,27 @@ li {
 }
 .form-input-wrapper.icon-role::before {
   background-image: url(../img/icons/icon-role.svg);
+}
+.form-input-wrapper.icon-company::before {
+  background-image: url(../img/icons/icon-company.svg);
+}
+.form-input-wrapper.icon-post-code::before {
+  background-image: url(../img/icons/icon-post.svg);
+}
+.form-input-wrapper.icon-city::before {
+  background-image: url(../img/icons/icon-city.svg);
+}
+.form-input-wrapper.icon-address::before {
+  background-image: url(../img/icons/icon-address.svg);
+}
+.form-input-wrapper.icon-phone::before {
+  background-image: url(../img/icons/icon-phone.svg);
+}
+.form-input-wrapper.icon-barcode::before {
+  background-image: url(../img/icons/icon-barcode.svg);
+}
+.form-input-wrapper.icon-note::before {
+  background-image: url(../img/icons/icon-note.svg);
 }
 .form-input {
   color: var(--white);
@@ -1082,6 +1107,9 @@ li {
   opacity: 0;
   position: absolute;
   z-index: -100;
+}
+.form-textarea {
+  resize: none;
 }
 .form-label-file {
   color: var(--white);
@@ -1318,33 +1346,33 @@ li {
   width: 50%;
   padding-top: 1.5em;
 }
-.user-info-item {
+.block-info-item {
   margin-bottom: 2em;
 }
-.user-info-label {
+.block-info-label {
   color: var(--gray);
   font-weight: 500;
   margin-bottom: 0.5em;
 }
-.user-info-value {
+.block-info-value {
+  line-height: 1.4;
   margin-bottom: 0;
   padding-left: 3rem;
 }
-.user-info-name {
+.block-info-value.h3 {
   font-family: var(--button-font);
   font-weight: 600;
   text-transform: none;
 }
-.user-info-post {
-  color: var(--light-gray);
-  text-transform: none;
-}
-.user-info-email {
+.block-info-value.h4 {
   color: var(--primary);
   text-transform: none;
 }
-.user-info-role {
+.block-info-value.h5 {
   color: var(--light-gray);
+  text-transform: none;
+}
+.user-info-role {
   text-transform: capitalize;
 }
 .account-button-block {
@@ -1409,6 +1437,7 @@ li {
 .company-item-wrapper {
   position: relative;
   padding: 8% 8% 14%;
+  height: 100%;
 }
 .company-item-wrapper::before,
 .company-item-wrapper::after {
@@ -1478,6 +1507,33 @@ li {
 /* --- Add company page --- */
 
 .return-company-list-button {
+  display: flex;
+  justify-content: center;
+}
+
+
+/* --- Company page --- */
+
+.company-main-info {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.5em;
+}
+.company-main-info .left-column {
+  width: 40%;
+}
+.company-main-info .image-wrapper svg {
+  width: 100%;
+}
+.company-main-info .right-column {
+  width: 50%;
+}
+.company-button-block {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2em;
+}
+.return-button-block {
   display: flex;
   justify-content: center;
 }

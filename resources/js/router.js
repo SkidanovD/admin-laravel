@@ -12,6 +12,7 @@ import MyAccount from './views/Users/MyAccount'
 import CompaniesList from './views/Companies/CompaniesList'
 import AddCompany from './views/Companies/AddCompany'
 import EditCompany from './views/Companies/EditCompany'
+import Company from './views/Companies/Company'
 import AddInvoice from './views/Invoices/AddInvoice'
 import EditInvoice from './views/Invoices/EditInvoice'
 
@@ -51,6 +52,10 @@ const routes = [
     {
         path: '/edit-company/:id',
         component: EditCompany,
+    },
+    {
+        path: '/company/:id',
+        component: Company,
     },
     {
         path: '/add-invoice',

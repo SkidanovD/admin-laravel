@@ -87,7 +87,7 @@ class CompanyController extends Controller
         }
         $validator = Validator::make($query_data, [
             'name' => 'string|nullable',
-            'company_name' => 'string',
+            'company_name' => 'required|string',
             'address' => 'string|nullable',
             'post_code' => 'string|nullable',
             'city' => 'string|nullable',
@@ -99,7 +99,7 @@ class CompanyController extends Controller
         ]);
         if ($validator->fails()) {
             return [
-                'status' => 'error',
+                'status' => 'not validated',
                 'messages' => $validator->messages(),
                 'form_field' => $request->all()
             ];

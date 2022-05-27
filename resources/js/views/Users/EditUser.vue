@@ -2,11 +2,11 @@
     <main class="site-main edit-user-main">
         <div class="site-main-wrapper edit-user-main-wrapper width-container">
             <h1 class="page-title edit-user-page-title">Edit user</h1>
-                <div class="edit-user-photo" v-if="user.photo">
-                    <div class="image-wrapper">
-                        <img :src="user.photo" :alt="user.first_name + user.last_name">
-                    </div>
+            <div class="edit-user-photo" v-if="user.photo">
+                <div class="image-wrapper">
+                    <img :src="user.photo" :alt="user.first_name + user.last_name">
                 </div>
+            </div>
             <div :class="'text message message-' + formMessage.class" v-if="formMessage.message">{{ formMessage.message }}</div>
             <form ref="form" class="form register-form" @submit.prevent="actionEditUser">
                 <input id="id" type="hidden" name="id" :value="user.id">
@@ -82,67 +82,6 @@
                     </div>
                 </div>
             </form>
-
-            <!-- <form class="users-list-main__form form"  ref="form" @submit.prevent="onFormSubmit">
-                <input id="id" type="hidden" name="id" :value="user.id">
-
-                <div class="form__row">
-                    <div class="form__field">
-                        <select class="form__input" id="role" name="role" required>
-                            <option v-for="(option, idx) in inputSelect" :key="idx" :value="option.value" :selected="option.selected">{{option.title}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="image-wrapper" v-if="user.photo">
-                    <img :src="user.photo" alt="">
-                </div>
-                <div class="form__row">
-                    <div class="form__field">
-                        <label class="form__label" for="photo">Photo</label>
-                        <input id="photo" type="file" name="photo">
-                    </div>
-                </div>
-
-                <div class="form__row">
-                    <div class="form__field">
-                        <label class="form__label" for="first_name">First Name</label>
-                        <input class="form__input" type="text" id="first_name" name="first_name" placeholder="First name" :value="user.first_name">
-                    </div>
-                    <div class="form__field">
-                        <label class="form__label" for="last_name">Last Name</label>
-                        <input class="form__input" type="text" id="last_name" name="last_name" placeholder="Last name" :value="user.last_name">
-                    </div>
-                </div>
-                
-                <div class="form__row">
-                    <div class="form__field">
-                        <label class="form__label" for="user_post">User Post</label>
-                        <input class="form__input" type="text" id="user_post" name="user_post" placeholder="User post" :value="user.user_post">
-                    </div>
-                </div>
-
-                <div class="form__row">
-                    <div class="form__field">
-                        <label class="form__label" for="email">Email</label>
-                        <input class="form__input" type="email" id="email" name="email" placeholder="Email" :value="user.email" required>
-                    </div>
-                </div>
-                <div class="form__row">
-                    <div class="form__field">
-                        <label class="form__label" for="password">New password</label>
-                        <input class="form__input" type="password" id="password" name="password" placeholder="* * * * * * * *">
-                    </div>
-
-                    <div class="form__field">
-                        <label class="form__label" for="password-confirm">Confirm password</label>
-                        <input class="form__input" id="password-confirm" type="password" name="password_confirmation" placeholder="* * * * * * * *">
-                    </div>
-                </div>
-
-                <div class="form__submit-wrap">
-                    <button class="form__submit btn" type="submit">Submit</button>
-                </div>
-            </form> -->
         </div>
     </main>
 </template>

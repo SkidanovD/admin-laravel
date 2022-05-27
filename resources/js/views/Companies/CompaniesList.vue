@@ -33,49 +33,7 @@
                   </router-link>
                </div>
             </div>
-            <!-- <table class="table">
-               <thead>
-                  <tr>
-                     <th>Name</th>
-                     <th>Company name</th>
-                     <th>Address</th>
-                     <th>Post code</th>
-                     <th>City</th>
-                     <th>Phone</th>
-                     <th>Siret</th>
-                     <th>RCS</th>
-                     <th>TVA</th>
-                     <th>Note</th>
-                     <th>Edit link</th>
-                     <th>Delete link</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <tr v-for="(company, index) in companiesList" :key="index">
-                     <td>{{ company.name }}</td>
-                     <td>{{ company.company_name }}</td>
-                     <td>{{ company.address }}</td>
-                     <td>{{ company.post_code }}</td>
-                     <td>{{ company.city }}</td>
-                     <td>{{ company.phone }}</td>
-                     <td>{{ company.siret }}</td>
-                     <td>{{ company.rcs }}</td>
-                     <td>{{ company.tva }}</td>
-                     <td>{{ company.note }}</td>
-                     <td>
-                        <router-link :to="'/edit-company/'+company.id">Edit company</router-link>
-                     </td>
-                     <td>
-                        <a href="#" @click.prevent="deleteCompany" :data-id="company.id">Delete company</a>
-                     </td>
-                  </tr>
-               </tbody>
-            </table> -->
          </div>
-
-
-
-         
          <div class="no-companies" v-if="getAllCompanies && !companiesList.length">
                <div class="text message message-info">No company has been created yet. In order to create the first company, click the «Add invoice» button.</div>
                <div class="button-wrapper">

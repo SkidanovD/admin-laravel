@@ -14,21 +14,21 @@
                     </div>
                 </div>
                 <div class="right-column">
-                    <div class="user-info-item">
-                        <div class="user-info-label">Name</div>
-                        <div class="user-info-value user-info-name h3" v-if="user.first_name || user.last_name">{{ user.first_name }} {{ user.last_name }}</div>
+                    <div class="block-info-item user-info-item">
+                        <div class="block-info-label user-info-label">Name</div>
+                        <div class="block-info-value user-info-value user-info-name h3" v-if="user.first_name || user.last_name">{{ user.first_name }} {{ user.last_name }}</div>
                     </div>
-                    <div class="user-info-item">
-                        <div class="user-info-label">Post</div>
-                        <div class="user-info-value user-info-post h5" v-if="user.user_post">{{ user.user_post }}</div>
+                    <div class="block-info-item user-info-item">
+                        <div class="block-info-label user-info-label">Post</div>
+                        <div class="block-info-value user-info-value user-info-post h5" v-if="user.user_post">{{ user.user_post }}</div>
                     </div>
-                    <div class="user-info-item">
-                        <div class="user-info-label">Email</div>
-                        <div class="user-info-value user-info-email h4" v-if="user.email">{{ user.email }}</div>
+                    <div class="block-info-item user-info-item">
+                        <div class="block-info-label user-info-label">Email</div>
+                        <div class="block-info-value user-info-value user-info-email h4" v-if="user.email">{{ user.email }}</div>
                     </div>
-                    <div class="user-info-item">
-                        <div class="user-info-label">Role</div>
-                        <div class="user-info-value user-info-role h5" v-if="user.role">{{ user.role }}</div>
+                    <div class="block-info-item user-info-item">
+                        <div class="block-info-label user-info-label">Role</div>
+                        <div class="block-info-value user-info-value user-info-role h5" v-if="user.role">{{ user.role }}</div>
                     </div>
                 </div>
             </div>
