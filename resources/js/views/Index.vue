@@ -2,6 +2,26 @@
     <main class="site-main home-main">
         <div class="site-main-wrapper home-main-wrapper width-container">
             <h1 class="page-title home-page-title">Invoice generator</h1>
+            <div class="invoices-list" v-if="getInvoices && invoicesList.length">
+                <div class="invoice-row invoice-row-header">
+                    <div class="invoice-cell invoice-cell-header invoice-cell-number">#</div>
+                    <div class="invoice-cell invoice-cell-header invoice-cell-date">Invoice date</div>
+                    <div class="invoice-cell invoice-cell-header invoice-cell-company">Company</div>
+                    <div class="invoice-cell invoice-cell-header invoice-cell-author">Author</div>
+                    <div class="invoice-cell invoice-cell-header invoice-cell-total">Total</div>
+                    <div class="invoice-cell invoice-cell-header invoice-cell-received-date">Received date</div>
+                    <div class="invoice-cell invoice-cell-header invoice-cell-status">Status</div>
+                </div>
+                <div class="invoice-row" v-for="(invoice, index) in invoicesList" :key="index">
+                    <div class="invoice-cell invoice-cell-number">{{ invoice.invoice_number }}</div>
+                    <div class="invoice-cell invoice-cell-date">{{ invoice.invoice_date }}</div>
+                    <div class="invoice-cell invoice-cell-company">{{ invoice.company }}</div>
+                    <div class="invoice-cell invoice-cell-author">{{ invoice.author.first_name }}</div>
+                    <div class="invoice-cell invoice-cell-total">{{ invoice.total_tax }}</div>
+                    <div class="invoice-cell invoice-cell-received-date">{{ invoice.received_date }}</div>
+                    <div class="invoice-cell invoice-cell-status">{{ invoice.status }}</div>
+                </div>
+            </div>
             <div v-if="getInvoices && invoicesList.length">
                 <table class="table">
                     <thead>

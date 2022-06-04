@@ -83,7 +83,7 @@ class InvoiceController extends Controller
         ]);
         if ($validator->fails()) {
             return [
-                'status' => 'error',
+                'status' => 'not validated',
                 'messages' => $validator->messages(),
                 'form_field' => $request->all()
             ];
@@ -194,7 +194,10 @@ class InvoiceController extends Controller
             'total_tax' => (int) $request->total_tax,
         ]);
 
-        return $this->getInvoice($request->id);
+        $result = $this->getInvoice($request->id);
+        $result['message'] = trans('success.update');
+
+        return $result;
 
     }
 
@@ -399,6 +402,7 @@ class InvoiceController extends Controller
         }
 
         foreach ($all_invoices as $key => $invoice) {
+            $all_invoices[$key]['invoice_number'] = sprintf('%03d', $invoice['invoice_number']);
             $author = User::find($invoice['author']);
             if (!empty($author)) {
                 $all_invoices[$key]['author'] = $author->toArray();
@@ -456,6 +460,7 @@ class InvoiceController extends Controller
         } else {
             $invoice['details'] = [];
         }
+        $invoice['invoice_number'] = sprintf('%03d', $invoice['invoice_number']);
         return [
             'status' => 'success',
             'invoice' => $invoice,
