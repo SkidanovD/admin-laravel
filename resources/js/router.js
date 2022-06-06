@@ -15,6 +15,7 @@ import EditCompany from './views/Companies/EditCompany'
 import Company from './views/Companies/Company'
 import AddInvoice from './views/Invoices/AddInvoice'
 import EditInvoice from './views/Invoices/EditInvoice'
+import DraftInvoices from './views/Invoices/DraftInvoices'
 
 const routes = [
     {
@@ -64,6 +65,10 @@ const routes = [
     {
         path: '/edit-invoice/:id',
         component: EditInvoice,
+    },
+    {
+        path: '/draft-invoices',
+        component: DraftInvoices,
     },
 ];
 

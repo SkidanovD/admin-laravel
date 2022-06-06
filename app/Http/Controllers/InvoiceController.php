@@ -317,7 +317,6 @@ class InvoiceController extends Controller
 
     public function getAllInvoices(Request $request)
     {
-        // dd($request->all());
         $auth_user = Auth::user();
         if (empty($auth_user)) {
             return [
@@ -391,9 +390,43 @@ class InvoiceController extends Controller
         if (!empty($where_default)) {
             $all_invoices = Invoice::whereRaw($where_default)->$orderBy($order)->get();
         } else {
-            $all_invoices = Invoice::$orderBy($order)->get()->toArray();
+            $all_invoices = Invoice::where('creation_status', 'public')->$orderBy($order)->get()->toArray();
         }
 
+        if (!count($all_invoices)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notFound', ['model' => 'Invoices']),
+            ];
+        }
+
+        foreach ($all_invoices as $key => $invoice) {
+            $all_invoices[$key]['invoice_number'] = sprintf('%03d', $invoice['invoice_number']);
+            $author = User::find($invoice['author']);
+            if (!empty($author)) {
+                $all_invoices[$key]['author'] = $author->toArray();
+            }
+        }
+
+        return [
+            'status' => 'success',
+            'all_invoices' => $all_invoices,
+        ];
+    }
+
+    public function getDraftInvoices(Request $request)
+    {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
+
+        $all_invoices = [];
+        $all_invoices = Invoice::where('creation_status', 'draft')->get()->toArray();
+        
         if (!count($all_invoices)) {
             return [
                 'status' => 'error',

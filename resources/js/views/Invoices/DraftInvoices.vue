@@ -1,8 +1,7 @@
 <template>
-    <main class="site-main home-main">
-        <div class="site-main-wrapper home-main-wrapper width-container">
-            <h1 class="page-title home-page-title">Invoice generator</h1>
-            <div :class="'text message message-' + formMessage.class" v-if="formMessage.message">{{ formMessage.message }}</div>
+    <main class="site-main draft-main">
+        <div class="site-main-wrapper draft-main-wrapper width-container">
+            <h1 class="page-title draft-page-title">Draft invoices</h1>
             <div class="invoices-list" v-if="getInvoices && invoicesList.length">
                 <div class="invoice-row invoice-row-header">
                     <div class="invoice-cell invoice-cell-header invoice-cell-number">#</div>
@@ -46,32 +45,17 @@
                             </button>
                         </div>
                     </div>
-                    <div class="invoice-action-list" v-if="actionListShow === index" @click="hideActionList">
+                    <div class="invoice-action-list" v-if="actionListShow === index">
                         <router-link :to="'/edit-invoice/' + invoice.id" class="invoice-action-item">Edit invoice</router-link>
-                        <span @click="showStatusPopup(index)" class="invoice-action-item">Edit status</span>
-                        <a :href="'/pdf/preview/' + invoice.id" class="invoice-action-item" target="_blank">Priview PDF</a>
                     </div>
                 </div>
             </div>
             <div class="no-invoices">
-                <div class="text message message-info" v-if="getInvoices && !invoicesList.length">No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button.</div>
+                <div class="text message message-info" v-if="getInvoices && !invoicesList.length">No invoice has been created yet.</div>
                 <div class="button-wrapper">
                     <div class="button-hover">
-                        <router-link to="/add-invoice" class="button">Add invoice</router-link>
+                        <router-link to="/" class="button">Home</router-link>
                     </div>
-                    <div class="button-hover">
-                        <router-link to="/draft-invoices" class="button">Draft</router-link>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="invoice-status-popup" v-if="statusPopupShow !== ''" @click="hideStatusPopup">
-            <div class="invoice-status-popup-wrapper width-container">
-                <div class="invoice-status-popup-list">
-                    <div class="invoice-status-popup-item" v-if="statusPopupShow !== 'to_be_sent'" data-status="to_be_sent" @click="actionEditStatus('to_be_sent')">To be sent</div>
-                    <div class="invoice-status-popup-item" v-if="statusPopupShow !== 'sent'" @click="actionEditStatus('sent')">Sent</div>
-                    <div class="invoice-status-popup-item" v-if="statusPopupShow !== 'canceled'" @click="actionEditStatus('canceled')">Canceled</div>
-                    <div class="invoice-status-popup-item" v-if="statusPopupShow !== 'paid'" @click="actionEditStatus('paid')">Paid</div>
                 </div>
             </div>
         </div>
@@ -84,19 +68,14 @@
             invoicesList: [],
             getInvoices: false,
             actionListShow: -1,
-            statusPopupShow: '',
-            statusPopupId: 0,
-            formMessage: {
-                class: '',
-                message: '',
-            },
+            indexListShow: -1,
         }),
         mounted() {
             this.loadPageData();
         },
         methods: {
             loadPageData() {
-                axios.get('/api/getAllInvoices').then(res => {
+                axios.get('/api/getDraftInvoices').then(res => {
                     this.getInvoices = true;
                     if (res.data.status === 'success') {
                         this.invoicesList = res.data.all_invoices
@@ -109,36 +88,6 @@
                 } else {
                     this.actionListShow = -1;
                 }
-            },
-            hideActionList() {
-                    this.actionListShow = -1;
-            },
-            showStatusPopup(index) {
-                if (this.statusPopupShow === '') {
-                    this.statusPopupShow = this.invoicesList[index].status;
-                    this.statusPopupId = this.invoicesList[index].id;
-                }
-            },
-            hideStatusPopup() {
-                this.statusPopupShow = '';
-            },
-            actionEditStatus(status) {
-                axios({
-                    method: 'post',
-                    url: '/api/actionEditStatus',
-                    data: {
-                        id: this.statusPopupId,
-                        status: status,
-                    },
-                }).then(
-                    res => {
-                        this.formMessage.class = res.data.status;
-                        this.formMessage.message = res.data.message;
-                        if (res.data.status === 'success') {
-                            this.loadPageData();
-                        }
-                    }
-                )
             },
             deleteInvoice(e) {
                 axios({

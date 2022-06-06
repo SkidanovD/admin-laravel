@@ -157,7 +157,12 @@
                     </div>
                 </div>
             </form>
-            <div class="pdf-buttons-block">
+            <div class="edit-invoice-buttons-block">
+                <div class="button-wrapper">
+                    <div class="button-hover">
+                        <button type="button" class="button" @click="actionPublicInvoice">Public invoice</button>
+                    </div>
+                </div>
                 <div class="button-wrapper">
                     <div class="button-hover">
                         <a :href="'/pdf/preview/' + invoice.id" class="button" target="_blank">Priview PDF</a>
@@ -208,6 +213,10 @@
         mounted() {
             this.getInvoice(this.$route.params.id);
             this.getAllCompanies();
+            var $this = this;
+            setTimeout(function() {
+                $this.totalCalculation();
+            }, 1000);
         },
         watch: {
             totalPrice() {
@@ -346,7 +355,50 @@
                         }
                     }
                 )
-            }
+            },
+            actionPublicInvoice() {
+                const formData = new FormData(this.$refs['form']);
+                const form_data = new FormData();
+
+                for (let [key, val] of formData.entries()) {
+                    form_data.append(key, val)
+                }
+                form_data.append('total_tax', this.totalTax);
+
+                axios({
+                    method: 'post',
+                    url: '/api/actionEditInvoice',
+                    data: form_data,
+                }).then(
+                    res => {
+                        if (res.data.status === 'not validated') {
+                            for(let key in res.data.messages) {
+                                this.$set(this.validate, key, res.data.messages[key]);
+                            }
+                            this.invoice = res.data.form_field;
+                        } else {
+                            var invoice = res.data.invoice;
+                            axios({
+                                method: 'post',
+                                url: '/api/actionPublicInvoice',
+                                data: invoice,
+                            }).then(
+                                res => {
+                                    if (res.data.status === 'success') {
+                                        this.validate = [];
+                                        this.formMessage.class = res.data.status;
+                                        this.formMessage.message = res.data.message;
+                                        this.getInvoice(this.$route.params.id);
+                                    } else {
+                                        this.formMessage.class = res.data.status;
+                                        this.formMessage.message = res.data.message;
+                                    }
+                                }
+                            )
+                        }
+                    }
+                )
+            },
         }
     }
 </script>

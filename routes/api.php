@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->post('/actionDeleteInvoice', [InvoiceControll
 Route::middleware('auth:sanctum')->post('/actionPublicInvoice', [InvoiceController::class, 'actionPublicInvoice'])->name('actionPublicInvoice');
 Route::middleware('auth:sanctum')->post('/actionEditStatus', [InvoiceController::class, 'actionEditStatus'])->name('actionEditStatus');
 Route::middleware('auth:sanctum')->match(['get', 'post'], '/getAllInvoices', [InvoiceController::class, 'getAllInvoices'])->name('getAllInvoices');
+Route::middleware('auth:sanctum')->match(['get', 'post'], '/getDraftInvoices', [InvoiceController::class, 'getDraftInvoices'])->name('getDraftInvoices');
 Route::middleware('auth:sanctum')->get('/getInvoice/{invoice}', [InvoiceController::class, 'getInvoice'])->name('getInvoice');
 Route::middleware('auth:sanctum')->post('/arrangeFormData', [InvoiceController::class, 'arrangeFormData'])->name('arrangeFormData');
 
