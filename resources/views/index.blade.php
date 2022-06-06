@@ -76,8 +76,7 @@
             <rect width="120" height="27.0968" fill="white"/>
             </clipPath>
             </defs>
-            </svg>
-            
+         </svg>
       </div>
       <page-content></page-content>
    </div>

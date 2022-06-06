@@ -234,6 +234,9 @@
                 }).then(
                     res => {
                         if (res.data.status === 'success') {
+                            if (res.data.invoice.name || res.data.invoice.phone || res.data.invoice.siret || res.data.invoice.rcs || res.data.invoice.note) {
+                                this.additionalFields = true;
+                            }
                             this.invoice = res.data.invoice
                             if (res.data.invoice.details.length) {
                                 this.invoiceDetails = res.data.invoice.details;

@@ -6107,6 +6107,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Index',
   data: function data() {
@@ -6633,6 +6634,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         url: '/api/getInvoice/' + id
       }).then(function (res) {
         if (res.data.status === 'success') {
+          if (res.data.invoice.name || res.data.invoice.phone || res.data.invoice.siret || res.data.invoice.rcs || res.data.invoice.note) {
+            _this.additionalFields = true;
+          }
+
           _this.invoice = res.data.invoice;
 
           if (res.data.invoice.details.length) {
@@ -33967,6 +33972,18 @@ var render = function () {
                                 },
                               },
                               [_vm._v("Priview PDF")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "invoice-action-item",
+                                attrs: {
+                                  href: "/pdf/generate/" + invoice.id,
+                                  target: "_blank",
+                                },
+                              },
+                              [_vm._v("Download PDF")]
                             ),
                           ],
                           1

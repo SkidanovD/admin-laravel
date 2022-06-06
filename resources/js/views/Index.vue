@@ -50,6 +50,7 @@
                         <router-link :to="'/edit-invoice/' + invoice.id" class="invoice-action-item">Edit invoice</router-link>
                         <span @click="showStatusPopup(index)" class="invoice-action-item">Edit status</span>
                         <a :href="'/pdf/preview/' + invoice.id" class="invoice-action-item" target="_blank">Priview PDF</a>
+                        <a :href="'/pdf/generate/' + invoice.id" class="invoice-action-item" target="_blank">Download PDF</a>
                     </div>
                 </div>
             </div>
