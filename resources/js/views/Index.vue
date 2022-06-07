@@ -49,6 +49,7 @@
                     <div class="invoice-action-list" v-if="actionListShow === index" @click="hideActionList">
                         <router-link :to="'/edit-invoice/' + invoice.id" class="invoice-action-item">Edit invoice</router-link>
                         <span @click="showStatusPopup(index)" class="invoice-action-item">Edit status</span>
+                        <span @click="showReceivedPopup(index)" class="invoice-action-item">Edit received date</span>
                         <a :href="'/pdf/preview/' + invoice.id" class="invoice-action-item" target="_blank">Priview PDF</a>
                         <a :href="'/pdf/generate/' + invoice.id" class="invoice-action-item" target="_blank">Download PDF</a>
                     </div>
@@ -76,6 +77,29 @@
                 </div>
             </div>
         </div>
+        <div class="invoice-received-popup" v-if="receivedPopupShow">
+            <div class="invoice-received-popup-wrapper width-container">
+                <div class="invoice-received-popup-block">
+                    <div class="form-item-wrapper form-item-invoice-date-wrapper">
+                        <div class="form-input-wrapper form-input-invoice-date-wrapper icon-date">
+                            <input class="form-input form-input-invoice-date" id="invoice_date" name="invoice_date" type="date" placeholder="Received date" v-model="receivedDate">
+                        </div>
+                    </div>
+                    <div class="buttons-block">
+                        <div class="button-wrapper">
+                            <div class="button-hover">
+                                <button class="button" type="button" @click="hideReceivedPopup">Cancel</button>
+                            </div>
+                        </div>
+                        <div class="button-wrapper">
+                            <div class="button-hover">
+                                <button class="button" type="button" @click="actionEditReceivedDate">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </template>
 <script>
@@ -87,6 +111,9 @@
             actionListShow: -1,
             statusPopupShow: '',
             statusPopupId: 0,
+            receivedPopupShow: false,
+            receivedPopupId: 0,
+            receivedDate: '',
             formMessage: {
                 class: '',
                 message: '',
@@ -140,6 +167,36 @@
                         }
                     }
                 )
+            },
+            showReceivedPopup(index) {
+                this.receivedPopupShow = !this.receivedPopupShow;
+                this.receivedPopupId = this.invoicesList[index].id;
+            },
+            hideReceivedPopup() {
+                this.receivedPopupShow = !this.receivedPopupShow;
+                this.receivedPopupId = 0;
+            },
+            actionEditReceivedDate() {
+                if (this.receivedDate !== '') {
+                    axios({
+                        method: 'post',
+                        url: '/api/actionEditReceivedDate',
+                        data: {
+                            id: this.receivedPopupId,
+                            received_date: this.receivedDate,
+                        },
+                    }).then(
+                        res => {
+                            this.formMessage.class = res.data.status;
+                            this.formMessage.message = res.data.message;
+                            if (res.data.status === 'success') {
+                                this.loadPageData();
+                            }
+                        }
+                    )
+                }
+                this.receivedPopupShow = !this.receivedPopupShow;
+                this.receivedPopupId = 0;
             },
             deleteInvoice(e) {
                 axios({

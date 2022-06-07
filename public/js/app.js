@@ -6108,6 +6108,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Index',
   data: function data() {
@@ -6117,6 +6141,9 @@ __webpack_require__.r(__webpack_exports__);
       actionListShow: -1,
       statusPopupShow: '',
       statusPopupId: 0,
+      receivedPopupShow: false,
+      receivedPopupId: 0,
+      receivedDate: '',
       formMessage: {
         "class": '',
         message: ''
@@ -6176,8 +6203,40 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    deleteInvoice: function deleteInvoice(e) {
+    showReceivedPopup: function showReceivedPopup(index) {
+      this.receivedPopupShow = !this.receivedPopupShow;
+      this.receivedPopupId = this.invoicesList[index].id;
+    },
+    hideReceivedPopup: function hideReceivedPopup() {
+      this.receivedPopupShow = !this.receivedPopupShow;
+      this.receivedPopupId = 0;
+    },
+    actionEditReceivedDate: function actionEditReceivedDate() {
       var _this3 = this;
+
+      if (this.receivedDate !== '') {
+        axios({
+          method: 'post',
+          url: '/api/actionEditReceivedDate',
+          data: {
+            id: this.receivedPopupId,
+            received_date: this.receivedDate
+          }
+        }).then(function (res) {
+          _this3.formMessage["class"] = res.data.status;
+          _this3.formMessage.message = res.data.message;
+
+          if (res.data.status === 'success') {
+            _this3.loadPageData();
+          }
+        });
+      }
+
+      this.receivedPopupShow = !this.receivedPopupShow;
+      this.receivedPopupId = 0;
+    },
+    deleteInvoice: function deleteInvoice(e) {
+      var _this4 = this;
 
       axios({
         method: 'post',
@@ -6186,7 +6245,7 @@ __webpack_require__.r(__webpack_exports__);
           id: e.target.dataset.id
         }
       }).then(function (res) {
-        _this3.loadPageData();
+        _this4.loadPageData();
       });
     }
   }
@@ -33963,6 +34022,19 @@ var render = function () {
                             ),
                             _vm._v(" "),
                             _c(
+                              "span",
+                              {
+                                staticClass: "invoice-action-item",
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.showReceivedPopup(index)
+                                  },
+                                },
+                              },
+                              [_vm._v("Edit received date")]
+                            ),
+                            _vm._v(" "),
+                            _c(
                               "a",
                               {
                                 staticClass: "invoice-action-item",
@@ -34114,6 +34186,93 @@ var render = function () {
             ),
           ]
         )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.receivedPopupShow
+      ? _c("div", { staticClass: "invoice-received-popup" }, [
+          _c(
+            "div",
+            { staticClass: "invoice-received-popup-wrapper width-container" },
+            [
+              _c("div", { staticClass: "invoice-received-popup-block" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "form-item-wrapper form-item-invoice-date-wrapper",
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "form-input-wrapper form-input-invoice-date-wrapper icon-date",
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.receivedDate,
+                              expression: "receivedDate",
+                            },
+                          ],
+                          staticClass: "form-input form-input-invoice-date",
+                          attrs: {
+                            id: "invoice_date",
+                            name: "invoice_date",
+                            type: "date",
+                            placeholder: "Received date",
+                          },
+                          domProps: { value: _vm.receivedDate },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.receivedDate = $event.target.value
+                            },
+                          },
+                        }),
+                      ]
+                    ),
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "buttons-block" }, [
+                  _c("div", { staticClass: "button-wrapper" }, [
+                    _c("div", { staticClass: "button-hover" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button",
+                          attrs: { type: "button" },
+                          on: { click: _vm.hideReceivedPopup },
+                        },
+                        [_vm._v("Cancel")]
+                      ),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "button-wrapper" }, [
+                    _c("div", { staticClass: "button-hover" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button",
+                          attrs: { type: "button" },
+                          on: { click: _vm.actionEditReceivedDate },
+                        },
+                        [_vm._v("Edit")]
+                      ),
+                    ]),
+                  ]),
+                ]),
+              ]),
+            ]
+          ),
+        ])
       : _vm._e(),
   ])
 }
@@ -34599,7 +34758,7 @@ var render = function () {
                         id: "invoice_date",
                         name: "invoice_date",
                         type: "date",
-                        placeholder: "Invoice number",
+                        placeholder: "Invoice date",
                       },
                       domProps: { value: _vm.invoice.invoice_date },
                     }),

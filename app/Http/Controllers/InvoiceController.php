@@ -286,7 +286,7 @@ class InvoiceController extends Controller
 
         $validator = Validator::make($request->all(), [
             'id' => 'numeric|required',
-            'received_date' => 'date|nullable',
+            // 'received_date' => 'date|nullable',
             'status' => 'string|required',
         ]);
         if ($validator->fails()) {
@@ -299,6 +299,46 @@ class InvoiceController extends Controller
 
         $result = Invoice::where('id', $request->id)->update([
             'status' => $request->status,
+            // 'received_date' => $request->received_date,
+        ]);
+        if (empty($result)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.notUpdate', ['model' => 'Invoice status']),
+            ];
+        }
+
+        return [
+            'status' => 'success',
+            'message' => trans('success.update', ['model' => 'Invoice status']),
+            'invoice' => $this->getInvoice($request->id),
+        ];
+    }
+
+    public function actionEditReceivedDate(Request $request)
+    {
+        $auth_user = Auth::user();
+        if (empty($auth_user)) {
+            return [
+                'status' => 'error',
+                'message' => trans('error.authentication'),
+            ];
+        }
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'numeric|required',
+            'received_date' => 'date|nullable',
+        ]);
+        if ($validator->fails()) {
+            return [
+                'status' => 'error',
+                'messages' => $validator->messages(),
+                'form_field' => $request->all()
+            ];
+        }
+
+        $result = Invoice::where('id', $request->id)->update([
+            // 'status' => $request->status,
             'received_date' => $request->received_date,
         ]);
         if (empty($result)) {
@@ -402,6 +442,8 @@ class InvoiceController extends Controller
 
         foreach ($all_invoices as $key => $invoice) {
             $all_invoices[$key]['invoice_number'] = sprintf('%03d', $invoice['invoice_number']);
+            $all_invoices[$key]['invoice_date'] = Carbon::parse($invoice['invoice_date'])->format('d.m.Y');
+            $all_invoices[$key]['received_date'] = Carbon::parse($invoice['received_date'])->format('d.m.Y');
             $author = User::find($invoice['author']);
             if (!empty($author)) {
                 $all_invoices[$key]['author'] = $author->toArray();

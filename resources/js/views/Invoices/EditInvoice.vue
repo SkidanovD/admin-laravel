@@ -13,7 +13,7 @@
                 </div>
                 <div class="form-item-wrapper form-item-invoice-date-wrapper required">
                     <div class="form-input-wrapper form-input-invoice-date-wrapper icon-date">
-                        <input class="form-input form-input-invoice-date" id="invoice_date" name="invoice_date" type="date" placeholder="Invoice number" :value="invoice.invoice_date">
+                        <input class="form-input form-input-invoice-date" id="invoice_date" name="invoice_date" type="date" placeholder="Invoice date" :value="invoice.invoice_date">
                     </div>
                     <vueValidateMessage  v-if="validate.invoice_date" :messages="validate.invoice_date"></vueValidateMessage>
                 </div>
