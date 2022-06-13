@@ -60,7 +60,15 @@ class InvoiceController extends Controller
             ];
         }
 
-        $validator = Validator::make($request->all(), [
+        $all_fields = $request->all();
+        $all_fields['vat'] = str_replace(',', '.', $all_fields['vat']);
+        $all_fields['total_tax'] = str_replace(',', '.', $all_fields['total_tax']);
+        foreach ($all_fields['details'] as $key => $detail) {
+            $all_fields['details'][$key]['quantity'] = str_replace(',', '.', $detail['quantity']);
+            $all_fields['details'][$key]['price'] = str_replace(',', '.', $detail['price']);
+        }
+
+        $validator = Validator::make($all_fields, [
             'invoice_number' => 'numeric|required',
             'invoice_date' => 'date|required',
             'name' => 'string|nullable',
@@ -76,8 +84,8 @@ class InvoiceController extends Controller
             'details' => 'array|required',
             'details.*.order' => 'numeric|nullable',
             'details.*.description' => 'string|required',
-            'details.*.quantity' => 'string|nullable',
-            'details.*.price' => 'string|required',
+            'details.*.quantity' => 'numeric|nullable',
+            'details.*.price' => 'numeric|required',
             'vat' => 'numeric|required',
             'total_tax' => 'numeric|required',
         ]);
@@ -85,99 +93,99 @@ class InvoiceController extends Controller
             return [
                 'status' => 'not validated',
                 'messages' => $validator->messages(),
-                'form_field' => $request->all()
+                'form_field' => $all_fields
             ];
         }
 
-        $invoice = Invoice::find($request->id);
+        $invoice = Invoice::find($all_fields['id']);
         if ($invoice->creation_status === 'public' && $auth_user->role !== 'admin') {
             return [
                 'status' => 'error',
                 'message' => trans('error.authorization'),
             ];
         }
-        $invoice_company = Invoice::find($request->id)->invoiceCompany;
+        $invoice_company = Invoice::find($all_fields['id'])->invoiceCompany;
 
         if (empty($invoice_company)) {
             $new_invoice_company = new InvoiceCompany([
-                'name' => $request->name,
-                'company_name' => $request->company_name,
-                'address' => $request->address,
-                'post_code' => $request->post_code,
-                'city' => $request->city,
-                'phone' => $request->phone,
-                'siret' => $request->siret,
-                'rcs' => $request->rcs,
-                'tva' => $request->tva,
-                'note' => $request->note,
+                'name' => !empty($all_fields['name']) ? $all_fields['name'] : '',
+                'company_name' => $all_fields['company_name'],
+                'address' => !empty($all_fields['address']) ? $all_fields['address'] : '',
+                'post_code' => !empty($all_fields['post_code']) ? $all_fields['post_code'] : '',
+                'city' => !empty($all_fields['city']) ? $all_fields['city'] : '',
+                'phone' => !empty($all_fields['phone']) ? $all_fields['phone'] : '',
+                'siret' => !empty($all_fields['siret']) ? $all_fields['siret'] : '',
+                'rcs' => !empty($all_fields['rcs']) ? $all_fields['rcs'] : '',
+                'tva' => !empty($all_fields['tva']) ? $all_fields['tva'] : '',
+                'note' => !empty($all_fields['note']) ? $all_fields['note'] : '',
             ]);
             $invoice->invoiceCompany()->save($new_invoice_company);
         } else {
             $invoice->invoiceCompany()->update([
-                'name' => $request->name,
-                'company_name' => $request->company_name,
-                'address' => $request->address,
-                'post_code' => $request->post_code,
-                'city' => $request->city,
-                'phone' => $request->phone,
-                'siret' => $request->siret,
-                'rcs' => $request->rcs,
-                'tva' => $request->tva,
-                'note' => $request->note,
+                'name' => !empty($all_fields['name']) ? $all_fields['name'] : '',
+                'company_name' => $all_fields['company_name'],
+                'address' => !empty($all_fields['address']) ? $all_fields['address'] : '',
+                'post_code' => !empty($all_fields['post_code']) ? $all_fields['post_code'] : '',
+                'city' => !empty($all_fields['city']) ? $all_fields['city'] : '',
+                'phone' => !empty($all_fields['phone']) ? $all_fields['phone'] : '',
+                'siret' => !empty($all_fields['siret']) ? $all_fields['siret'] : '',
+                'rcs' => !empty($all_fields['rcs']) ? $all_fields['rcs'] : '',
+                'tva' => !empty($all_fields['tva']) ? $all_fields['tva'] : '',
+                'note' => !empty($all_fields['note']) ? $all_fields['note'] : '',
             ]);
         }
 
-        $old_invoice_details = Invoice::find($request->id)->invoiceDetails;
+        $old_invoice_details = Invoice::find($all_fields['id'])->invoiceDetails;
         
         if (empty($old_invoice_details->all())) {
             $query_invoice_details = [];
-            foreach ($request->details as $detail) {
+            foreach ($all_fields['details'] as $detail) {
                 $query_invoice_details[] = new InvoiceDetail([
                     'order' => $detail['order'],
                     'description' => $detail['description'],
-                    'quantity' => $detail['quantity'],
-                    'price' => $detail['price'],
+                    'quantity' => (float) $detail['quantity'],
+                    'price' => (float) $detail['price'],
                 ]);
             }
             $invoice->invoiceDetails()->saveMany($query_invoice_details);
         } else {
-            if (count($request->details) === count($old_invoice_details->all())) {
+            if (count($all_fields['details']) === count($old_invoice_details->all())) {
                 foreach ($old_invoice_details->all() as $key => $old_invoice_detail) {
                     InvoiceDetail::where('id', $old_invoice_detail->id)->update([
-                        'order' => (int) $request->details[$key]['order'],
-                        'description' => $request->details[$key]['description'],
-                        'quantity' => (int) $request->details[$key]['quantity'],
-                        'price' => (int) $request->details[$key]['price'],
+                        'order' => (int) $all_fields['details'][$key]['order'],
+                        'description' => $all_fields['details'][$key]['description'],
+                        'quantity' => (float) $all_fields['details'][$key]['quantity'],
+                        'price' => (float) $all_fields['details'][$key]['price'],
                     ]);
                 }
-            } elseif (count($request->details) > count($old_invoice_details->all())) {
+            } elseif (count($all_fields['details']) > count($old_invoice_details->all())) {
                 $query_invoice_details = [];
-                foreach ($request->details as $key => $detail) {
+                foreach ($all_fields['details'] as $key => $detail) {
                     if (!empty($old_invoice_details->all()[$key])) {
                         InvoiceDetail::where('id', $old_invoice_details->all()[$key]->id)->update([
                             'order' => (int) $detail['order'],
                             'description' => $detail['description'],
-                            'quantity' => (int) $detail['quantity'],
-                            'price' => (int) $detail['price'],
+                            'quantity' => (float) $detail['quantity'],
+                            'price' => (float) $detail['price'],
                         ]);
                     } else {
                         $query_invoice_details[] = new InvoiceDetail([
                             'order' => $detail['order'],
                             'description' => $detail['description'],
-                            'quantity' => $detail['quantity'],
-                            'price' => $detail['price'],
+                            'quantity' => (float) $detail['quantity'],
+                            'price' => (float) $detail['price'],
                         ]);
                     }
                 }
                 $invoice->invoiceDetails()->saveMany($query_invoice_details);
-            } elseif (count($request->details) < count($old_invoice_details->all())) {
+            } elseif (count($all_fields['details']) < count($old_invoice_details->all())) {
                 foreach ($old_invoice_details->all() as $key => $old_invoice_detail) {
-                    if (!empty($request->details[$key])) {
+                    if (!empty($all_fields['details'][$key])) {
                         InvoiceDetail::where('id', $old_invoice_detail->id)->update([
-                            'order' => (int) $request->details[$key]['order'],
-                            'description' => $request->details[$key]['description'],
-                            'quantity' => (int) $request->details[$key]['quantity'],
-                            'price' => (int) $request->details[$key]['price'],
+                            'order' => (int) $all_fields['details'][$key]['order'],
+                            'description' => $all_fields['details'][$key]['description'],
+                            'quantity' => (float) $all_fields['details'][$key]['quantity'],
+                            'price' => (float) $all_fields['details'][$key]['price'],
                         ]);
                     } else {
                         $old_invoice_detail->delete();
@@ -186,15 +194,15 @@ class InvoiceController extends Controller
             }
         }
 
-        Invoice::where('id', $request->id)->update([
-            'invoice_number' => (int) $request->invoice_number,
-            'invoice_date' => $request->invoice_date,
-            'company' => $request->company_name,
-            'vat' => (int) $request->vat,
-            'total_tax' => (int) $request->total_tax,
+        Invoice::where('id', $all_fields['id'])->update([
+            'invoice_number' => (int) $all_fields['invoice_number'],
+            'invoice_date' => $all_fields['invoice_date'],
+            'company' => $all_fields['company_name'],
+            'vat' => (float) $all_fields['vat'],
+            'total_tax' => (float) $all_fields['total_tax'],
         ]);
 
-        $result = $this->getInvoice($request->id);
+        $result = $this->getInvoice($all_fields['id']);
         $result['message'] = trans('success.update');
 
         return $result;
@@ -372,7 +380,7 @@ class InvoiceController extends Controller
             $order = $request->sort['order'];
         }
 
-        $orderBy = 'orderByDesc';
+        $orderBy = 'orderBy';
         if (!empty($request->sort['orderBy'])) {
             if ($request->sort['orderBy'] === 'asc') {
                 $orderBy = 'orderBy';
@@ -428,7 +436,7 @@ class InvoiceController extends Controller
         }
 
         if (!empty($where_default)) {
-            $all_invoices = Invoice::whereRaw($where_default)->$orderBy($order)->get();
+            $all_invoices = Invoice::whereRaw($where_default)->where('creation_status', 'public')->$orderBy($order)->get();
         } else {
             $all_invoices = Invoice::where('creation_status', 'public')->$orderBy($order)->get()->toArray();
         }

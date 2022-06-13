@@ -189,14 +189,30 @@
         </div>
         <div class="pdf-customer-block">
             <h2 class="block-title">Customer</h2>
-            <p>{{ $invoice['name'] }}</p>
-            <p>{{ $invoice['company_name'] }}</p>
-            <p>{{ $invoice['address'] }}<br> {{ $invoice['post_code'] }} {{ $invoice['city'] }}</p>
-            <p>{{ $invoice['phone'] }}</p>
-            <p>Siret: {{ $invoice['siret'] }}</p>
-            <p>RCS: {{ $invoice['rcs'] }}</p>
-            <p>TVA: {{ $invoice['tva'] }}</p>
-            <p>{{ $invoice['note'] }}</p>
+            @if (!empty($invoice['name']))
+                <p>{{ $invoice['name'] }}</p>
+            @endif
+            @if (!empty($invoice['company_name']))
+                <p>{{ $invoice['company_name'] }}</p>
+            @endif
+            @if (!empty($invoice['address']) || !empty($invoice['post_code']) || !empty($invoice['city']))
+                <p>{{ $invoice['address'] }}<br> {{ $invoice['post_code'] }} {{ $invoice['city'] }}</p>
+            @endif
+            @if (!empty($invoice['phone']))
+                <p>{{ $invoice['phone'] }}</p>
+            @endif
+            @if (!empty($invoice['siret']))
+                <p>Siret: {{ $invoice['siret'] }}</p>
+            @endif
+            @if (!empty($invoice['rcs']))
+                <p>RCS: {{ $invoice['rcs'] }}</p>
+            @endif
+            @if (!empty($invoice['tva']))
+                <p>TVA: {{ $invoice['tva'] }}</p>
+            @endif
+            @if (!empty($invoice['note']))
+                <p>{{ $invoice['note'] }}</p>
+            @endif
         </div>
         <div class="pdf-details-block">
             <table>

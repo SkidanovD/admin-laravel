@@ -5,11 +5,11 @@
             <div :class="'text message message-' + formMessage.class" v-if="formMessage.message">{{ formMessage.message }}</div>
             <div class="invoices-list" v-if="getInvoices && invoicesList.length">
                 <div class="invoice-row invoice-row-header">
-                    <div class="invoice-cell invoice-cell-header invoice-cell-number">#</div>
+                    <div class="invoice-cell invoice-cell-header invoice-cell-number sort-cell" :class="{asc: sort.orderBy === 'asc', desc: sort.orderBy === 'desc', active: sort.order === 'invoice_number'}" @click="actionSort('invoice_number')">#</div>
                     <div class="invoice-cell invoice-cell-header invoice-cell-date">Invoice date</div>
                     <div class="invoice-cell invoice-cell-header invoice-cell-company">Company</div>
                     <div class="invoice-cell invoice-cell-header invoice-cell-author">Author</div>
-                    <div class="invoice-cell invoice-cell-header invoice-cell-total">Total</div>
+                    <div class="invoice-cell invoice-cell-header invoice-cell-total sort-cell" :class="{asc: sort.orderBy === 'asc', desc: sort.orderBy === 'desc', active: sort.order === 'total_tax'}" @click="actionSort('total_tax')">Total</div>
                     <div class="invoice-cell invoice-cell-header invoice-cell-received-date">Received date</div>
                     <div class="invoice-cell invoice-cell-header invoice-cell-status">Status</div>
                     <div class="invoice-cell invoice-cell-header invoice-cell-action">
@@ -118,13 +118,25 @@
                 class: '',
                 message: '',
             },
+            sort: {
+                order: 'invoice_number',
+                orderBy: 'asc',
+            },
+            filter: {},
         }),
         mounted() {
             this.loadPageData();
         },
         methods: {
             loadPageData() {
-                axios.get('/api/getAllInvoices').then(res => {
+                axios({
+                    method: 'post',
+                    url: '/api/getAllInvoices',
+                    data: {
+                        sort: this.sort,
+                        filter: this.filter,
+                    },
+                }).then(res => {
                     this.getInvoices = true;
                     if (res.data.status === 'success') {
                         this.invoicesList = res.data.all_invoices
@@ -210,6 +222,15 @@
                         this.loadPageData();
                     }
                 )
+            },
+            actionSort(field) {
+                this.sort.order = field;
+                if (this.sort.orderBy === 'asc') {
+                    this.sort.orderBy = 'desc';
+                } else {
+                    this.sort.orderBy = 'asc';
+                }
+                this.loadPageData();
             }
         }
     }

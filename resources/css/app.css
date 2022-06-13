@@ -1170,6 +1170,14 @@ li {
 .form-textarea {
   resize: none;
 }
+.form-label-wrapper {
+  color: var(--gray);
+  line-height: 1;
+  margin-bottom: 0.5em;
+}
+.form-label {
+  padding: 0 1.5em;
+}
 .form-label-file {
   color: var(--white);
   display: block;
@@ -1191,14 +1199,6 @@ li {
   height: 1.3em;
   top: 1.45em;
   right: 1.3em;
-}
-.form-label-wrapper {
-  color: var(--gray);
-  line-height: 1;
-  margin-bottom: 0.5em;
-}
-.form-label {
-  padding: 0 1.5em;
 }
 
 

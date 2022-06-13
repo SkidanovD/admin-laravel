@@ -47,6 +47,7 @@
                     </div>
                     <div class="invoice-action-list" v-if="actionListShow === index">
                         <router-link :to="'/edit-invoice/' + invoice.id" class="invoice-action-item">Edit invoice</router-link>
+                        <span @click="actionDeleteInvoice(invoice.id)" class="invoice-action-item">Delete invoice</span>
                     </div>
                 </div>
             </div>
@@ -69,6 +70,10 @@
             getInvoices: false,
             actionListShow: -1,
             indexListShow: -1,
+            formMessage: {
+                class: '',
+                message: '',
+            },
         }),
         mounted() {
             this.loadPageData();
@@ -79,6 +84,10 @@
                     this.getInvoices = true;
                     if (res.data.status === 'success') {
                         this.invoicesList = res.data.all_invoices
+                    } else {
+                        this.invoicesList = [];
+                        this.formMessage.class = res.data.status;
+                        this.formMessage.message = res.data.message;
                     }
                 })
             },
@@ -89,12 +98,12 @@
                     this.actionListShow = -1;
                 }
             },
-            deleteInvoice(e) {
+            actionDeleteInvoice(id) {
                 axios({
                     method: 'post',
                     url: '/api/actionDeleteInvoice',
                     data: {
-                        id: e.target.dataset.id,
+                        id: id,
                     },
                 }).then(
                     res => {

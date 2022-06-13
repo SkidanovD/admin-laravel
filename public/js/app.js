@@ -6147,7 +6147,12 @@ __webpack_require__.r(__webpack_exports__);
       formMessage: {
         "class": '',
         message: ''
-      }
+      },
+      sort: {
+        order: 'invoice_number',
+        orderBy: 'asc'
+      },
+      filter: {}
     };
   },
   mounted: function mounted() {
@@ -6157,7 +6162,14 @@ __webpack_require__.r(__webpack_exports__);
     loadPageData: function loadPageData() {
       var _this = this;
 
-      axios.get('/api/getAllInvoices').then(function (res) {
+      axios({
+        method: 'post',
+        url: '/api/getAllInvoices',
+        data: {
+          sort: this.sort,
+          filter: this.filter
+        }
+      }).then(function (res) {
         _this.getInvoices = true;
 
         if (res.data.status === 'success') {
@@ -6247,6 +6259,17 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         _this4.loadPageData();
       });
+    },
+    actionSort: function actionSort(field) {
+      this.sort.order = field;
+
+      if (this.sort.orderBy === 'asc') {
+        this.sort.orderBy = 'desc';
+      } else {
+        this.sort.orderBy = 'asc';
+      }
+
+      this.loadPageData();
     }
   }
 });
@@ -6380,6 +6403,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Index',
   data: function data() {
@@ -6387,7 +6411,11 @@ __webpack_require__.r(__webpack_exports__);
       invoicesList: [],
       getInvoices: false,
       actionListShow: -1,
-      indexListShow: -1
+      indexListShow: -1,
+      formMessage: {
+        "class": '',
+        message: ''
+      }
     };
   },
   mounted: function mounted() {
@@ -6402,6 +6430,10 @@ __webpack_require__.r(__webpack_exports__);
 
         if (res.data.status === 'success') {
           _this.invoicesList = res.data.all_invoices;
+        } else {
+          _this.invoicesList = [];
+          _this.formMessage["class"] = res.data.status;
+          _this.formMessage.message = res.data.message;
         }
       });
     },
@@ -6412,14 +6444,14 @@ __webpack_require__.r(__webpack_exports__);
         this.actionListShow = -1;
       }
     },
-    deleteInvoice: function deleteInvoice(e) {
+    actionDeleteInvoice: function actionDeleteInvoice(id) {
       var _this2 = this;
 
       axios({
         method: 'post',
         url: '/api/actionDeleteInvoice',
         data: {
-          id: e.target.dataset.id
+          id: id
         }
       }).then(function (res) {
         _this2.loadPageData();
@@ -6762,7 +6794,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
         summary += parseFloat(price);
       });
-      console.log(elements);
       this.totalPrice = summary.toFixed(2);
     },
     countTotalPrice: function countTotalPrice() {
@@ -6795,7 +6826,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.invoice.tva = company.tva;
       this.invoice.note = company.note;
       this.companyListShow = false;
-      console.log(this.companiesList[index]);
     },
     actionEditInvoice: function actionEditInvoice() {
       var _this4 = this;
@@ -33762,7 +33792,17 @@ var render = function () {
                     "div",
                     {
                       staticClass:
-                        "invoice-cell invoice-cell-header invoice-cell-number",
+                        "invoice-cell invoice-cell-header invoice-cell-number sort-cell",
+                      class: {
+                        asc: _vm.sort.orderBy === "asc",
+                        desc: _vm.sort.orderBy === "desc",
+                        active: _vm.sort.order === "invoice_number",
+                      },
+                      on: {
+                        click: function ($event) {
+                          return _vm.actionSort("invoice_number")
+                        },
+                      },
                     },
                     [_vm._v("#")]
                   ),
@@ -33798,7 +33838,17 @@ var render = function () {
                     "div",
                     {
                       staticClass:
-                        "invoice-cell invoice-cell-header invoice-cell-total",
+                        "invoice-cell invoice-cell-header invoice-cell-total sort-cell",
+                      class: {
+                        asc: _vm.sort.orderBy === "asc",
+                        desc: _vm.sort.orderBy === "desc",
+                        active: _vm.sort.order === "total_tax",
+                      },
+                      on: {
+                        click: function ($event) {
+                          return _vm.actionSort("total_tax")
+                        },
+                      },
                     },
                     [_vm._v("Total")]
                   ),
@@ -34604,6 +34654,19 @@ var render = function () {
                               },
                               [_vm._v("Edit invoice")]
                             ),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                staticClass: "invoice-action-item",
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.actionDeleteInvoice(invoice.id)
+                                  },
+                                },
+                              },
+                              [_vm._v("Delete invoice")]
+                            ),
                           ],
                           1
                         )
@@ -34717,6 +34780,14 @@ var render = function () {
                   },
                   [
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.invoice.invoice_number,
+                          expression: "invoice.invoice_number",
+                        },
+                      ],
                       staticClass: "form-input form-input-invoice-number",
                       attrs: {
                         id: "invoice_number",
@@ -34725,6 +34796,18 @@ var render = function () {
                         placeholder: "Invoice number",
                       },
                       domProps: { value: _vm.invoice.invoice_number },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.invoice,
+                            "invoice_number",
+                            $event.target.value
+                          )
+                        },
+                      },
                     }),
                   ]
                 ),
@@ -34753,6 +34836,14 @@ var render = function () {
                   },
                   [
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.invoice.invoice_date,
+                          expression: "invoice.invoice_date",
+                        },
+                      ],
                       staticClass: "form-input form-input-invoice-date",
                       attrs: {
                         id: "invoice_date",
@@ -34761,6 +34852,18 @@ var render = function () {
                         placeholder: "Invoice date",
                       },
                       domProps: { value: _vm.invoice.invoice_date },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.invoice,
+                            "invoice_date",
+                            $event.target.value
+                          )
+                        },
+                      },
                     }),
                   ]
                 ),
@@ -34884,6 +34987,14 @@ var render = function () {
                       },
                       [
                         _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.invoice.name,
+                              expression: "invoice.name",
+                            },
+                          ],
                           staticClass: "form-input form-input-name",
                           attrs: {
                             id: "name",
@@ -34892,6 +35003,14 @@ var render = function () {
                             placeholder: "Name",
                           },
                           domProps: { value: _vm.invoice.name },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.invoice, "name", $event.target.value)
+                            },
+                          },
                         }),
                       ]
                     ),
@@ -34921,6 +35040,14 @@ var render = function () {
                   },
                   [
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.invoice.company_name,
+                          expression: "invoice.company_name",
+                        },
+                      ],
                       staticClass: "form-input form-input-company-name",
                       attrs: {
                         id: "company_name",
@@ -34929,6 +35056,18 @@ var render = function () {
                         placeholder: "Company name",
                       },
                       domProps: { value: _vm.invoice.company_name },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.invoice,
+                            "company_name",
+                            $event.target.value
+                          )
+                        },
+                      },
                     }),
                   ]
                 ),
@@ -34954,6 +35093,14 @@ var render = function () {
                   },
                   [
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.invoice.address,
+                          expression: "invoice.address",
+                        },
+                      ],
                       staticClass: "form-input form-input-address",
                       attrs: {
                         id: "address",
@@ -34962,6 +35109,14 @@ var render = function () {
                         placeholder: "Address",
                       },
                       domProps: { value: _vm.invoice.address },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.invoice, "address", $event.target.value)
+                        },
+                      },
                     }),
                   ]
                 ),
@@ -34987,6 +35142,14 @@ var render = function () {
                   },
                   [
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.invoice.post_code,
+                          expression: "invoice.post_code",
+                        },
+                      ],
                       staticClass: "form-input form-input-post-code",
                       attrs: {
                         id: "post_code",
@@ -34995,6 +35158,18 @@ var render = function () {
                         placeholder: "Post code",
                       },
                       domProps: { value: _vm.invoice.post_code },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.invoice,
+                            "post_code",
+                            $event.target.value
+                          )
+                        },
+                      },
                     }),
                   ]
                 ),
@@ -35020,6 +35195,14 @@ var render = function () {
                   },
                   [
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.invoice.city,
+                          expression: "invoice.city",
+                        },
+                      ],
                       staticClass: "form-input form-input-city",
                       attrs: {
                         id: "city",
@@ -35028,6 +35211,14 @@ var render = function () {
                         placeholder: "City",
                       },
                       domProps: { value: _vm.invoice.city },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.invoice, "city", $event.target.value)
+                        },
+                      },
                     }),
                   ]
                 ),
@@ -35054,6 +35245,14 @@ var render = function () {
                       },
                       [
                         _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.invoice.phone,
+                              expression: "invoice.phone",
+                            },
+                          ],
                           staticClass: "form-input form-input-phone",
                           attrs: {
                             id: "phone",
@@ -35062,6 +35261,18 @@ var render = function () {
                             placeholder: "Telephone",
                           },
                           domProps: { value: _vm.invoice.phone },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.invoice,
+                                "phone",
+                                $event.target.value
+                              )
+                            },
+                          },
                         }),
                       ]
                     ),
@@ -35089,6 +35300,14 @@ var render = function () {
                       },
                       [
                         _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.invoice.siret,
+                              expression: "invoice.siret",
+                            },
+                          ],
                           staticClass: "form-input form-input-siret",
                           attrs: {
                             id: "siret",
@@ -35097,6 +35316,18 @@ var render = function () {
                             placeholder: "Siret",
                           },
                           domProps: { value: _vm.invoice.siret },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.invoice,
+                                "siret",
+                                $event.target.value
+                              )
+                            },
+                          },
                         }),
                       ]
                     ),
@@ -35124,6 +35355,14 @@ var render = function () {
                       },
                       [
                         _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.invoice.rcs,
+                              expression: "invoice.rcs",
+                            },
+                          ],
                           staticClass: "form-input form-input-rcs",
                           attrs: {
                             id: "rcs",
@@ -35132,6 +35371,14 @@ var render = function () {
                             placeholder: "RCS",
                           },
                           domProps: { value: _vm.invoice.rcs },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.invoice, "rcs", $event.target.value)
+                            },
+                          },
                         }),
                       ]
                     ),
@@ -35158,6 +35405,14 @@ var render = function () {
                   },
                   [
                     _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.invoice.tva,
+                          expression: "invoice.tva",
+                        },
+                      ],
                       staticClass: "form-input form-input-tva",
                       attrs: {
                         id: "tva",
@@ -35166,6 +35421,14 @@ var render = function () {
                         placeholder: "TVA",
                       },
                       domProps: { value: _vm.invoice.tva },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.invoice, "tva", $event.target.value)
+                        },
+                      },
                     }),
                   ]
                 ),
@@ -35192,6 +35455,14 @@ var render = function () {
                       },
                       [
                         _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.invoice.note,
+                              expression: "invoice.note",
+                            },
+                          ],
                           staticClass:
                             "form-input form-textarea form-textarea-note",
                           attrs: {
@@ -35202,6 +35473,14 @@ var render = function () {
                             placeholder: "Note",
                           },
                           domProps: { value: _vm.invoice.note },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.invoice, "note", $event.target.value)
+                            },
+                          },
                         }),
                       ]
                     ),

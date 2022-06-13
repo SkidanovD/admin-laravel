@@ -7,13 +7,13 @@
                 <input id="id" type="hidden" name="id" :value="invoice.id">
                 <div class="form-item-wrapper form-item-invoice-number-wrapper required">
                     <div class="form-input-wrapper form-input-invoice-number-wrapper icon-number">
-                        <input class="form-input form-input-invoice-number" id="invoice_number" name="invoice_number" type="text" placeholder="Invoice number" :value="invoice.invoice_number">
+                        <input class="form-input form-input-invoice-number" id="invoice_number" name="invoice_number" type="text" placeholder="Invoice number" v-model="invoice.invoice_number">
                     </div>
                     <vueValidateMessage  v-if="validate.invoice_number" :messages="validate.invoice_number"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-invoice-date-wrapper required">
                     <div class="form-input-wrapper form-input-invoice-date-wrapper icon-date">
-                        <input class="form-input form-input-invoice-date" id="invoice_date" name="invoice_date" type="date" placeholder="Invoice date" :value="invoice.invoice_date">
+                        <input class="form-input form-input-invoice-date" id="invoice_date" name="invoice_date" type="date" placeholder="Invoice date" v-model="invoice.invoice_date">
                     </div>
                     <vueValidateMessage  v-if="validate.invoice_date" :messages="validate.invoice_date"></vueValidateMessage>
                 </div>
@@ -41,61 +41,61 @@
                 </div>
                 <div class="form-item-wrapper form-item-name-wrapper" v-if="additionalFields">
                     <div class="form-input-wrapper form-input-name-wrapper icon-name">
-                        <input class="form-input form-input-name" id="name" name="name" type="text" placeholder="Name" :value="invoice.name">
+                        <input class="form-input form-input-name" id="name" name="name" type="text" placeholder="Name" v-model="invoice.name">
                     </div>
                     <vueValidateMessage  v-if="validate.name" :messages="validate.name"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-company-name-wrapper required">
                     <div class="form-input-wrapper form-input-company-name-wrapper icon-company">
-                        <input class="form-input form-input-company-name" id="company_name" name="company_name" type="text" placeholder="Company name" :value="invoice.company_name">
+                        <input class="form-input form-input-company-name" id="company_name" name="company_name" type="text" placeholder="Company name" v-model="invoice.company_name">
                     </div>
                     <vueValidateMessage  v-if="validate.company_name" :messages="validate.company_name"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-address-wrapper">
                     <div class="form-input-wrapper form-input-address-wrapper icon-address">
-                        <input class="form-input form-input-address" id="address" name="address" type="text" placeholder="Address" :value="invoice.address">
+                        <input class="form-input form-input-address" id="address" name="address" type="text" placeholder="Address" v-model="invoice.address">
                     </div>
                     <vueValidateMessage  v-if="validate.address" :messages="validate.address"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-post-code-wrapper">
                     <div class="form-input-wrapper form-input-post-code-wrapper icon-post-code">
-                        <input class="form-input form-input-post-code" id="post_code" name="post_code" type="text" placeholder="Post code" :value="invoice.post_code">
+                        <input class="form-input form-input-post-code" id="post_code" name="post_code" type="text" placeholder="Post code" v-model="invoice.post_code">
                     </div>
                     <vueValidateMessage  v-if="validate.post_code" :messages="validate.post_code"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-city-wrapper">
                     <div class="form-input-wrapper form-input-city-wrapper icon-city">
-                        <input class="form-input form-input-city" id="city" name="city" type="text" placeholder="City" :value="invoice.city">
+                        <input class="form-input form-input-city" id="city" name="city" type="text" placeholder="City" v-model="invoice.city">
                     </div>
                     <vueValidateMessage  v-if="validate.city" :messages="validate.city"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-phone-wrapper" v-if="additionalFields">
                     <div class="form-input-wrapper form-input-phone-wrapper icon-phone">
-                        <input class="form-input form-input-phone" id="phone" name="phone" type="text" placeholder="Telephone" :value="invoice.phone">
+                        <input class="form-input form-input-phone" id="phone" name="phone" type="text" placeholder="Telephone" v-model="invoice.phone">
                     </div>
                     <vueValidateMessage  v-if="validate.phone" :messages="validate.phone"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-siret-wrapper" v-if="additionalFields">
                     <div class="form-input-wrapper form-input-siret-wrapper icon-barcode">
-                        <input class="form-input form-input-siret" id="siret" name="siret" type="text" placeholder="Siret" :value="invoice.siret">
+                        <input class="form-input form-input-siret" id="siret" name="siret" type="text" placeholder="Siret" v-model="invoice.siret">
                     </div>
                     <vueValidateMessage  v-if="validate.siret" :messages="validate.siret"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-rcs-wrapper" v-if="additionalFields">
                     <div class="form-input-wrapper form-input-rcs-wrapper icon-barcode">
-                        <input class="form-input form-input-rcs" id="rcs" name="rcs" type="text" placeholder="RCS" :value="invoice.rcs">
+                        <input class="form-input form-input-rcs" id="rcs" name="rcs" type="text" placeholder="RCS" v-model="invoice.rcs">
                     </div>
                     <vueValidateMessage  v-if="validate.rcs" :messages="validate.rcs"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-tva-wrapper">
                     <div class="form-input-wrapper form-input-tva-wrapper icon-barcode">
-                        <input class="form-input form-input-tva" id="tva" name="tva" type="text" placeholder="TVA" :value="invoice.tva">
+                        <input class="form-input form-input-tva" id="tva" name="tva" type="text" placeholder="TVA" v-model="invoice.tva">
                     </div>
                     <vueValidateMessage  v-if="validate.tva" :messages="validate.tva"></vueValidateMessage>
                 </div>
                 <div class="form-item-wrapper form-item-note-wrapper" v-if="additionalFields">
                     <div class="form-input-wrapper form-textarea-wrapper form-textarea-note-wrapper icon-note">
-                        <textarea class="form-input form-textarea form-textarea-note" name="note" id="note" cols="30" rows="8" placeholder="Note" :value="invoice.note"></textarea>
+                        <textarea class="form-input form-textarea form-textarea-note" name="note" id="note" cols="30" rows="8" placeholder="Note" v-model="invoice.note"></textarea>
                     </div>
                     <vueValidateMessage  v-if="validate.note" :messages="validate.note"></vueValidateMessage>
                 </div>
@@ -293,7 +293,6 @@
                     }
                     summary += parseFloat(price);
                 });
-                console.log(elements);
                 
                 this.totalPrice = summary.toFixed(2);
             },
@@ -327,7 +326,6 @@
 
 
                 this.companyListShow = false;
-                console.log(this.companiesList[index]);
                 
             },
             actionEditInvoice() {

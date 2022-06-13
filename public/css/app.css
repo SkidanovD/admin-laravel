@@ -1170,6 +1170,14 @@ li {
 .form-textarea {
   resize: none;
 }
+.form-label-wrapper {
+  color: var(--gray);
+  line-height: 1;
+  margin-bottom: 0.5em;
+}
+.form-label {
+  padding: 0 1.5em;
+}
 .form-label-file {
   color: var(--white);
   display: block;
@@ -1191,14 +1199,6 @@ li {
   height: 1.3em;
   top: 1.45em;
   right: 1.3em;
-}
-.form-label-wrapper {
-  color: var(--gray);
-  line-height: 1;
-  margin-bottom: 0.5em;
-}
-.form-label {
-  padding: 0 1.5em;
 }
 
 
@@ -1305,6 +1305,31 @@ li {
 .invoice-cell {
   text-align: right;
   padding: 1.2em 1%;
+}
+.sort-cell {
+  cursor: pointer;
+  transition: color 0.3s;
+  position: relative;
+}
+.sort-cell:hover {
+  color: var(--white);
+}
+.sort-cell::before {
+  content: '';
+  position: absolute;
+  display: none;
+  background: url(../img/icons/icon-arrow-bottom.svg) center center no-repeat;
+  background-size: contain;
+  width: 0.6em;
+  height: 1.1em;
+  top: calc(50% - 0.55em);
+  right: 0;
+}
+.sort-cell.active::before {
+  display: block;
+}
+.sort-cell.desc::before {
+  transform: rotate(180deg);
 }
 .empty {
   position: relative;
