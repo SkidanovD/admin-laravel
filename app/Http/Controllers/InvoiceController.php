@@ -423,7 +423,7 @@ class InvoiceController extends Controller
                         } elseif ($str_count > 1) {
                             $string .= 'OR ';
                         }
-                        $string .= '`' . $filter_key . '` = "' . $str_val . '" ';
+                        $string .= '`' . $filter_key . '` = "' . addcslashes($str_val, '"') . '" ';
                         if ($str_count === count($filter_val)) {
                             $string .= ') ';
                         }
@@ -557,5 +557,41 @@ class InvoiceController extends Controller
             unset($data['invoice_date']);
         }
         return $data;
+    }
+
+    public function getFilterData()
+    {
+        $all_invoices = Invoice::where('creation_status', 'public')->get(['company', 'author', 'status'])->toArray();
+        $companies = [];
+        $authors = [];
+        $all_status = [];
+        foreach ($all_invoices as $invoice) {
+            $companies[] = $invoice['company'];
+            $authors[] = $invoice['author'];
+            $all_status[] = $invoice['status'];
+        }
+        $companies = array_values(array_unique($companies));
+        $authors = array_values(array_unique($authors));
+        $all_status = array_values(array_unique($all_status));
+        $authors_data = [];
+
+        foreach ($authors as $key => $id) {
+            $author = User::find($id)->toArray();
+            $authors_data[$key]['id'] = $author['id'];
+            if (!empty($author['first_name'])) {
+                $authors_data[$key]['label'] = $author['first_name'];
+            } else {
+                $authors_data[$key]['label'] = $author['email'];
+            }
+        }
+
+        return [
+            'status' => 'success',
+            'filter_data' => [
+                'companies' => $companies,
+                'authors' => $authors_data,
+                'all_status' => $all_status,
+            ],
+        ];
     }
 }

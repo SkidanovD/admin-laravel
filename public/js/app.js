@@ -6132,6 +6132,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Index',
   data: function data() {
@@ -6144,6 +6188,8 @@ __webpack_require__.r(__webpack_exports__);
       receivedPopupShow: false,
       receivedPopupId: 0,
       receivedDate: '',
+      filterShow: true,
+      filterData: {},
       formMessage: {
         "class": '',
         message: ''
@@ -6152,11 +6198,13 @@ __webpack_require__.r(__webpack_exports__);
         order: 'invoice_number',
         orderBy: 'asc'
       },
-      filter: {}
+      filter: {},
+      filterCompany: []
     };
   },
   mounted: function mounted() {
     this.loadPageData();
+    this.getFilterData();
   },
   methods: {
     loadPageData: function loadPageData() {
@@ -6171,9 +6219,26 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (res) {
         _this.getInvoices = true;
+        _this.formMessage = {
+          "class": '',
+          message: ''
+        };
 
         if (res.data.status === 'success') {
           _this.invoicesList = res.data.all_invoices;
+        } else {
+          _this.invoicesList = [];
+          _this.formMessage["class"] = res.data.status;
+          _this.formMessage.message = res.data.message;
+        }
+      });
+    },
+    getFilterData: function getFilterData() {
+      var _this2 = this;
+
+      axios.get('/api/getFilterData').then(function (res) {
+        if (res.data.status === 'success') {
+          _this2.filterData = res.data.filter_data;
         }
       });
     },
@@ -6197,7 +6262,7 @@ __webpack_require__.r(__webpack_exports__);
       this.statusPopupShow = '';
     },
     actionEditStatus: function actionEditStatus(status) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios({
         method: 'post',
@@ -6207,11 +6272,11 @@ __webpack_require__.r(__webpack_exports__);
           status: status
         }
       }).then(function (res) {
-        _this2.formMessage["class"] = res.data.status;
-        _this2.formMessage.message = res.data.message;
+        _this3.formMessage["class"] = res.data.status;
+        _this3.formMessage.message = res.data.message;
 
         if (res.data.status === 'success') {
-          _this2.loadPageData();
+          _this3.loadPageData();
         }
       });
     },
@@ -6224,7 +6289,7 @@ __webpack_require__.r(__webpack_exports__);
       this.receivedPopupId = 0;
     },
     actionEditReceivedDate: function actionEditReceivedDate() {
-      var _this3 = this;
+      var _this4 = this;
 
       if (this.receivedDate !== '') {
         axios({
@@ -6235,11 +6300,11 @@ __webpack_require__.r(__webpack_exports__);
             received_date: this.receivedDate
           }
         }).then(function (res) {
-          _this3.formMessage["class"] = res.data.status;
-          _this3.formMessage.message = res.data.message;
+          _this4.formMessage["class"] = res.data.status;
+          _this4.formMessage.message = res.data.message;
 
           if (res.data.status === 'success') {
-            _this3.loadPageData();
+            _this4.loadPageData();
           }
         });
       }
@@ -6248,7 +6313,7 @@ __webpack_require__.r(__webpack_exports__);
       this.receivedPopupId = 0;
     },
     deleteInvoice: function deleteInvoice(e) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios({
         method: 'post',
@@ -6257,7 +6322,7 @@ __webpack_require__.r(__webpack_exports__);
           id: e.target.dataset.id
         }
       }).then(function (res) {
-        _this4.loadPageData();
+        _this5.loadPageData();
       });
     },
     actionSort: function actionSort(field) {
@@ -6269,6 +6334,38 @@ __webpack_require__.r(__webpack_exports__);
         this.sort.orderBy = 'asc';
       }
 
+      this.loadPageData();
+    },
+    showFilter: function showFilter() {
+      this.filterShow = !this.filterShow;
+    },
+    getFilterValue: function getFilterValue(key, value, event) {
+      if (!event.target.classList.contains('selected')) {
+        event.target.classList.add('selected');
+
+        if (this.filter[key]) {
+          this.$set(this.filter[key], this.filter[key].length, value); // this.filter[key].push(value);
+        } else {
+          this.$set(this.filter, key, [value]);
+        }
+      } else {
+        event.target.classList.remove('selected');
+        var array_values = [];
+
+        for (var i = 0; i < this.filter[key].length; i++) {
+          if (this.filter[key][i] !== value) {
+            array_values.push(this.filter[key][i]);
+          }
+        }
+
+        this.filter[key] = array_values;
+
+        if (!this.filter[key].length) {
+          delete this.filter[key];
+        }
+      }
+
+      console.log(this.filter);
       this.loadPageData();
     }
   }
@@ -34119,7 +34216,9 @@ var render = function () {
           : _vm._e(),
         _vm._v(" "),
         _c("div", { staticClass: "no-invoices" }, [
-          _vm.getInvoices && !_vm.invoicesList.length
+          _vm.getInvoices &&
+          !_vm.invoicesList.length &&
+          !Object.keys(_vm.filterData).length
             ? _c("div", { staticClass: "text message message-info" }, [
                 _vm._v(
                   "No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button."
@@ -34323,6 +34422,245 @@ var render = function () {
             ]
           ),
         ])
+      : _vm._e(),
+    _vm._v(" "),
+    Object.keys(_vm.filterData).length
+      ? _c(
+          "div",
+          {
+            staticClass: "invoice-filter-block",
+            class: { show: _vm.filterShow },
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "invoice-filter-block-button",
+                on: { click: _vm.showFilter },
+              },
+              [
+                _c("div", { staticClass: "icon-wrapper" }, [
+                  _c(
+                    "svg",
+                    {
+                      attrs: {
+                        "data-name": "Layer 1",
+                        id: "Layer_1",
+                        viewBox: "0 0 48 48",
+                        xmlns: "http://www.w3.org/2000/svg",
+                      },
+                    },
+                    [
+                      _c("path", {
+                        attrs: {
+                          d: "M47,12a2,2,0,0,0-2-2H24a2,2,0,0,0,0,4H45A2,2,0,0,0,47,12Z",
+                          fill: "#06ffff",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("path", {
+                        attrs: {
+                          d: "M3,14H8.35a6,6,0,1,0,0-4H3a2,2,0,0,0,0,4Zm11-4a2,2,0,1,1-2,2A2,2,0,0,1,14,10Z",
+                          fill: "#06ffff",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("path", {
+                        attrs: {
+                          d: "M45,22H37.65a6,6,0,1,0,0,4H45a2,2,0,0,0,0-4ZM32,26a2,2,0,1,1,2-2A2,2,0,0,1,32,26Z",
+                          fill: "#06ffff",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("path", {
+                        attrs: {
+                          d: "M22,22H3a2,2,0,0,0,0,4H22a2,2,0,0,0,0-4Z",
+                          fill: "#06ffff",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("path", {
+                        attrs: {
+                          d: "M45,34H28a2,2,0,0,0,0,4H45a2,2,0,0,0,0-4Z",
+                          fill: "#06ffff",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("path", {
+                        attrs: {
+                          d: "M18,30a6,6,0,0,0-5.65,4H3a2,2,0,0,0,0,4h9.35A6,6,0,1,0,18,30Zm0,8a2,2,0,1,1,2-2A2,2,0,0,1,18,38Z",
+                          fill: "#06ffff",
+                        },
+                      }),
+                    ]
+                  ),
+                ]),
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "invoice-filter-wrapper" }, [
+              _c("h2", { staticClass: "h4 invoice-filter-block-title" }, [
+                _vm._v("Filter"),
+              ]),
+              _vm._v(" "),
+              _vm.filterData.companies
+                ? _c(
+                    "div",
+                    {
+                      staticClass:
+                        "invoice-filter-item invoice-filter-item-companies",
+                    },
+                    [
+                      _c(
+                        "h3",
+                        { staticClass: "h5 invoice-filter-item-title" },
+                        [_vm._v("Companies :")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "invoice-filter-list" },
+                        _vm._l(
+                          _vm.filterData.companies,
+                          function (company, index) {
+                            return _c(
+                              "div",
+                              {
+                                key: index,
+                                staticClass:
+                                  "invoice-filter-list-item invoice-filter-list-checkbox",
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.getFilterValue(
+                                      "company",
+                                      company,
+                                      $event
+                                    )
+                                  },
+                                },
+                              },
+                              [
+                                _c("div", { staticClass: "icon" }),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "label" }, [
+                                  _vm._v(_vm._s(company)),
+                                ]),
+                              ]
+                            )
+                          }
+                        ),
+                        0
+                      ),
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.filterData.authors
+                ? _c(
+                    "div",
+                    {
+                      staticClass:
+                        "invoice-filter-item invoice-filter-item-authors",
+                    },
+                    [
+                      _c(
+                        "h3",
+                        { staticClass: "h5 invoice-filter-item-title" },
+                        [_vm._v("Authors :")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "invoice-filter-list" },
+                        _vm._l(
+                          _vm.filterData.authors,
+                          function (author, index) {
+                            return _c(
+                              "div",
+                              {
+                                key: index,
+                                staticClass:
+                                  "invoice-filter-list-item invoice-filter-list-checkbox",
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.getFilterValue(
+                                      "author",
+                                      author.id,
+                                      $event
+                                    )
+                                  },
+                                },
+                              },
+                              [
+                                _c("div", { staticClass: "icon" }),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "label" }, [
+                                  _vm._v(_vm._s(author.label)),
+                                ]),
+                              ]
+                            )
+                          }
+                        ),
+                        0
+                      ),
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.filterData.all_status
+                ? _c(
+                    "div",
+                    {
+                      staticClass:
+                        "invoice-filter-item invoice-filter-item-authors",
+                    },
+                    [
+                      _c(
+                        "h3",
+                        { staticClass: "h5 invoice-filter-item-title" },
+                        [_vm._v("Status :")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "invoice-filter-list" },
+                        _vm._l(
+                          _vm.filterData.all_status,
+                          function (status, index) {
+                            return _c(
+                              "div",
+                              {
+                                key: index,
+                                staticClass:
+                                  "invoice-filter-list-item invoice-filter-list-checkbox",
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.getFilterValue(
+                                      "status",
+                                      status,
+                                      $event
+                                    )
+                                  },
+                                },
+                              },
+                              [
+                                _c("div", { staticClass: "icon" }),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "label" }, [
+                                  _vm._v(_vm._s(status.replace(/_/g, " "))),
+                                ]),
+                              ]
+                            )
+                          }
+                        ),
+                        0
+                      ),
+                    ]
+                  )
+                : _vm._e(),
+            ]),
+          ]
+        )
       : _vm._e(),
   ])
 }

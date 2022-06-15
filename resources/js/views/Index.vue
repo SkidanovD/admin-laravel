@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="no-invoices">
-                <div class="text message message-info" v-if="getInvoices && !invoicesList.length">No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button.</div>
+                <div class="text message message-info" v-if="getInvoices && !invoicesList.length && !Object.keys(filterData).length">No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button.</div>
                 <div class="button-wrapper">
                     <div class="button-hover">
                         <router-link to="/add-invoice" class="button">Add invoice</router-link>
@@ -100,6 +100,50 @@
                 </div>
             </div>
         </div>
+        <div class="invoice-filter-block" :class="{show: filterShow}" v-if="Object.keys(filterData).length">
+            <div class="invoice-filter-block-button" @click="showFilter">
+                <div class="icon-wrapper">
+                    <svg data-name="Layer 1" id="Layer_1" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M47,12a2,2,0,0,0-2-2H24a2,2,0,0,0,0,4H45A2,2,0,0,0,47,12Z" fill="#06ffff"/>
+                        <path d="M3,14H8.35a6,6,0,1,0,0-4H3a2,2,0,0,0,0,4Zm11-4a2,2,0,1,1-2,2A2,2,0,0,1,14,10Z" fill="#06ffff"/>
+                        <path d="M45,22H37.65a6,6,0,1,0,0,4H45a2,2,0,0,0,0-4ZM32,26a2,2,0,1,1,2-2A2,2,0,0,1,32,26Z" fill="#06ffff"/>
+                        <path d="M22,22H3a2,2,0,0,0,0,4H22a2,2,0,0,0,0-4Z" fill="#06ffff"/>
+                        <path d="M45,34H28a2,2,0,0,0,0,4H45a2,2,0,0,0,0-4Z" fill="#06ffff"/>
+                        <path d="M18,30a6,6,0,0,0-5.65,4H3a2,2,0,0,0,0,4h9.35A6,6,0,1,0,18,30Zm0,8a2,2,0,1,1,2-2A2,2,0,0,1,18,38Z" fill="#06ffff"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="invoice-filter-wrapper">
+                <h2 class="h4 invoice-filter-block-title">Filter</h2>
+                <div class="invoice-filter-item invoice-filter-item-companies" v-if="filterData.companies">
+                    <h3 class="h5 invoice-filter-item-title">Companies :</h3>
+                    <div class="invoice-filter-list">
+                        <div class="invoice-filter-list-item invoice-filter-list-checkbox" v-for="(company, index) in filterData.companies" :key="index" @click="getFilterValue('company', company, $event)">
+                            <div class="icon"></div>
+                            <div class="label">{{ company }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="invoice-filter-item invoice-filter-item-authors" v-if="filterData.authors">
+                    <h3 class="h5 invoice-filter-item-title">Authors :</h3>
+                    <div class="invoice-filter-list">
+                        <div class="invoice-filter-list-item invoice-filter-list-checkbox" v-for="(author, index) in filterData.authors" :key="index" @click="getFilterValue('author', author.id, $event)">
+                            <div class="icon"></div>
+                            <div class="label">{{ author.label }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="invoice-filter-item invoice-filter-item-authors" v-if="filterData.all_status">
+                    <h3 class="h5 invoice-filter-item-title">Status :</h3>
+                    <div class="invoice-filter-list">
+                        <div class="invoice-filter-list-item invoice-filter-list-checkbox" v-for="(status, index) in filterData.all_status" :key="index" @click="getFilterValue('status', status, $event)">
+                            <div class="icon"></div>
+                            <div class="label">{{ status.replace(/_/g, ' ') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </template>
 <script>
@@ -114,6 +158,8 @@
             receivedPopupShow: false,
             receivedPopupId: 0,
             receivedDate: '',
+            filterShow: true,
+            filterData: {},
             formMessage: {
                 class: '',
                 message: '',
@@ -123,9 +169,11 @@
                 orderBy: 'asc',
             },
             filter: {},
+            filterCompany: [],
         }),
         mounted() {
             this.loadPageData();
+            this.getFilterData();
         },
         methods: {
             loadPageData() {
@@ -138,8 +186,23 @@
                     },
                 }).then(res => {
                     this.getInvoices = true;
+                    this.formMessage = {
+                        class: '',
+                        message: '',
+                    };
                     if (res.data.status === 'success') {
                         this.invoicesList = res.data.all_invoices
+                    } else {
+                        this.invoicesList = [];
+                        this.formMessage.class = res.data.status;
+                        this.formMessage.message = res.data.message;
+                    }
+                })
+            },
+            getFilterData() {
+                axios.get('/api/getFilterData').then(res => {
+                    if (res.data.status === 'success') {
+                        this.filterData = res.data.filter_data;
                     }
                 })
             },
@@ -230,6 +293,35 @@
                 } else {
                     this.sort.orderBy = 'asc';
                 }
+                this.loadPageData();
+            },
+            showFilter() {
+                this.filterShow = !this.filterShow;
+            },
+            getFilterValue(key, value, event) {
+                if (!event.target.classList.contains('selected')) {
+                    event.target.classList.add('selected');
+                    if (this.filter[key]) {
+                        this.$set(this.filter[key], this.filter[key].length, value);
+                        // this.filter[key].push(value);
+                    } else {
+                        this.$set(this.filter, key, [value]);
+                    }
+                } else {
+                    event.target.classList.remove('selected');
+                    var array_values = [];
+                    for (var i = 0; i < this.filter[key].length; i++) {
+                        if (this.filter[key][i] !== value) {
+                            array_values.push(this.filter[key][i]);
+                        }
+                    }
+                    this.filter[key] = array_values;
+                    if (!this.filter[key].length) {
+                        delete this.filter[key];
+                    }
+                }
+                console.log(this.filter);
+                
                 this.loadPageData();
             }
         }

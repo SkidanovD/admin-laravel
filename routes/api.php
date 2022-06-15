@@ -63,6 +63,7 @@ Route::middleware('auth:sanctum')->match(['get', 'post'], '/getAllInvoices', [In
 Route::middleware('auth:sanctum')->match(['get', 'post'], '/getDraftInvoices', [InvoiceController::class, 'getDraftInvoices'])->name('getDraftInvoices');
 Route::middleware('auth:sanctum')->get('/getInvoice/{invoice}', [InvoiceController::class, 'getInvoice'])->name('getInvoice');
 Route::middleware('auth:sanctum')->post('/arrangeFormData', [InvoiceController::class, 'arrangeFormData'])->name('arrangeFormData');
+Route::middleware('auth:sanctum')->get('/getFilterData', [InvoiceController::class, 'getFilterData'])->name('getFilterData');
 
 
 
