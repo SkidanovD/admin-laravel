@@ -226,13 +226,9 @@
                         this.invoicesList = res.data.all_invoices
                     } else {
                         this.invoicesList = [];
-                        this.formMessage.class = res.data.status;
-                        this.formMessage.message = res.data.message;
-                        if (!Object.keys(filter).length) {
-                            this.formMessage = {
-                                class: '',
-                                message: '',
-                            }
+                        if (Object.keys(this.filter).length) {
+                            this.formMessage.class = res.data.status;
+                            this.formMessage.message = res.data.message;
                         }
                     }
                 })
