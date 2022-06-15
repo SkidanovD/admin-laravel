@@ -1522,8 +1522,6 @@ li {
 .invoice-filter-block-button:hover path {
   fill: var(--dark);
 }
-
-
 .invoice-filter-block {
   padding: 5% 3%;
 }
@@ -1603,6 +1601,12 @@ li {
 }
 .invoice-filter-list-checkbox .label {
   pointer-events: none;
+}
+.invoice-filter-list-invoice-date {
+  display: block;
+}
+.invoice-filter-item-invoice-date .invoice-filter-list {
+  padding-left: 0;
 }
 
 

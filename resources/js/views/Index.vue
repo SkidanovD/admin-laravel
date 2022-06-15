@@ -142,6 +142,29 @@
                         </div>
                     </div>
                 </div>
+                <div class="invoice-filter-item invoice-filter-item-invoice-date">
+                    <h3 class="h5 invoice-filter-item-title">Invoice date :</h3>
+                    <div class="invoice-filter-list">
+                        <div class="invoice-filter-list-item invoice-filter-list-invoice-date">
+                            <div class="form-item-wrapper form-item-invoice-date-min-wrapper">
+                                <div class="form-label-wrapper">
+                                    <label for="invoice_date_min" class="form-label form-label-invoice-date-min">From</label>
+                                </div>
+                                <div class="form-input-wrapper form-input-invoice-date-min-wrapper icon-date">
+                                    <input class="form-input form-input-invoice-date-min" id="invoice_date_min" type="date" v-model="filterInvoiceDateMin">
+                                </div>
+                            </div>
+                            <div class="form-item-wrapper form-item-invoice-date-max-wrapper">
+                                <div class="form-label-wrapper">
+                                    <label for="invoice_date_max" class="form-label form-label-invoice-date-max">To</label>
+                                </div>
+                                <div class="form-input-wrapper form-input-invoice-date-max-wrapper icon-date">
+                                    <input class="form-input form-input-invoice-date-max" id="invoice_date_max" type="date" v-model="filterInvoiceDateMax">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -168,12 +191,22 @@
                 order: 'invoice_number',
                 orderBy: 'asc',
             },
+            filterInvoiceDateMin: '',
+            filterInvoiceDateMax: '',
             filter: {},
             filterCompany: [],
         }),
         mounted() {
             this.loadPageData();
             this.getFilterData();
+        },
+        watch: {
+            filterInvoiceDateMin() {
+                this.addInvoiceDateFilter();
+            },
+            filterInvoiceDateMax() {
+                this.addInvoiceDateFilter();
+            },
         },
         methods: {
             loadPageData() {
@@ -320,7 +353,19 @@
                         delete this.filter[key];
                     }
                 }
-                console.log(this.filter);
+                
+                this.loadPageData();
+            },
+            addInvoiceDateFilter() {
+                if (this.filterInvoiceDateMin === '' && this.filterInvoiceDateMax === '') {
+                    delete this.filter.invoice_date;
+                } else {
+                    var date = {
+                        min: this.filterInvoiceDateMin,
+                        max: this.filterInvoiceDateMax,
+                    }
+                    this.$set(this.filter, 'invoice_date', date);
+                }
                 
                 this.loadPageData();
             }

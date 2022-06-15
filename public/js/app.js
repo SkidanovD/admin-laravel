@@ -6176,6 +6176,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Index',
   data: function data() {
@@ -6198,6 +6221,8 @@ __webpack_require__.r(__webpack_exports__);
         order: 'invoice_number',
         orderBy: 'asc'
       },
+      filterInvoiceDateMin: '',
+      filterInvoiceDateMax: '',
       filter: {},
       filterCompany: []
     };
@@ -6205,6 +6230,14 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.loadPageData();
     this.getFilterData();
+  },
+  watch: {
+    filterInvoiceDateMin: function filterInvoiceDateMin() {
+      this.addInvoiceDateFilter();
+    },
+    filterInvoiceDateMax: function filterInvoiceDateMax() {
+      this.addInvoiceDateFilter();
+    }
   },
   methods: {
     loadPageData: function loadPageData() {
@@ -6365,7 +6398,19 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      console.log(this.filter);
+      this.loadPageData();
+    },
+    addInvoiceDateFilter: function addInvoiceDateFilter() {
+      if (this.filterInvoiceDateMin === '' && this.filterInvoiceDateMax === '') {
+        delete this.filter.invoice_date;
+      } else {
+        var date = {
+          min: this.filterInvoiceDateMin,
+          max: this.filterInvoiceDateMax
+        };
+        this.$set(this.filter, 'invoice_date', date);
+      }
+
       this.loadPageData();
     }
   }
@@ -34658,13 +34703,162 @@ var render = function () {
                     ]
                   )
                 : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "invoice-filter-item invoice-filter-item-invoice-date",
+                },
+                [
+                  _c("h3", { staticClass: "h5 invoice-filter-item-title" }, [
+                    _vm._v("Invoice date :"),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "invoice-filter-list" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "invoice-filter-list-item invoice-filter-list-invoice-date",
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-item-wrapper form-item-invoice-date-min-wrapper",
+                          },
+                          [
+                            _vm._m(0),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "form-input-wrapper form-input-invoice-date-min-wrapper icon-date",
+                              },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.filterInvoiceDateMin,
+                                      expression: "filterInvoiceDateMin",
+                                    },
+                                  ],
+                                  staticClass:
+                                    "form-input form-input-invoice-date-min",
+                                  attrs: {
+                                    id: "invoice_date_min",
+                                    type: "date",
+                                  },
+                                  domProps: { value: _vm.filterInvoiceDateMin },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.filterInvoiceDateMin =
+                                        $event.target.value
+                                    },
+                                  },
+                                }),
+                              ]
+                            ),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "form-item-wrapper form-item-invoice-date-max-wrapper",
+                          },
+                          [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "form-input-wrapper form-input-invoice-date-max-wrapper icon-date",
+                              },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.filterInvoiceDateMax,
+                                      expression: "filterInvoiceDateMax",
+                                    },
+                                  ],
+                                  staticClass:
+                                    "form-input form-input-invoice-date-max",
+                                  attrs: {
+                                    id: "invoice_date_max",
+                                    type: "date",
+                                  },
+                                  domProps: { value: _vm.filterInvoiceDateMax },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.filterInvoiceDateMax =
+                                        $event.target.value
+                                    },
+                                  },
+                                }),
+                              ]
+                            ),
+                          ]
+                        ),
+                      ]
+                    ),
+                  ]),
+                ]
+              ),
             ]),
           ]
         )
       : _vm._e(),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-label-wrapper" }, [
+      _c(
+        "label",
+        {
+          staticClass: "form-label form-label-invoice-date-min",
+          attrs: { for: "invoice_date_min" },
+        },
+        [_vm._v("From")]
+      ),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-label-wrapper" }, [
+      _c(
+        "label",
+        {
+          staticClass: "form-label form-label-invoice-date-max",
+          attrs: { for: "invoice_date_max" },
+        },
+        [_vm._v("To")]
+      ),
+    ])
+  },
+]
 render._withStripped = true
 
 
