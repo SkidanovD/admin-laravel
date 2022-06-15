@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="no-invoices">
-                <div class="text message message-info" v-if="getInvoices && !invoicesList.length && !Object.keys(filterData).length">No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button.</div>
+                <div class="text message message-info" v-if="getInvoices && !invoicesList.length && !Object.keys(filter).length">No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button.</div>
                 <div class="button-wrapper">
                     <div class="button-hover">
                         <router-link to="/add-invoice" class="button">Add invoice</router-link>
@@ -181,7 +181,7 @@
             receivedPopupShow: false,
             receivedPopupId: 0,
             receivedDate: '',
-            filterShow: true,
+            filterShow: false,
             filterData: {},
             formMessage: {
                 class: '',
@@ -194,7 +194,6 @@
             filterInvoiceDateMin: '',
             filterInvoiceDateMax: '',
             filter: {},
-            filterCompany: [],
         }),
         mounted() {
             this.loadPageData();

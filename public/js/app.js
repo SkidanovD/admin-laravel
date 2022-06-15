@@ -6211,7 +6211,7 @@ __webpack_require__.r(__webpack_exports__);
       receivedPopupShow: false,
       receivedPopupId: 0,
       receivedDate: '',
-      filterShow: true,
+      filterShow: false,
       filterData: {},
       formMessage: {
         "class": '',
@@ -6223,8 +6223,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       filterInvoiceDateMin: '',
       filterInvoiceDateMax: '',
-      filter: {},
-      filterCompany: []
+      filter: {}
     };
   },
   mounted: function mounted() {
@@ -34263,7 +34262,7 @@ var render = function () {
         _c("div", { staticClass: "no-invoices" }, [
           _vm.getInvoices &&
           !_vm.invoicesList.length &&
-          !Object.keys(_vm.filterData).length
+          !Object.keys(_vm.filter).length
             ? _c("div", { staticClass: "text message message-info" }, [
                 _vm._v(
                   "No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button."
