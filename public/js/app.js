@@ -6262,6 +6262,13 @@ __webpack_require__.r(__webpack_exports__);
           _this.invoicesList = [];
           _this.formMessage["class"] = res.data.status;
           _this.formMessage.message = res.data.message;
+
+          if (!Object.keys(filter).length) {
+            _this.formMessage = {
+              "class": '',
+              message: ''
+            };
+          }
         }
       });
     },

@@ -585,13 +585,20 @@ class InvoiceController extends Controller
             }
         }
 
+        $filter_data = [];
+        if (!empty($companies)) {
+            $filter_data['companies'] = $companies;
+        }
+        if (!empty($authors_data)) {
+            $filter_data['authors'] = $authors_data;
+        }
+        if (!empty($all_status)) {
+            $filter_data['all_status'] = $all_status;
+        }
+
         return [
             'status' => 'success',
-            'filter_data' => [
-                'companies' => $companies,
-                'authors' => $authors_data,
-                'all_status' => $all_status,
-            ],
+            'filter_data' => $filter_data,
         ];
     }
 }
