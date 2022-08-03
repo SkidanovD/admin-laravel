@@ -212,7 +212,7 @@ class UserController extends Controller
                 'message' => trans('error.authorization'),
             ];
         }
-        $all_users = User::all();
+        $all_users = User::orderBy('first_name', 'asc')->get();
         if (empty($all_users->all())) {
             return [
                 'status' => 'error',

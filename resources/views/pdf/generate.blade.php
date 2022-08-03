@@ -74,12 +74,11 @@
         clear: both;
     }
     .pdf-seller-block .image-wrapper {
-        width: 14em;
-        height: 3.5em;
-        transform: rotate(57deg);
+        width: 9em;
+        height: 3.4em;
         position: absolute;
-        top: 7em;
-        right: -2em;
+        top: -0.5em;
+        right: 0em;
     }
     .pdf-seller-block img {
         width: 100%;
@@ -175,14 +174,14 @@
                     <p>E-mail: <a href="mailto:contact@bato-webdesign.net">contact@bato-webdesign.net</a></p>
                     <p>IBAN: LT233500010008937005</p>
                     <p>Swift code: EVIULT2VXXX</p>
-                    <p>Code de la banque: 35000</p>
-                    <p>Nome de la banque: "Paysera LT", UAB</p>
-                    <p>Adresse de la banque Pilaités pr. 16, LT-04352, Vilnius, Lituanie</p>
+                    <p>Bank code: 35000</p>
+                    <p>Bank Name: "Paysera LT", UAB</p>
+                    <p>Bank address: Pilaités pr. 16, LT-04352, Vilnius, Lituanie</p>
                 </div>
             </div>
             <div class="right-column">
                 <div class="image-wrapper">
-                    <img src="{{ asset('img/logo-bato.png') }}" alt="Bato">
+                    <img src="{{ asset('img/logo-shadow.png') }}" alt="Bato">
                 </div>
             </div>
             <div class="clear-fix"></div>
@@ -243,7 +242,11 @@
                     <td>{{ $invoice['total'] }} €</td>
                 </tr>
                 <tr>
-                    <td>VAT</td>
+                    <td>VAT
+                        @if (!empty($invoice['vat']))
+                            , ({{$invoice['vat']}}%)
+                        @endif
+                    </td>
                     <td>{{ $invoice['vat_qty'] }} €</td>
                 </tr>
                 <tr>

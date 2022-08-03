@@ -153,14 +153,14 @@
                 </div>
                 <div class="button-wrapper button-submit-wrapper">
                     <div class="button-hover button-submit-hover">
-                        <button class="button button-submit" type="submit">Edit invoice</button>
+                        <button class="button button-submit" type="submit">Save the draft</button>
                     </div>
                 </div>
             </form>
             <div class="edit-invoice-buttons-block">
                 <div class="button-wrapper">
                     <div class="button-hover">
-                        <button type="button" class="button" @click="actionPublicInvoice">Public invoice</button>
+                        <button type="button" class="button" @click="actionPublicInvoice">Save and public</button>
                     </div>
                 </div>
                 <div class="button-wrapper">

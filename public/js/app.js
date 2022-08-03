@@ -36284,7 +36284,7 @@ var render = function () {
                   attrs: { type: "button" },
                   on: { click: _vm.actionPublicInvoice },
                 },
-                [_vm._v("Public invoice")]
+                [_vm._v("Save and public")]
               ),
             ]),
           ]),
@@ -36411,7 +36411,7 @@ var staticRenderFns = [
         _c(
           "button",
           { staticClass: "button button-submit", attrs: { type: "submit" } },
-          [_vm._v("Edit invoice")]
+          [_vm._v("Save the draft")]
         ),
       ]),
     ])
