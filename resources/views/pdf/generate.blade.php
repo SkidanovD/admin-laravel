@@ -243,7 +243,7 @@
                 </tr>
                 <tr>
                     <td>VAT
-                        @if (!empty($invoice['vat']))
+                        @if (!empty($invoice['vat']) && $invoice['vat'] != 0)
                             , ({{$invoice['vat']}}%)
                         @endif
                     </td>
