@@ -36996,7 +36996,7 @@ var staticRenderFns = [
             name: "password",
             type: "password",
             placeholder: "New password",
-            autocomplete: "off",
+            autocomplete: "autopasoff",
           },
         }),
       ]

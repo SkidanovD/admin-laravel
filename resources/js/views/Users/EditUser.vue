@@ -65,7 +65,7 @@
                 </div>
                 <div class="form-item-wrapper form-item-password-wrapper">
                     <div class="form-input-wrapper form-input-password-wrapper icon-password">
-                        <input class="form-input form-input-password" id="password" name="password" type="password" placeholder="New password" autocomplete="off">
+                        <input class="form-input form-input-password" id="password" name="password" type="password" placeholder="New password" autocomplete="autopasoff">
                     </div>
                     <div class="form-validate-messages message message-error" v-if="validate.password">
                         <p class="message-item" v-for="(message, index) in validate.password" :key="index">{{ message }}</p>
