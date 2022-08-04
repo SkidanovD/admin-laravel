@@ -78,7 +78,7 @@
                 </div>
                 <div class="button-wrapper button-submit-wrapper">
                     <div class="button-hover button-submit-hover">
-                        <button class="button button-submit" type="submit">Add user</button>
+                        <button class="button button-submit" type="submit">Save</button>
                     </div>
                 </div>
             </form>
@@ -180,16 +180,37 @@
                 }).then(
                     res => {
                         if (res.data.status === 'not validated') {
+                            this.validate = [];
                             for(let key in res.data.messages) {
                                 this.$set(this.validate, key, res.data.messages[key]);
                             }
+                            this.scrollToElement('form-validate-messages');
                         } else {
+                            this.validate = [];
                             this.formMessage.class = res.data.status;
                             this.formMessage.message = res.data.message;
                             this.getUser(this.$route.params.id);
+                            this.scrollToElement();
                         }
                     }
                 )
+            },
+            scrollToElement(elem = '') {
+                var $this = this;
+                var el = this.$el;
+                
+                setTimeout(function() {
+                    if (elem) {
+                        el = $this.$el.getElementsByClassName(elem)[0];
+                    }
+                    if (el) {
+                        window.scrollTo({
+                            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
+                
             },
         }
     }

@@ -81,7 +81,7 @@ class CompanyController extends Controller
         if (empty($query_data)) {
             return [
                 'status' => 'error',
-                'messages' => trans('error.notChanged'),
+                'message' => trans('error.notChanged'),
                 'form_field' => $request->all(),
             ];
         }

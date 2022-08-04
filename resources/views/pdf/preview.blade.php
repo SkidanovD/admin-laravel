@@ -254,6 +254,7 @@
                 </tr>
             </table>
         </div>
+        <div class="pdf-footnote" style="font-size: 14px; font-weight: 600;text-align: center; margin-top: 50px;">Thank you for your business!</div>
     </div>
 </body>
 </html>

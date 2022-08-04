@@ -5548,7 +5548,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   data: function data() {
     return {
-      validate: {},
+      validate: [],
       formMessage: {
         "class": '',
         message: ''
@@ -5585,14 +5585,38 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         data: form_data
       }).then(function (res) {
         if (res.data.status === 'not validated') {
+          _this.validate = [];
+
           for (var key in res.data.messages) {
             _this.$set(_this.validate, key, res.data.messages[key]);
           }
+
+          _this.scrollToElement('form-validate-messages');
         } else {
+          _this.validate = [];
           _this.formMessage["class"] = res.data.status;
           _this.formMessage.message = res.data.message;
+
+          _this.scrollToElement();
         }
       });
+    },
+    scrollToElement: function scrollToElement() {
+      var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var $this = this;
+      var el = this.$el;
+      setTimeout(function () {
+        if (elem) {
+          el = $this.$el.getElementsByClassName(elem)[0];
+        }
+
+        if (el) {
+          window.scrollTo({
+            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
     }
   }
 });
@@ -5998,19 +6022,42 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         data: form_data
       }).then(function (res) {
         if (res.data.status === 'not validated') {
+          _this2.validate = [];
+
           for (var key in res.data.messages) {
             _this2.$set(_this2.validate, key, res.data.messages[key]);
           }
 
           _this2.company = res.data.form_field;
+
+          _this2.scrollToElement('form-validate-messages');
         } else {
           _this2.validate = [];
           _this2.formMessage["class"] = res.data.status;
           _this2.formMessage.message = res.data.message;
 
           _this2.getCompany(_this2.$route.params.id);
+
+          _this2.scrollToElement();
         }
       });
+    },
+    scrollToElement: function scrollToElement() {
+      var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var $this = this;
+      var el = this.$el;
+      setTimeout(function () {
+        if (elem) {
+          el = $this.$el.getElementsByClassName(elem)[0];
+        }
+
+        if (el) {
+          window.scrollTo({
+            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
     }
   }
 });
@@ -6813,6 +6860,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -7001,17 +7050,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         data: form_data
       }).then(function (res) {
         if (res.data.status === 'not validated') {
+          _this4.validate = [];
+
           for (var key in res.data.messages) {
             _this4.$set(_this4.validate, key, res.data.messages[key]);
           }
 
           _this4.invoice = res.data.form_field;
+
+          _this4.scrollToElement('form-validate-messages');
         } else {
           _this4.validate = [];
           _this4.formMessage["class"] = res.data.status;
           _this4.formMessage.message = res.data.message;
 
           _this4.getInvoice(_this4.$route.params.id);
+
+          _this4.scrollToElement();
         }
       });
     },
@@ -7070,6 +7125,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           });
         }
       });
+    },
+    scrollToElement: function scrollToElement() {
+      var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var $this = this;
+      var el = this.$el;
+      setTimeout(function () {
+        if (elem) {
+          el = $this.$el.getElementsByClassName(elem)[0];
+        }
+
+        if (el) {
+          window.scrollTo({
+            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
     }
   }
 });
@@ -7299,16 +7371,40 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }
       }).then(function (res) {
         if (res.data.status === 'not validated') {
+          _this2.validate = [];
+
           for (var key in res.data.messages) {
             _this2.$set(_this2.validate, key, res.data.messages[key]);
           }
+
+          _this2.scrollToElement('form-validate-messages');
         } else {
+          _this2.validate = [];
           _this2.formMessage["class"] = res.data.status;
           _this2.formMessage.message = res.data.message;
 
           _this2.getUser(_this2.$route.params.id);
+
+          _this2.scrollToElement();
         }
       });
+    },
+    scrollToElement: function scrollToElement() {
+      var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var $this = this;
+      var el = this.$el;
+      setTimeout(function () {
+        if (elem) {
+          el = $this.$el.getElementsByClassName(elem)[0];
+        }
+
+        if (el) {
+          window.scrollTo({
+            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
     }
   }
 });
@@ -7821,14 +7917,38 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }
       }).then(function (res) {
         if (res.data.status === 'not validated') {
+          _this2.validate = [];
+
           for (var key in res.data.messages) {
             _this2.$set(_this2.validate, key, res.data.messages[key]);
           }
+
+          _this2.scrollToElement('form-validate-messages');
         } else {
+          _this2.validate = [];
           _this2.formMessage["class"] = res.data.status;
           _this2.formMessage.message = res.data.message;
+
+          _this2.scrollToElement('form-validate-messages');
         }
       });
+    },
+    scrollToElement: function scrollToElement() {
+      var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var $this = this;
+      var el = this.$el;
+      setTimeout(function () {
+        if (elem) {
+          el = $this.$el.getElementsByClassName(elem)[0];
+        }
+
+        if (el) {
+          window.scrollTo({
+            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
     }
   }
 });
@@ -36066,6 +36186,15 @@ var render = function () {
                         },
                       }),
                       _vm._v(" "),
+                      _vm.validate["details." + index + ".order"]
+                        ? _c("vueValidateMessage", {
+                            attrs: {
+                              messages:
+                                _vm.validate["details." + index + ".order"],
+                            },
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
                       _vm.validate["details." + index + ".description"]
                         ? _c("vueValidateMessage", {
                             attrs: {
@@ -36073,6 +36202,15 @@ var render = function () {
                                 _vm.validate[
                                   "details." + index + ".description"
                                 ],
+                            },
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.validate["details." + index + ".quantity"]
+                        ? _c("vueValidateMessage", {
+                            attrs: {
+                              messages:
+                                _vm.validate["details." + index + ".quantity"],
                             },
                           })
                         : _vm._e(),
@@ -36901,7 +37039,7 @@ var staticRenderFns = [
         _c(
           "button",
           { staticClass: "button button-submit", attrs: { type: "submit" } },
-          [_vm._v("Add user")]
+          [_vm._v("Save")]
         ),
       ]),
     ])

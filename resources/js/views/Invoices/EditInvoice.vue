@@ -112,7 +112,9 @@
                     </div>
                     <div class="invoice-detail-row-wrapper" v-for="(invoiceDetail, index) in invoiceDetails" :key="index">
                         <vueInvoiceDetail :invoiceDetail="invoiceDetail" :index="index" @eventDeleteInvoiceRow="deleteInvoiceRow" @eventTotalCalculation="totalCalculation"></vueInvoiceDetail>
+                        <vueValidateMessage  v-if="validate['details.' + index + '.order']" :messages="validate['details.' + index + '.order']"></vueValidateMessage>
                         <vueValidateMessage  v-if="validate['details.' + index + '.description']" :messages="validate['details.' + index + '.description']"></vueValidateMessage>
+                        <vueValidateMessage  v-if="validate['details.' + index + '.quantity']" :messages="validate['details.' + index + '.quantity']"></vueValidateMessage>
                         <vueValidateMessage  v-if="validate['details.' + index + '.price']" :messages="validate['details.' + index + '.price']"></vueValidateMessage>
                     </div>
                     <div class="button-wrapper">
@@ -344,15 +346,18 @@
                 }).then(
                     res => {
                         if (res.data.status === 'not validated') {
+                            this.validate = [];
                             for(let key in res.data.messages) {
                                 this.$set(this.validate, key, res.data.messages[key]);
                             }
                             this.invoice = res.data.form_field;
+                            this.scrollToElement('form-validate-messages');
                         } else {
                             this.validate = [];
                             this.formMessage.class = res.data.status;
                             this.formMessage.message = res.data.message;
                             this.getInvoice(this.$route.params.id);
+                            this.scrollToElement();
                         }
                     }
                 )
@@ -399,6 +404,23 @@
                         }
                     }
                 )
+            },
+            scrollToElement(elem = '') {
+                var $this = this;
+                var el = this.$el;
+                
+                setTimeout(function() {
+                    if (elem) {
+                        el = $this.$el.getElementsByClassName(elem)[0];
+                    }
+                    if (el) {
+                        window.scrollTo({
+                            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
+                
             },
         }
     }
