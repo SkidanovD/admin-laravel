@@ -25,7 +25,7 @@ export default {
             }).then(
                 res => {
                     if (res.data.status === 'success') {
-                        this.$router.push('/edit-invoice/' + res.data.invoice.id);
+                        this.$router.push('/edit-invoice/' + res.data.invoice.id + '?add=true');
                     }
                     if (res.data.status === 'error') {
                         this.errorMessage = res.data.message

@@ -1257,6 +1257,49 @@ li {
 }
 
 
+/* --- Delete popup --- */
+
+.delete-popup-block {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000ee;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.delete-popup-wrapper {
+  padding: 2em 0;
+}
+.delete-popup {
+  max-width: 45em;
+  margin: 0 auto;
+  padding: 3.5em 4.5em;
+}
+.delete-popup-text {
+  font-size: 1.4em;
+  margin-bottom: 1.5em;
+}
+.delete-popup .button-block {
+  display: flex;
+  justify-content: space-between;
+}
+.delete-popup .button.delete:hover {
+  color: var(--red);
+}
+.delete-popup .button-delete-hover::before,
+.delete-popup .button-delete-hover::after {
+	background-color: var(--red);
+}
+.delete-popup .button.delete::before,
+.delete-popup .button.delete::after {
+	background-color: var(--red);
+}
+
+
 /* --- Login page --- */
 
 .login-main {
@@ -1276,9 +1319,7 @@ li {
   justify-content: space-between;
 }
 .invoices-list {
-  border-bottom: 1px solid var(--gray);
-  margin-bottom: 3.5em;
-  padding-bottom: 1.5em;
+  margin-top: 3.5em;
 }
 .invoice-row {
   display: flex;
@@ -1998,6 +2039,9 @@ li {
 .invoice-detail-cell-description .form-input {
   text-align: left;
 }
+.invoice-detail-row-wrapper.single-item .btn-wrapper {
+  display: none;
+}
 .invoice-details-block .button-hover {
   display: block;
   width: 100%;
@@ -2070,3 +2114,107 @@ li {
   align-items: center;
   padding-top: 3.5em;
 }
+
+
+
+}
+.invoice-detail-cell-price {
+  width: 17%;
+}
+.invoice-detail-cell-header {
+  color: var(--primary);
+  font-weight: 500;
+  line-height: 1;
+  background-color: #06ffff20;
+  border: 1px solid var(--primary);
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+  padding: 1.4em;
+}
+.invoice-detail-cell .form-item-wrapper {
+  margin-bottom: 0;
+}
+.invoice-detail-cell .form-input-wrapper::before {
+  display: none;
+}
+.invoice-detail-cell .form-input {
+  text-align: right;
+  padding: 1.4em;
+}
+.invoice-detail-cell-description .form-input {
+  text-align: left;
+}
+.invoice-details-block .button-hover {
+  display: block;
+  width: 100%;
+}
+.invoice-details-block .button {
+  display: block;
+  width: 100%;
+}
+.invoice-details-block .btn-delete-wrapper {
+  background-color: var(--dark);
+  border-radius: 50%;
+  position: absolute;
+  width: 2em;
+  height: 2em;
+  bottom: 0.2em;
+  right: -1em;
+  z-index: 1;
+}
+.invoice-total-block {
+  margin-bottom: 3.5em;
+}
+.invoice-vat-quantity {
+  color: var(--gray);
+  font-size: 1.2em;
+  line-height: 1;
+  position: absolute;
+  transform: translate(0, -50%);
+  top: 50%;
+  right: 1.5em;
+}
+.select-company-block {
+  margin-bottom: 1em;
+  position: relative;
+  z-index: 1;
+}
+.select-company-block .label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+.select-company-block .text {
+  width: calc(100% - 4em);
+}
+.select-company-block .list {
+  background-color: var(--dark);
+  border: 1px solid var(--gray);
+  padding: 2em 1.5em;
+  width: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+.select-company-block .item {
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 1em;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+.select-company-block .item:hover {
+  color: var(--primary);
+}
+.select-company-block .item:last-child {
+  margin-bottom: 0;
+}
+.edit-invoice-buttons-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 3.5em;
+}
+
+

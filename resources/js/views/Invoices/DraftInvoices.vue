@@ -2,6 +2,15 @@
     <main class="site-main draft-main">
         <div class="site-main-wrapper draft-main-wrapper width-container">
             <h1 class="page-title draft-page-title">Draft invoices</h1>
+            <div :class="'text message message-' + formMessage.class" v-if="formMessage.message">{{ formMessage.message }}</div>
+            <div class="no-invoices">
+                <div class="text message message-info" v-if="getInvoices && !invoicesList.length">No invoice has been created yet.</div>
+                <div class="button-wrapper">
+                    <div class="button-hover">
+                        <router-link to="/" class="button">Home</router-link>
+                    </div>
+                </div>
+            </div>
             <div class="invoices-list" v-if="getInvoices && invoicesList.length">
                 <div class="invoice-row invoice-row-header">
                     <div class="invoice-cell invoice-cell-header invoice-cell-number">#</div>
@@ -45,31 +54,36 @@
                             </button>
                         </div>
                     </div>
-                    <div class="invoice-action-list" v-if="actionListShow === index">
+                    <div class="invoice-action-list" v-if="actionListShow === index" @click="showActionList">
                         <router-link :to="'/edit-invoice/' + invoice.id" class="invoice-action-item">Edit invoice</router-link>
-                        <span @click="actionDeleteInvoice(invoice.id)" class="invoice-action-item">Delete invoice</span>
-                    </div>
-                </div>
-            </div>
-            <div class="no-invoices">
-                <div class="text message message-info" v-if="getInvoices && !invoicesList.length">No invoice has been created yet.</div>
-                <div class="button-wrapper">
-                    <div class="button-hover">
-                        <router-link to="/" class="button">Home</router-link>
+                        <span @click="actionInvoiceDeletePopup(invoice.id)" class="invoice-action-item">Delete invoice</span>
                     </div>
                 </div>
             </div>
         </div>
+        <vueDeletePopup v-if="displayDeletePopup" :deletePopupData="deletePopupData" @eventDeleteInvoice="actionDeleteInvoice(deletePopupData.itemId)" @eventHideDeletePopup="actionDisplayDeletePopup"></vueDeletePopup>
     </main>
 </template>
 <script>
+    import vueValidateMessage from './../../components/MessageValidate';
+    import vueDeletePopup from './../../components/DeletePopup';
     export default {
-        name: 'Index',
+        name: 'DraftInvoices',
+        components: {
+            vueValidateMessage,
+            vueDeletePopup,
+        },
         data: () => ({
             invoicesList: [],
             getInvoices: false,
             actionListShow: -1,
             indexListShow: -1,
+            displayDeletePopup: false,
+            deletePopupData: {
+                textPopup: '',
+                eventName: '',
+                itemId: 0,
+            },
             formMessage: {
                 class: '',
                 message: '',
@@ -88,6 +102,7 @@
                         this.invoicesList = [];
                         this.formMessage.class = res.data.status;
                         this.formMessage.message = res.data.message;
+                        this.scrollToElement();
                     }
                 })
             },
@@ -98,6 +113,24 @@
                     this.actionListShow = -1;
                 }
             },
+            actionDisplayDeletePopup() {
+                if (this.displayDeletePopup) {
+                    this.displayDeletePopup = false;
+                    this.deletePopupData = {
+                        textPopup: '',
+                        eventName: '',
+                        itemId: 0,
+                    }
+                } else {
+                    this.displayDeletePopup = true;
+                }
+            },
+            actionInvoiceDeletePopup(id) {
+                this.deletePopupData.textPopup = 'Are you sure you want to delete the invoice?';
+                this.deletePopupData.eventName = 'eventDeleteInvoice';
+                this.deletePopupData.itemId = id;
+                this.actionDisplayDeletePopup();
+            },
             actionDeleteInvoice(id) {
                 axios({
                     method: 'post',
@@ -107,10 +140,29 @@
                     },
                 }).then(
                     res => {
+                        this.actionDisplayDeletePopup();
+                        this.formMessage.class = res.data.status;
+                        this.formMessage.message = res.data.message;
                         this.loadPageData();
+                        this.scrollToElement();
                     }
                 )
-            }
+            },
+            scrollToElement(elem = '') {
+                var $this = this;
+                var el = this.$el;
+                setTimeout(function() {
+                    if (elem) {
+                        el = $this.$el.getElementsByClassName(elem)[0];
+                    }
+                    if (el) {
+                        window.scrollTo({
+                            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100); 
+            },
         }
     }
 </script>

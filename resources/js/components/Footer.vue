@@ -5,10 +5,10 @@
          <nav class="social-menu">
             <ul class="social-menu-list">
                <li class="social-menu-item">
-                  <a href="https://www.instagram.com/" class="social-menu-link">Instagram</a>
+                  <a href="https://www.instagram.com/" class="social-menu-link" target="_blank">Instagram</a>
                </li>
                <li class="social-menu-item">
-                  <a href="https://www.linkedin.com/company/11551793/" class="social-menu-link">Linkedin</a>
+                  <a href="https://www.linkedin.com/company/11551793/" class="social-menu-link" target="_blank">Linkedin</a>
                </li>
             </ul>
          </nav>

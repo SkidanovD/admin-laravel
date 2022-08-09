@@ -3,6 +3,17 @@
         <div class="site-main-wrapper home-main-wrapper width-container">
             <h1 class="page-title home-page-title">Invoice generator</h1>
             <div :class="'text message message-' + formMessage.class" v-if="formMessage.message">{{ formMessage.message }}</div>
+            <div class="no-invoices">
+                <div class="text message message-info" v-if="getInvoices && !invoicesList.length && !Object.keys(filter).length">No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button.</div>
+                <div class="button-wrapper">
+                    <div class="button-hover">
+                        <router-link to="/add-invoice" class="button">Add invoice</router-link>
+                    </div>
+                    <div class="button-hover">
+                        <router-link to="/draft-invoices" class="button">Draft</router-link>
+                    </div>
+                </div>
+            </div>
             <div class="invoices-list" v-if="getInvoices && invoicesList.length">
                 <div class="invoice-row invoice-row-header">
                     <div class="invoice-cell invoice-cell-header invoice-cell-number sort-cell" :class="{asc: sort.orderBy === 'asc', desc: sort.orderBy === 'desc', active: sort.order === 'invoice_number'}" @click="actionSort('invoice_number')">#</div>
@@ -52,17 +63,6 @@
                         <span @click="showReceivedPopup(index)" class="invoice-action-item">Edit received date</span>
                         <a :href="'/pdf/preview/' + invoice.id" class="invoice-action-item" target="_blank">Priview PDF</a>
                         <a :href="'/pdf/generate/' + invoice.id" class="invoice-action-item" target="_blank">Download PDF</a>
-                    </div>
-                </div>
-            </div>
-            <div class="no-invoices">
-                <div class="text message message-info" v-if="getInvoices && !invoicesList.length && !Object.keys(filter).length">No invoice has been created yet. In order to create the first invoice, click the «Add invoice» button or check the list of unpublished invoices by clicking the «Draft» button.</div>
-                <div class="button-wrapper">
-                    <div class="button-hover">
-                        <router-link to="/add-invoice" class="button">Add invoice</router-link>
-                    </div>
-                    <div class="button-hover">
-                        <router-link to="/draft-invoices" class="button">Draft</router-link>
                     </div>
                 </div>
             </div>

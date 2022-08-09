@@ -1,7 +1,8 @@
 <template>
     <main class="site-main edit-invoice-main">
         <div class="site-main-wrapper edit-invoice-main-wrapper width-container">
-            <h1 class="page-title edit-company-page-title">Edit invoice</h1>
+            <h1 v-if="$route.query.add" class="page-title edit-company-page-title">Add invoice</h1>
+            <h1 v-else class="page-title edit-company-page-title">Edit invoice</h1>
             <div :class="'text message message-' + formMessage.class" v-if="formMessage.message">{{ formMessage.message }}</div>
             <form class="users-list-main__form form"  ref="form" @submit.prevent="actionEditInvoice">
                 <input id="id" type="hidden" name="id" :value="invoice.id">
@@ -110,8 +111,8 @@
                         <div class="invoice-detail-cell invoice-detail-cell-quantity invoice-detail-cell-header">Qty</div>
                         <div class="invoice-detail-cell invoice-detail-cell-price invoice-detail-cell-header">Price</div>
                     </div>
-                    <div class="invoice-detail-row-wrapper" v-for="(invoiceDetail, index) in invoiceDetails" :key="index">
-                        <vueInvoiceDetail :invoiceDetail="invoiceDetail" :index="index" @eventDeleteInvoiceRow="deleteInvoiceRow" @eventTotalCalculation="totalCalculation"></vueInvoiceDetail>
+                    <div class="invoice-detail-row-wrapper" :class="{'single-item': invoiceDetails.length < 2}" v-for="(invoiceDetail, index) in invoiceDetails" :key="index">
+                        <vueInvoiceDetail :invoiceDetail="invoiceDetail" :index="index" @eventDeleteInvoiceRowBefore="actionInvoiceRowDeletePopup(index)" @eventTotalCalculation="totalCalculation"></vueInvoiceDetail>
                         <vueValidateMessage  v-if="validate['details.' + index + '.order']" :messages="validate['details.' + index + '.order']"></vueValidateMessage>
                         <vueValidateMessage  v-if="validate['details.' + index + '.description']" :messages="validate['details.' + index + '.description']"></vueValidateMessage>
                         <vueValidateMessage  v-if="validate['details.' + index + '.quantity']" :messages="validate['details.' + index + '.quantity']"></vueValidateMessage>
@@ -155,14 +156,14 @@
                 </div>
                 <div class="button-wrapper button-submit-wrapper">
                     <div class="button-hover button-submit-hover">
-                        <button class="button button-submit" type="submit">Save the draft</button>
+                        <button type="button" class="button button-submit" @click="actionPublicInvoice">Save and public</button>
                     </div>
                 </div>
             </form>
             <div class="edit-invoice-buttons-block">
                 <div class="button-wrapper">
                     <div class="button-hover">
-                        <button type="button" class="button" @click="actionPublicInvoice">Save and public</button>
+                        <button class="button" type="button" @click="actionEditInvoice">Save</button>
                     </div>
                 </div>
                 <div class="button-wrapper">
@@ -177,17 +178,20 @@
                 </div>
             </div>
         </div>
+        <vueDeletePopup v-if="displayDeletePopup" :deletePopupData="deletePopupData" @eventDeleteInvoiceRow="deleteInvoiceRow(deletePopupData.itemId)" @eventHideDeletePopup="actionDisplayDeletePopup"></vueDeletePopup>
     </main>
 </template>
 
 <script>
     import vueValidateMessage from './../../components/MessageValidate';
     import vueInvoiceDetail from './../../components/InvoiceDetail';
+    import vueDeletePopup from './../../components/DeletePopup';
     export default {
         name: 'EditInvoice',
         components: {
             vueValidateMessage,
             vueInvoiceDetail,
+            vueDeletePopup,
         },
         data: () => ({
             invoice: [],
@@ -207,6 +211,12 @@
             totalTax: 0,
             validate: [],
             additionalFields: false,
+            displayDeletePopup: false,
+            deletePopupData: {
+                textPopup: '',
+                eventName: '',
+                itemId: 0,
+            },
             formMessage: {
                 class: '',
                 message: '',
@@ -268,7 +278,29 @@
                     };
                 this.invoiceDetails.push(newRow);
             },
+            actionDisplayDeletePopup() {
+                if (this.displayDeletePopup) {
+                    this.displayDeletePopup = false;
+                    this.deletePopupData = {
+                        textPopup: '',
+                        eventName: '',
+                        itemId: 0,
+                    }
+                } else {
+                    this.displayDeletePopup = true;
+                }
+            },
+            actionInvoiceRowDeletePopup(idx) {
+                this.deletePopupData.textPopup = 'Are you sure you want to delete the item?';
+                this.deletePopupData.eventName = 'eventDeleteInvoiceRow';
+                this.deletePopupData.itemId = idx;
+                this.actionDisplayDeletePopup();
+            },
             deleteInvoiceRow(index) {
+                this.actionDisplayDeletePopup();
+                if (this.invoiceDetails.length < 2) {
+                    return;
+                }
                 delete this.invoiceDetails[index];
                 var count = 0;
                 this.invoiceDetails.forEach(function(elem, idx, arrray) {
@@ -378,10 +410,12 @@
                 }).then(
                     res => {
                         if (res.data.status === 'not validated') {
+                            this.validate = [];
                             for(let key in res.data.messages) {
                                 this.$set(this.validate, key, res.data.messages[key]);
                             }
                             this.invoice = res.data.form_field;
+                            this.scrollToElement('form-validate-messages');
                         } else {
                             var invoice = res.data.invoice;
                             axios({
@@ -395,9 +429,12 @@
                                         this.formMessage.class = res.data.status;
                                         this.formMessage.message = res.data.message;
                                         this.getInvoice(this.$route.params.id);
+                                        this.scrollToElement();
                                     } else {
+                                        this.validate = [];
                                         this.formMessage.class = res.data.status;
                                         this.formMessage.message = res.data.message;
+                                        this.scrollToElement();
                                     }
                                 }
                             )
@@ -408,7 +445,6 @@
             scrollToElement(elem = '') {
                 var $this = this;
                 var el = this.$el;
-                
                 setTimeout(function() {
                     if (elem) {
                         el = $this.$el.getElementsByClassName(elem)[0];
@@ -419,8 +455,7 @@
                             behavior: 'smooth'
                         });
                     }
-                }, 100);
-                
+                }, 100); 
             },
         }
     }

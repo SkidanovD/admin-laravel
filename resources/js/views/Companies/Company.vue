@@ -62,7 +62,7 @@
                 <div class="company-button-block">
                     <div class="button-wrapper">
                         <div class="button-hover">
-                            <a href="#" @click.prevent="actionDeleteCompany" class="button">Delete company</a>
+                            <button type="button" @click="actionCompanyDeletePopup(company.id)" class="button">Delete company</button>
                         </div>
                     </div>
                     <div class="button-wrapper">
@@ -73,13 +73,26 @@
                 </div>
             </div>
         </div>
+        <vueDeletePopup v-if="displayDeletePopup" :deletePopupData="deletePopupData" @eventDeleteCompany="actionDeleteCompany(deletePopupData.itemId)" @eventHideDeletePopup="actionDisplayDeletePopup"></vueDeletePopup>
     </main>
 </template>
 <script>
+    import vueValidateMessage from './../../components/MessageValidate';
+    import vueDeletePopup from './../../components/DeletePopup';
     export default {
         name: 'Company',
+        components: {
+            vueValidateMessage,
+            vueDeletePopup,
+        },
         data: () => ({
             company: [],
+            displayDeletePopup: false,
+            deletePopupData: {
+                textPopup: '',
+                eventName: '',
+                itemId: 0,
+            },
             formMessage: {
                 class: '',
                 message: '',
@@ -97,6 +110,7 @@
                     } else {
                         this.formMessage.class = res.data.status;
                         this.formMessage.message = res.data.message;
+                        this.scrollToElement();
                     }
                 });
             },
@@ -108,13 +122,49 @@
                         id: this.company.id,
                     },
                 }).then(res => {
+                        this.actionDisplayDeletePopup();
                     if (res.data.status === 'success') {
-                        this.formMessage.class = res.data.status;
-                        this.formMessage.message = res.data.message;
                         this.company = [];
                         this.returnButton = true;
                     }
+                    this.formMessage.class = res.data.status;
+                    this.formMessage.message = res.data.message;
+                    this.scrollToElement();
                 })
+            },
+            actionDisplayDeletePopup() {
+                if (this.displayDeletePopup) {
+                    this.displayDeletePopup = false;
+                    this.deletePopupData = {
+                        textPopup: '',
+                        eventName: '',
+                        itemId: 0,
+                    }
+                } else {
+                    this.displayDeletePopup = true;
+                }
+            },
+            actionCompanyDeletePopup(id) {
+                this.deletePopupData.textPopup = 'Are you sure you want to delete the company?';
+                this.deletePopupData.eventName = 'eventDeleteCompany';
+                this.deletePopupData.itemId = id;
+                this.actionDisplayDeletePopup();
+            },
+            
+            scrollToElement(elem = '') {
+                var $this = this;
+                var el = this.$el;
+                setTimeout(function() {
+                    if (elem) {
+                        el = $this.$el.getElementsByClassName(elem)[0];
+                    }
+                    if (el) {
+                        window.scrollTo({
+                            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100); 
             },
         }
     }
