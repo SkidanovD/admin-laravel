@@ -85,9 +85,10 @@ class CompanyController extends Controller
                 'form_field' => $request->all(),
             ];
         }
+        $query_data['company_name'] = $request->company_name;
         $validator = Validator::make($query_data, [
             'name' => 'string|nullable',
-            'company_name' => 'string',
+            'company_name' => 'required|string',
             'address' => 'string|nullable',
             'post_code' => 'string|nullable',
             'city' => 'string|nullable',
