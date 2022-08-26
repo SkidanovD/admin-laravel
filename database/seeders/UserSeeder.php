@@ -17,13 +17,13 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
+            'first_name' => '',
+            'last_name' => '',
+            'photo' => '',
+            'user_post' => '',
             'email' => 'super@admin.start',
             'role' => 'admin',
             'password' => Hash::make('password'),
         ]);
-        // DB::table('users')->insert([
-        //     'email' => 'super@admin.start',
-        //     'password' => Hash::make('password'),
-        // ]);
     }
 }
