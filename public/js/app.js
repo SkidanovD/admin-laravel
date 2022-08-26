@@ -5326,6 +5326,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {},
   data: function data() {
@@ -5363,6 +5368,24 @@ __webpack_require__.r(__webpack_exports__);
           _this2.$router.push('/login');
         }
       });
+    },
+    actionNavToggle: function actionNavToggle(e) {
+      var body = document.querySelector('body'),
+          header = document.querySelector('.site-header'),
+          navBlock = document.querySelector('.main-navigation'),
+          navToggle = document.querySelector('.nav-toggle');
+
+      if (navToggle.classList.contains('opened')) {
+        body.classList.remove('stop-scroll');
+        header.classList.remove('nav-opened');
+        navBlock.classList.remove('opened');
+        navToggle.classList.remove('opened');
+      } else {
+        body.classList.add('stop-scroll');
+        header.classList.add('nav-opened');
+        navBlock.classList.add('opened');
+        navToggle.classList.add('opened');
+      }
     }
   }
 });
@@ -32520,6 +32543,25 @@ var render = function () {
                 }),
               ]
             ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "nav-toggle",
+            on: {
+              click: function ($event) {
+                return _vm.actionNavToggle($event)
+              },
+            },
+          },
+          [
+            _c("span", { staticClass: "bar-top" }),
+            _vm._v(" "),
+            _c("span", { staticClass: "bar-mid" }),
+            _vm._v(" "),
+            _c("span", { staticClass: "bar-bot" }),
+          ]
+        ),
         _vm._v(" "),
         _c("nav", { staticClass: "main-navigation" }, [
           _c("ul", { staticClass: "main-nav-list" }, [
