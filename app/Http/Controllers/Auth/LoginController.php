@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -89,6 +90,31 @@ class LoginController extends Controller
         return [
             'status' => 'error',
             'message' => trans('auth.failed'),
+        ];
+    }
+
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        $validator =  Validator::make($request->all(), [
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return [
+                'status' => 'not validated',
+                'messages' => $validator->messages(),
+            ];
+        }
+        return [
+            'status' => 'validated'
         ];
     }
     

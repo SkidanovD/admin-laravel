@@ -196,6 +196,7 @@
             filter: {},
         }),
         mounted() {
+            this.unAuthenticated();
             this.loadPageData();
             this.getFilterData();
         },
@@ -208,6 +209,11 @@
             },
         },
         methods: {
+            unAuthenticated() {
+                axios.get('/api/unAuthenticated').catch(err => {
+                    location = '/login';
+                })
+            },
             loadPageData() {
                 axios({
                     method: 'post',
