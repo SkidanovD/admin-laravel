@@ -223,6 +223,7 @@
             }
         }),
         mounted() {
+            this.unAuthenticated();
             this.getInvoice(this.$route.params.id);
             this.getAllCompanies();
             var $this = this;
@@ -239,6 +240,11 @@
             },
         },
         methods: {
+            unAuthenticated() {
+                axios.get('/api/unAuthenticated').catch(err => {
+                    location = '/login';
+                })
+            },
             getInvoice(id) {
                 axios({
                     method: 'get',

@@ -8,31 +8,37 @@
 </template>
 
 <script>
-export default {
-    name: 'AddInvoice',
-    data: () => ({
-        errorMessage: '',
-    }),
-    mounted() {
-        this.addInvoice();
-    },
-    methods: {
-        addInvoice(id) {
-            axios({
-               method: 'post',
-               url: '/api/actionAddInvoice',
-               data: {},
-            }).then(
-                res => {
-                    if (res.data.status === 'success') {
-                        this.$router.push('/edit-invoice/' + res.data.invoice.id + '?add=true');
-                    }
-                    if (res.data.status === 'error') {
-                        this.errorMessage = res.data.message
-                    }
-                }
-            )
+    export default {
+        name: 'AddInvoice',
+        data: () => ({
+            errorMessage: '',
+        }),
+        mounted() {
+            this.unAuthenticated();
+            this.addInvoice();
         },
+        methods: {
+            unAuthenticated() {
+                axios.get('/api/unAuthenticated').catch(err => {
+                    location = '/login';
+                })
+            },
+            addInvoice(id) {
+                axios({
+                method: 'post',
+                url: '/api/actionAddInvoice',
+                data: {},
+                }).then(
+                    res => {
+                        if (res.data.status === 'success') {
+                            this.$router.push('/edit-invoice/' + res.data.invoice.id + '?add=true');
+                        }
+                        if (res.data.status === 'error') {
+                            this.errorMessage = res.data.message
+                        }
+                    }
+                )
+            },
+        }
     }
-}
 </script>

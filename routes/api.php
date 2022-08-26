@@ -34,6 +34,7 @@ Route::get('/getPageRegister', [PageController::class, 'showRegisterForm'])->nam
 // User API
 
 Route::get('/getAuthUser', [UserController::class, 'getAuthUser'])->name('getAuthUser');
+Route::middleware('auth:sanctum')->get('/unAuthenticated', [UserController::class, 'unAuthenticated'])->name('unAuthenticated');
 Route::middleware('auth:sanctum')->post('/actionAddUser', [UserController::class, 'actionAddUser'])->name('actionAddUser');
 Route::middleware('auth:sanctum')->post('/actionEditUser', [UserController::class, 'actionEditUser'])->name('actionEditUser');
 Route::middleware('auth:sanctum')->post('/actionDeleteUser', [UserController::class, 'actionDeleteUser'])->name('actionDeleteUser');

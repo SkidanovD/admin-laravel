@@ -5606,7 +5606,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
+  mounted: function mounted() {
+    this.unAuthenticated();
+  },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     actionAddCompany: function actionAddCompany() {
       var _this = this;
 
@@ -5741,9 +5749,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.loadPageData();
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     loadPageData: function loadPageData() {
       var _this = this;
 
@@ -5889,9 +5903,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.getCompany(this.$route.params.id);
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     getCompany: function getCompany(id) {
       var _this = this;
 
@@ -6089,9 +6109,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.getCompany(this.$route.params.id);
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     getCompany: function getCompany(id) {
       var _this = this;
 
@@ -6382,6 +6408,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.loadPageData();
     this.getFilterData();
   },
@@ -6394,6 +6421,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     loadPageData: function loadPageData() {
       var _this = this;
 
@@ -6603,9 +6635,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.addInvoice();
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     addInvoice: function addInvoice(id) {
       var _this = this;
 
@@ -6734,9 +6772,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.loadPageData();
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     loadPageData: function loadPageData() {
       var _this = this;
 
@@ -7073,6 +7117,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.getInvoice(this.$route.params.id);
     this.getAllCompanies();
     var $this = this;
@@ -7089,6 +7134,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     getInvoice: function getInvoice(id) {
       var _this = this;
 
@@ -7514,9 +7564,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.getUser(this.$route.params.id);
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     getUser: function getUser(id) {
       var _this = this;
 
@@ -7583,6 +7639,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }
       }).then(function (res) {
         if (res.data.status === 'not validated') {
+          _this2.formMessage["class"] = '';
+          _this2.formMessage.message = '';
           _this2.validate = [];
 
           for (var key in res.data.messages) {
@@ -7687,9 +7745,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.getUser(this.$route.params.id);
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     getUser: function getUser(id) {
       var _this = this;
 
@@ -7799,9 +7863,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    this.unAuthenticated();
     this.loadPageData();
   },
   methods: {
+    unAuthenticated: function unAuthenticated() {
+      axios.get('/api/unAuthenticated')["catch"](function (err) {
+        location = '/login';
+      });
+    },
     loadPageData: function loadPageData() {
       var _this = this;
 
@@ -7890,6 +7960,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _components_MessageValidate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../../components/MessageValidate */ "./resources/js/components/MessageValidate.vue");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -7930,11 +8001,18 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Login',
+  components: {
+    vueValidateMessage: _components_MessageValidate__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       pageData: [],
+      validate: {},
       formMessage: {
         "class": '',
         message: ''
@@ -7980,15 +8058,42 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         url: '/api/actionLogin',
         data: form_data
       }).then(function (res) {
-        if (res.data.status === 'success') {
+        _this2.formMessage["class"] = '';
+        _this2.formMessage.message = '';
+        _this2.validate = {};
+
+        if (res.data.status === 'not validated') {
+          for (var key in res.data.messages) {
+            _this2.$set(_this2.validate, key, res.data.messages[key]);
+          }
+
+          _this2.scrollToElement('form-validate-messages');
+        } else if (res.data.status === 'success') {
           location = '/'; // this.$router.push('/');
         } else {
-          console.log(res.data);
-          console.log(res.data.message);
           _this2.formMessage["class"] = 'error';
           _this2.formMessage.message = res.data.message;
+
+          _this2.scrollToElement();
         }
       });
+    },
+    scrollToElement: function scrollToElement() {
+      var elem = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var $this = this;
+      var el = this.$el;
+      setTimeout(function () {
+        if (elem) {
+          el = $this.$el.getElementsByClassName(elem)[0];
+        }
+
+        if (el) {
+          window.scrollTo({
+            top: el.getBoundingClientRect().top + document.documentElement.scrollTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
     }
   }
 });
@@ -38073,7 +38178,39 @@ var render = function () {
               },
             },
           },
-          [_vm._m(0), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm._m(2)]
+          [
+            _c(
+              "div",
+              { staticClass: "form-item-wrapper form-item-email-wrapper" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _vm.validate.email
+                  ? _c("vueValidateMessage", {
+                      attrs: { messages: _vm.validate.email },
+                    })
+                  : _vm._e(),
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "form-item-wrapper form-item-password-wrapper" },
+              [
+                _vm._m(1),
+                _vm._v(" "),
+                _vm.validate.password
+                  ? _c("vueValidateMessage", {
+                      attrs: { messages: _vm.validate.password },
+                    })
+                  : _vm._e(),
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm._m(2),
+          ]
         ),
       ]
     ),
@@ -38086,26 +38223,17 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "form-item-wrapper form-item-email-wrapper" },
+      { staticClass: "form-input-wrapper form-input-email-wrapper icon-email" },
       [
-        _c(
-          "div",
-          {
-            staticClass:
-              "form-input-wrapper form-input-email-wrapper icon-email",
+        _c("input", {
+          staticClass: "form-input form-input-email",
+          attrs: {
+            id: "email",
+            name: "email",
+            type: "email",
+            placeholder: "Email",
           },
-          [
-            _c("input", {
-              staticClass: "form-input form-input-email",
-              attrs: {
-                id: "email",
-                name: "email",
-                type: "email",
-                placeholder: "Email",
-              },
-            }),
-          ]
-        ),
+        }),
       ]
     )
   },
@@ -38115,26 +38243,20 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "form-item-wrapper form-item-password-wrapper" },
+      {
+        staticClass:
+          "form-input-wrapper form-input-password-wrapper icon-password",
+      },
       [
-        _c(
-          "div",
-          {
-            staticClass:
-              "form-input-wrapper form-input-password-wrapper icon-password",
+        _c("input", {
+          staticClass: "form-input form-input-password",
+          attrs: {
+            id: "password",
+            name: "password",
+            type: "password",
+            placeholder: "Password",
           },
-          [
-            _c("input", {
-              staticClass: "form-input form-input-password",
-              attrs: {
-                id: "password",
-                name: "password",
-                type: "password",
-                placeholder: "Password",
-              },
-            }),
-          ]
-        ),
+        }),
       ]
     )
   },

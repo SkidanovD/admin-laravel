@@ -11,6 +11,13 @@ use Carbon\Carbon;
 
 class UserController extends Controller
 {
+    public function unAuthenticated()
+    {
+        return [
+            'message' => 'authenticated'
+        ];
+    }
+
     public function getAuthUser(Request $request)
     {
         $auth_user = Auth::user();
@@ -95,8 +102,8 @@ class UserController extends Controller
             'last_name' => 'string|nullable|max:255',
             'photo' => 'image|nullable|max:2048',
             'user_post' => 'string|nullable|max:255',
-            'email' => 'nullable|string|email|max:255',
-            'role' => 'nullable|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'role' => 'required|string|max:255',
         ];
         foreach ($request->all() as $key => $item) {
             if ($item === null) {
@@ -119,6 +126,8 @@ class UserController extends Controller
                 'form_field' => $request->all(),
             ];
         }
+        $query_data['role'] = $request->role;
+        $query_data['email'] = $request->email;
         $validator = Validator::make($query_data, $query_validator);
         if ($validator->fails()) {
             return [

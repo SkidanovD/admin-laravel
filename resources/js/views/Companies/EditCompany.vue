@@ -91,9 +91,15 @@
             }
         }),
         mounted() {
+            this.unAuthenticated();
             this.getCompany(this.$route.params.id);
         },
         methods: {
+            unAuthenticated() {
+                axios.get('/api/unAuthenticated').catch(err => {
+                    location = '/login';
+                })
+            },
             getCompany(id) {
                 axios.get('/api/getCompany/' + id).then(res => {
                     if (res.data.status === 'success') {

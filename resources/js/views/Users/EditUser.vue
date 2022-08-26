@@ -129,9 +129,15 @@
             },
         }),
         mounted() {
+            this.unAuthenticated();
             this.getUser(this.$route.params.id);
         },
         methods: {
+            unAuthenticated() {
+                axios.get('/api/unAuthenticated').catch(err => {
+                    location = '/login';
+                })
+            },
             getUser(id) {
                 axios.get('/api/getUser/' + id).then(res => {
                     if (res.data.status === 'success') {
@@ -180,6 +186,8 @@
                 }).then(
                     res => {
                         if (res.data.status === 'not validated') {
+                            this.formMessage.class = '';
+                            this.formMessage.message = '';
                             this.validate = [];
                             for(let key in res.data.messages) {
                                 this.$set(this.validate, key, res.data.messages[key]);

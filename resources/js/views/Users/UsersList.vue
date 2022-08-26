@@ -79,9 +79,15 @@
          },
       }),
       mounted() {
+         this.unAuthenticated();
          this.loadPageData();
       },
       methods: {
+         unAuthenticated() {
+            axios.get('/api/unAuthenticated').catch(err => {
+               location = '/login';
+            })
+         },
          loadPageData() {
             axios.get('/api/getAllUsers').then(res => {
                if (res.data.status === 'success') {

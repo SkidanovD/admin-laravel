@@ -50,9 +50,15 @@
             user: [],
         }),
         mounted() {
+            this.unAuthenticated();
             this.getUser(this.$route.params.id);
         },
         methods: {
+            unAuthenticated() {
+                axios.get('/api/unAuthenticated').catch(err => {
+                    location = '/login';
+                })
+            },
             getUser(id) {
                 axios.get('/api/getUser/' + id).then(res => {
                     if (res.data.status === 'success') {
