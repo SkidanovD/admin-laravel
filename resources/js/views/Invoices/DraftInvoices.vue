@@ -29,14 +29,33 @@
                     </div>
                 </div>
                 <div class="invoice-row" v-for="(invoice, index) in invoicesList" :key="index">
-                    <div class="invoice-cell invoice-cell-number" :class="{empty: !invoice.invoice_number}">{{ invoice.invoice_number }}</div>
-                    <div class="invoice-cell invoice-cell-date" :class="{empty: !invoice.invoice_date}">{{ invoice.invoice_date }}</div>
-                    <div class="invoice-cell invoice-cell-company" :class="{empty: !invoice.company}">{{ invoice.company }}</div>
-                    <div class="invoice-cell invoice-cell-author" :class="{empty: !invoice.author.first_name}">{{ invoice.author.first_name }}</div>
-                    <div class="invoice-cell invoice-cell-total" :class="{empty: !invoice.total_tax}">{{ invoice.total_tax }}</div>
-                    <div class="invoice-cell invoice-cell-received-date" :class="{empty: !invoice.received_date}">{{ invoice.received_date }}</div>
+                    <div class="invoice-cell invoice-cell-number" :class="{empty: !invoice.invoice_number}">
+                        <div class="invoice-cell-label">#</div>
+                        <div class="invoice-cell-value">{{ invoice.invoice_number }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-date" :class="{empty: !invoice.invoice_date}">
+                        <div class="invoice-cell-label">Invoice date</div>
+                        <div class="invoice-cell-value">{{ invoice.invoice_date }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-company" :class="{empty: !invoice.company}">
+                        <div class="invoice-cell-label">Company</div>
+                        <div class="invoice-cell-value">{{ invoice.company }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-author" :class="{empty: !invoice.author.first_name}">
+                        <div class="invoice-cell-label">Author</div>
+                        <div class="invoice-cell-value">{{ invoice.author.first_name }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-total" :class="{empty: !invoice.total_tax}">
+                        <div class="invoice-cell-label">Total</div>
+                        <div class="invoice-cell-value">{{ invoice.total_tax }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-received-date" :class="{empty: !invoice.received_date}">
+                        <div class="invoice-cell-label">Received date</div>
+                        <div class="invoice-cell-value">{{ invoice.received_date }}</div>
+                    </div>
                     <div class="invoice-cell invoice-cell-status" :class="{empty: !invoice.status}">
-                        <span v-if="invoice.status">{{ invoice.status.replace(/_/g, ' ') }}</span>
+                        <div class="invoice-cell-label">Status</div>
+                        <div class="invoice-cell-value"><span v-if="invoice.status">{{ invoice.status.replace(/_/g, ' ') }}</span></div>
                     </div>
                     <div class="invoice-cell invoice-cell-action">
                         <div class="btn-wrapper btn-edit-wrapper">

@@ -7,26 +7,26 @@
             <router-link class="site-logo-link" to="/login" v-else>
                 <img class="site-logo" src="/img/logo.png"  alt="Bato Invoices">
             </router-link>
-            <button class="nav-toggle" @click="actionNavToggle($event)">
+            <button class="nav-toggle" @click="actionNavToggle($event)" v-if="isAuth">
                 <span class="bar-top"></span>
                 <span class="bar-mid"></span>
                 <span class="bar-bot"></span>
             </button>
             <nav class="main-navigation">
                 <ul class="main-nav-list">
-                    <li class="main-nav-item" v-if="isAuth">
+                    <li class="main-nav-item" v-if="isAuth" @click="actionCloseMenu">
                         <router-link class="main-nav-link" to="/">Home</router-link>
                     </li>
-                    <li class="main-nav-item" v-if="isAuth">
+                    <li class="main-nav-item" v-if="isAuth" @click="actionCloseMenu">
                         <router-link class="main-nav-link" to="/companies-list">Companies</router-link>
                     </li>
-                    <li class="main-nav-item" v-if="isAuth && authUser.role == 'admin'">
+                    <li class="main-nav-item" v-if="isAuth && authUser.role == 'admin'" @click="actionCloseMenu">
                         <router-link class="main-nav-link" to="/users-list">Users</router-link>
                     </li>
-                    <li class="main-nav-item" v-if="isAuth">
+                    <li class="main-nav-item" v-if="isAuth" @click="actionCloseMenu">
                         <router-link class="main-nav-link" :to="'/my-account/' + authUser.id">My account</router-link>
                     </li>
-                    <li class="main-nav-item logout" v-if="isAuth">
+                    <li class="main-nav-item logout" v-if="isAuth" @click="actionCloseMenu">
                         <a href="#" class="main-nav-link" @click.prevent="actionLogOut">Log out</a>
                     </li>
                 </ul>
@@ -74,8 +74,12 @@
                     navBlock = document.querySelector('.main-navigation'),
                     navToggle = document.querySelector('.nav-toggle');
                 if (navToggle.classList.contains('opened')) {
-                    if (!document.querySelector('.invoice-filter-block').classList.contains('show')) {
-                        body.classList.remove('stop-scroll');
+                    if (document.querySelector('.invoice-filter-block')) {
+                        if (!document.querySelector('.invoice-filter-block').classList.contains('show')) {
+                            body.classList.remove('stop-scroll');
+                        }
+                    } else {
+                        body.classList.remove('stop-scroll'); 
                     }
                     header.classList.remove('nav-opened');
                     navBlock.classList.remove('opened');
@@ -86,6 +90,12 @@
                     navBlock.classList.add('opened');
                     navToggle.classList.add('opened');
                 }
+            },
+            actionCloseMenu() {
+                document.querySelector('body').classList.remove('stop-scroll');
+                document.querySelector('.site-header').classList.remove('nav-opened');
+                document.querySelector('.main-navigation').classList.remove('opened');
+                document.querySelector('.nav-toggle').classList.remove('opened');    
             },
         },
     }

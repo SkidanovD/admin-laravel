@@ -5376,7 +5376,11 @@ __webpack_require__.r(__webpack_exports__);
           navToggle = document.querySelector('.nav-toggle');
 
       if (navToggle.classList.contains('opened')) {
-        if (!document.querySelector('.invoice-filter-block').classList.contains('show')) {
+        if (document.querySelector('.invoice-filter-block')) {
+          if (!document.querySelector('.invoice-filter-block').classList.contains('show')) {
+            body.classList.remove('stop-scroll');
+          }
+        } else {
           body.classList.remove('stop-scroll');
         }
 
@@ -5389,6 +5393,12 @@ __webpack_require__.r(__webpack_exports__);
         navBlock.classList.add('opened');
         navToggle.classList.add('opened');
       }
+    },
+    actionCloseMenu: function actionCloseMenu() {
+      document.querySelector('body').classList.remove('stop-scroll');
+      document.querySelector('.site-header').classList.remove('nav-opened');
+      document.querySelector('.main-navigation').classList.remove('opened');
+      document.querySelector('.nav-toggle').classList.remove('opened');
     }
   }
 });
@@ -5406,6 +5416,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
 //
 //
 //
@@ -6738,6 +6752,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _components_MessageValidate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../../components/MessageValidate */ "./resources/js/components/MessageValidate.vue");
 /* harmony import */ var _components_DeletePopup__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../components/DeletePopup */ "./resources/js/components/DeletePopup.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -32580,31 +32613,36 @@ var render = function () {
               ]
             ),
         _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "nav-toggle",
-            on: {
-              click: function ($event) {
-                return _vm.actionNavToggle($event)
+        _vm.isAuth
+          ? _c(
+              "button",
+              {
+                staticClass: "nav-toggle",
+                on: {
+                  click: function ($event) {
+                    return _vm.actionNavToggle($event)
+                  },
+                },
               },
-            },
-          },
-          [
-            _c("span", { staticClass: "bar-top" }),
-            _vm._v(" "),
-            _c("span", { staticClass: "bar-mid" }),
-            _vm._v(" "),
-            _c("span", { staticClass: "bar-bot" }),
-          ]
-        ),
+              [
+                _c("span", { staticClass: "bar-top" }),
+                _vm._v(" "),
+                _c("span", { staticClass: "bar-mid" }),
+                _vm._v(" "),
+                _c("span", { staticClass: "bar-bot" }),
+              ]
+            )
+          : _vm._e(),
         _vm._v(" "),
         _c("nav", { staticClass: "main-navigation" }, [
           _c("ul", { staticClass: "main-nav-list" }, [
             _vm.isAuth
               ? _c(
                   "li",
-                  { staticClass: "main-nav-item" },
+                  {
+                    staticClass: "main-nav-item",
+                    on: { click: _vm.actionCloseMenu },
+                  },
                   [
                     _c(
                       "router-link",
@@ -32619,7 +32657,10 @@ var render = function () {
             _vm.isAuth
               ? _c(
                   "li",
-                  { staticClass: "main-nav-item" },
+                  {
+                    staticClass: "main-nav-item",
+                    on: { click: _vm.actionCloseMenu },
+                  },
                   [
                     _c(
                       "router-link",
@@ -32637,7 +32678,10 @@ var render = function () {
             _vm.isAuth && _vm.authUser.role == "admin"
               ? _c(
                   "li",
-                  { staticClass: "main-nav-item" },
+                  {
+                    staticClass: "main-nav-item",
+                    on: { click: _vm.actionCloseMenu },
+                  },
                   [
                     _c(
                       "router-link",
@@ -32655,7 +32699,10 @@ var render = function () {
             _vm.isAuth
               ? _c(
                   "li",
-                  { staticClass: "main-nav-item" },
+                  {
+                    staticClass: "main-nav-item",
+                    on: { click: _vm.actionCloseMenu },
+                  },
                   [
                     _c(
                       "router-link",
@@ -32671,22 +32718,29 @@ var render = function () {
               : _vm._e(),
             _vm._v(" "),
             _vm.isAuth
-              ? _c("li", { staticClass: "main-nav-item logout" }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "main-nav-link",
-                      attrs: { href: "#" },
-                      on: {
-                        click: function ($event) {
-                          $event.preventDefault()
-                          return _vm.actionLogOut.apply(null, arguments)
+              ? _c(
+                  "li",
+                  {
+                    staticClass: "main-nav-item logout",
+                    on: { click: _vm.actionCloseMenu },
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "main-nav-link",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function ($event) {
+                            $event.preventDefault()
+                            return _vm.actionLogOut.apply(null, arguments)
+                          },
                         },
                       },
-                    },
-                    [_vm._v("Log out")]
-                  ),
-                ])
+                      [_vm._v("Log out")]
+                    ),
+                  ]
+                )
               : _vm._e(),
           ]),
         ]),
@@ -32728,6 +32782,8 @@ var render = function () {
         "div",
         { staticClass: "invoice-detail-cell invoice-detail-cell-order" },
         [
+          _c("div", { staticClass: "invoice-detail-label" }, [_vm._v("#")]),
+          _vm._v(" "),
           _c(
             "div",
             { staticClass: "form-item-wrapper form-item-order-wrapper" },
@@ -32756,6 +32812,10 @@ var render = function () {
         "div",
         { staticClass: "invoice-detail-cell invoice-detail-cell-description" },
         [
+          _c("div", { staticClass: "invoice-detail-label" }, [
+            _vm._v("Description"),
+          ]),
+          _vm._v(" "),
           _c(
             "div",
             {
@@ -32790,6 +32850,8 @@ var render = function () {
         "div",
         { staticClass: "invoice-detail-cell invoice-detail-cell-quantity" },
         [
+          _c("div", { staticClass: "invoice-detail-label" }, [_vm._v("Qty")]),
+          _vm._v(" "),
           _c(
             "div",
             { staticClass: "form-item-wrapper form-item-quantity-wrapper" },
@@ -32820,6 +32882,8 @@ var render = function () {
         "div",
         { staticClass: "invoice-detail-cell invoice-detail-cell-price" },
         [
+          _c("div", { staticClass: "invoice-detail-label" }, [_vm._v("Price")]),
+          _vm._v(" "),
           _c(
             "div",
             {
@@ -35960,7 +36024,15 @@ var render = function () {
                             staticClass: "invoice-cell invoice-cell-number",
                             class: { empty: !invoice.invoice_number },
                           },
-                          [_vm._v(_vm._s(invoice.invoice_number))]
+                          [
+                            _c("div", { staticClass: "invoice-cell-label" }, [
+                              _vm._v("#"),
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "invoice-cell-value" }, [
+                              _vm._v(_vm._s(invoice.invoice_number)),
+                            ]),
+                          ]
                         ),
                         _vm._v(" "),
                         _c(
@@ -35969,7 +36041,15 @@ var render = function () {
                             staticClass: "invoice-cell invoice-cell-date",
                             class: { empty: !invoice.invoice_date },
                           },
-                          [_vm._v(_vm._s(invoice.invoice_date))]
+                          [
+                            _c("div", { staticClass: "invoice-cell-label" }, [
+                              _vm._v("Invoice date"),
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "invoice-cell-value" }, [
+                              _vm._v(_vm._s(invoice.invoice_date)),
+                            ]),
+                          ]
                         ),
                         _vm._v(" "),
                         _c(
@@ -35978,7 +36058,15 @@ var render = function () {
                             staticClass: "invoice-cell invoice-cell-company",
                             class: { empty: !invoice.company },
                           },
-                          [_vm._v(_vm._s(invoice.company))]
+                          [
+                            _c("div", { staticClass: "invoice-cell-label" }, [
+                              _vm._v("Company"),
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "invoice-cell-value" }, [
+                              _vm._v(_vm._s(invoice.company)),
+                            ]),
+                          ]
                         ),
                         _vm._v(" "),
                         _c(
@@ -35987,7 +36075,15 @@ var render = function () {
                             staticClass: "invoice-cell invoice-cell-author",
                             class: { empty: !invoice.author.first_name },
                           },
-                          [_vm._v(_vm._s(invoice.author.first_name))]
+                          [
+                            _c("div", { staticClass: "invoice-cell-label" }, [
+                              _vm._v("Author"),
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "invoice-cell-value" }, [
+                              _vm._v(_vm._s(invoice.author.first_name)),
+                            ]),
+                          ]
                         ),
                         _vm._v(" "),
                         _c(
@@ -35996,7 +36092,15 @@ var render = function () {
                             staticClass: "invoice-cell invoice-cell-total",
                             class: { empty: !invoice.total_tax },
                           },
-                          [_vm._v(_vm._s(invoice.total_tax))]
+                          [
+                            _c("div", { staticClass: "invoice-cell-label" }, [
+                              _vm._v("Total"),
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "invoice-cell-value" }, [
+                              _vm._v(_vm._s(invoice.total_tax)),
+                            ]),
+                          ]
                         ),
                         _vm._v(" "),
                         _c(
@@ -36006,7 +36110,15 @@ var render = function () {
                               "invoice-cell invoice-cell-received-date",
                             class: { empty: !invoice.received_date },
                           },
-                          [_vm._v(_vm._s(invoice.received_date))]
+                          [
+                            _c("div", { staticClass: "invoice-cell-label" }, [
+                              _vm._v("Received date"),
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "invoice-cell-value" }, [
+                              _vm._v(_vm._s(invoice.received_date)),
+                            ]),
+                          ]
                         ),
                         _vm._v(" "),
                         _c(
@@ -36016,13 +36128,19 @@ var render = function () {
                             class: { empty: !invoice.status },
                           },
                           [
-                            invoice.status
-                              ? _c("span", [
-                                  _vm._v(
-                                    _vm._s(invoice.status.replace(/_/g, " "))
-                                  ),
-                                ])
-                              : _vm._e(),
+                            _c("div", { staticClass: "invoice-cell-label" }, [
+                              _vm._v("Status"),
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "invoice-cell-value" }, [
+                              invoice.status
+                                ? _c("span", [
+                                    _vm._v(
+                                      _vm._s(invoice.status.replace(/_/g, " "))
+                                    ),
+                                  ])
+                                : _vm._e(),
+                            ]),
                           ]
                         ),
                         _vm._v(" "),

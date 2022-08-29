@@ -1,6 +1,7 @@
 <template>
     <div :class="'invoice-detail-row invoice-detail-row-' + invoiceDetail.order">
         <div class="invoice-detail-cell invoice-detail-cell-order">
+            <div class="invoice-detail-label">#</div>
             <div class="form-item-wrapper form-item-order-wrapper">
                 <div class="form-input-wrapper form-input-order-wrapper">
                     <input class="form-input form-input-order" :id="'order_' + index" :name="'details['+ index +'][order]'" type="text" :value="invoiceDetail.order">
@@ -8,6 +9,7 @@
             </div>
         </div>
         <div class="invoice-detail-cell invoice-detail-cell-description">
+            <div class="invoice-detail-label">Description</div>
             <div class="form-item-wrapper form-item-description-wrapper required">
                 <div class="form-input-wrapper form-input-description-wrapper">
                     <input class="form-input form-input-description" :id="'description_' + index" :name="'details['+ index +'][description]'" type="text" :value="invoiceDetail.description">
@@ -15,6 +17,7 @@
             </div>
         </div>
         <div class="invoice-detail-cell invoice-detail-cell-quantity">
+            <div class="invoice-detail-label">Qty</div>
             <div class="form-item-wrapper form-item-quantity-wrapper">
                 <div class="form-input-wrapper form-input-quantity-wrapper">
                     <input class="form-input form-input-quantity" :id="'quantity_' + index" :name="'details['+ index +'][quantity]'" type="text" :value="invoiceDetail.quantity">
@@ -22,6 +25,7 @@
             </div>
         </div>
         <div class="invoice-detail-cell invoice-detail-cell-price">
+            <div class="invoice-detail-label">Price</div>
             <div class="form-item-wrapper form-item-price-wrapper required">
                 <div class="form-input-wrapper form-input-price-wrapper">
                     <input class="form-input form-input-price" :id="'price_' + index" :name="'details['+ index +'][price]'" type="text" :value="invoiceDetail.price"  @blur="$emit('eventTotalCalculation')">

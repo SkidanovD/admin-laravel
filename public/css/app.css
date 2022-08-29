@@ -641,9 +641,6 @@ li {
 .vue-wrapper {
   position: relative;
 }
-
-
-
 .width-container {
   width: 80%;
   margin: 0 auto;
@@ -896,18 +893,30 @@ li {
   cursor: pointer;
 }
 
-@media screen and (max-width: 1240px) {
-
-}
 @media screen and (max-width: 1060px) {
   .button {
     font-size: 0.8em;
-    padding: 1.2em 1.5em 1.15em;
+    padding: 1.4em 1.5em 1.35em;
   }
 }
 @media screen and (max-width: 767px) {
   .width-container {
     width: 87%;
+  }
+  .button-hover {
+    width: 100%;
+  }
+  .button {
+    font-size: 0.8em;
+    padding: 1.2em 1.5em 1.15em;
+    width: 100%;
+  }
+  .site-background-block {
+    width: 180vw;
+    left: -35vw;
+  }
+  .site-background-block svg {
+    transform: rotate(75deg);
   }
 }
 
@@ -1345,6 +1354,43 @@ li {
   right: 1.3em;
 }
 
+@media screen and (max-width: 1060px) {
+  .form-input {
+    padding: 1.2em 1.6em 1.2em 4.5em;
+  }
+  .form-select-wrapper::after {
+    top: 1.3em;
+  }
+  .form-label-file {
+    padding: 1.2em 1.6em 1.2em 4.5em;
+  }
+  .form-label-file::before {
+    top: 1.25em;
+  }
+}
+@media screen and (max-width: 767px) {
+  .form-item-wrapper {
+    margin-bottom: 1.2em;
+  }
+  .form-input-wrapper::before {
+    width: 1.4em;
+    height: 1.4em;
+    left: 1.1em;
+  }
+  .form-input {
+    padding: 0.9em 1.2em 0.9em 3.5em;
+  }
+  .form-select-wrapper::after {
+    top: 1.05em;
+  }
+  .form-label-file {
+    padding: 0.9em 1.2em 0.9em 3.5em;
+  }
+  .form-label-file::before {
+    top: 1.0em;
+  }
+}
+
 
 /* --- Messages --- */
 
@@ -1441,6 +1487,22 @@ li {
 .delete-popup .button.delete::before,
 .delete-popup .button.delete::after {
 	background-color: var(--red);
+}
+
+@media screen and (max-width: 767px) {
+  .delete-popup {
+    padding: 3.5em 7.5%;
+  }
+  .delete-popup .button-block {
+    flex-direction: column;
+  }
+  .delete-popup .button-wrapper {
+    width: 100%;
+    margin-bottom: 1.2em;
+  }
+  .delete-popup .button-wrapper:last-child {
+    margin-bottom: 0;
+  }
 }
 
 
@@ -1849,6 +1911,7 @@ li {
   }
   .invoice-row {
     flex-wrap: wrap;
+    align-items: stretch;
     padding: 1.2em 3% 1em;
   }
   .invoice-row:nth-child(even) {
@@ -1868,6 +1931,10 @@ li {
     font-size: 0.75em;
     font-weight: 300;
     display: block;
+  }
+  .empty::before {
+    right: auto;
+    left: 6%;
   }
 }
 @media screen and (max-width: 767px) {
@@ -1897,6 +1964,16 @@ li {
   }
   .invoice-cell {
     width: 50%;
+  }
+  .invoice-received-popup .buttons-block {
+    flex-direction: column-reverse;
+  }
+  .invoice-received-popup .button-wrapper {
+    width: 100%;
+    margin-bottom: 1.2em;
+  }
+  .invoice-received-popup .button-wrapper:first-child {
+    margin-bottom: 0;
   }
 }
 @media screen and (max-width: 520px) {
@@ -1972,6 +2049,34 @@ li {
 .add-use-block .button-wrapper {
   display: flex;
   justify-content: flex-end;
+}
+
+@media screen and (max-width: 1060px) {
+  .user-item .action-column {
+    width: 20%;
+  }
+}
+@media screen and (max-width: 767px) {
+  .user-item {
+    flex-wrap: wrap;
+  }
+  .user-item .photo-column {
+    width: 40%;
+    order: 1;
+  }
+  .user-item .action-column {
+    width: 40%;
+    order: 2;
+  }
+  .user-item .text-column {
+    text-align: center;
+    width: 100%;
+    margin-top: 2em;
+    order: 3;
+  }
+  .user-item .image-wrapper {
+    height: 34.8vw;
+  }
 }
 
 
@@ -2075,6 +2180,40 @@ li {
 .account-button-block {
   display: flex;
   justify-content: flex-end;
+}
+
+@media screen and (max-width: 1060px) {
+  .user-main-info {
+    flex-direction: column;
+  }
+  .user-main-info .left-column {
+    width: 100%;
+    margin-bottom: 1.5em;
+  }
+  .user-main-info .right-column {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .user-main-info .user-photo .image-wrapper {
+    max-width: 600px;
+    height: 87vw;
+    max-height: 600px;
+    margin: 0 auto;
+  }
+}
+@media screen and (max-width: 767px) {
+  .account-button-block {
+    flex-direction: column;
+  }
+  .account-button-block .button-wrapper {
+    width: 100%;
+    margin-bottom: 1.2em;
+  }
+  .account-button-block .button-wrapper:last-child {
+    margin-bottom: 0;
+  }
 }
 
 
@@ -2200,6 +2339,36 @@ li {
   justify-content: center;
 }
 
+@media screen and (max-width: 1060px) {
+  .companies-list-wrapper {
+    margin: 0 -2.075%;
+  }
+  .company-item {
+    width: 29.33%;
+    margin: 2%;
+  }
+}
+@media screen and (max-width: 767px) {
+  .add-company-button-wrapper .button-hover {
+    width: 100%;
+  }
+  .add-company-button-wrapper .button {
+    width: 100%;
+  }
+  .company-item {
+    width: 46%;
+  }
+}
+@media screen and (max-width: 520px) {
+  .companies-list-wrapper {
+    margin: 0;
+  }
+  .company-item {
+    width: 100%;
+    margin: 0 0 6.5%;
+  }
+}
+
 
 /* --- Add company page --- */
 
@@ -2233,6 +2402,52 @@ li {
 .return-button-block {
   display: flex;
   justify-content: center;
+}
+
+@media screen and (max-width: 1060px) {
+  .company-main-info {
+    flex-direction: column;
+    padding: 0;
+  }
+  .company-main-info .left-column {
+    width: 100%;
+  }
+  .company-main-info .right-column {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .company-main-info .left-column .image-wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .block-info-item {
+    width: 48%;
+  }
+}
+@media screen and (max-width: 767px) {
+  .company-main {
+    padding: 2em 0 3em;
+  }
+  .block-info-item {
+    width: 100%;
+  }
+  .block-info-label {
+    text-align: center;
+  }
+  .block-info-value {
+    text-align: center;
+    padding: 0;
+  }
+  .company-button-block {
+    flex-direction: column-reverse;
+    margin-top: 1em;
+  }
+  .company-button-block .button-wrapper {
+    width: 100%;
+    margin-bottom: 1.2em;
+  }
 }
 
 
@@ -2383,6 +2598,11 @@ li {
   border-top-right-radius: 0.5em;
   padding: 1.4em;
 }
+.invoice-detail-label {
+  color: var(--primary);
+  font-size: 0.875em;
+  display: none;
+}
 .invoice-detail-cell .form-item-wrapper {
   margin-bottom: 0;
 }
@@ -2469,4 +2689,38 @@ li {
   padding-top: 3.5em;
 }
 
-
+@media screen and (max-width: 767px) {
+  .invoice-detail-row-wrapper {
+    border-bottom: 1px solid var(--gray);
+    margin-bottom: 1.2em;
+    padding-bottom: 1.2em;
+  }
+  .invoice-detail-row {
+    flex-direction: column;
+  }
+  .invoice-detail-row-header {
+    display: none;
+  }
+  .invoice-detail-cell {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 0.5em;
+  }
+  .invoice-detail-label {
+    display: block;
+  }
+  .invoice-detail-cell .form-input {
+    text-align: left;
+    padding: 0.9em 1.2em;
+  }
+  .edit-invoice-buttons-block {
+    flex-direction: column;
+  }
+  .edit-invoice-buttons-block .button-wrapper {
+    width: 100%;
+    margin-bottom: 1.2em;
+  }
+  .edit-invoice-buttons-block .button-wrapper:last-child {
+    margin-bottom: 0;
+  }
+}
