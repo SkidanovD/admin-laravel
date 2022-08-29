@@ -5376,7 +5376,10 @@ __webpack_require__.r(__webpack_exports__);
           navToggle = document.querySelector('.nav-toggle');
 
       if (navToggle.classList.contains('opened')) {
-        body.classList.remove('stop-scroll');
+        if (!document.querySelector('.invoice-filter-block').classList.contains('show')) {
+          body.classList.remove('stop-scroll');
+        }
+
         header.classList.remove('nav-opened');
         navBlock.classList.remove('opened');
         navToggle.classList.remove('opened');
@@ -6403,6 +6406,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Index',
   data: function data() {
@@ -6582,7 +6609,16 @@ __webpack_require__.r(__webpack_exports__);
       this.loadPageData();
     },
     showFilter: function showFilter() {
+      var body = document.querySelector('body');
       this.filterShow = !this.filterShow;
+
+      if (this.filterShow) {
+        body.classList.add('stop-scroll');
+      } else {
+        if (!document.querySelector('.nav-toggle').classList.contains('opened')) {
+          body.classList.remove('stop-scroll');
+        }
+      }
     },
     getFilterValue: function getFilterValue(key, value, event) {
       if (!event.target.classList.contains('selected')) {
@@ -34835,7 +34871,15 @@ var render = function () {
                         staticClass: "invoice-cell invoice-cell-number",
                         class: { empty: !invoice.invoice_number },
                       },
-                      [_vm._v(_vm._s(invoice.invoice_number))]
+                      [
+                        _c("div", { staticClass: "invoice-cell-label" }, [
+                          _vm._v("#"),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "invoice-cell-value" }, [
+                          _vm._v(_vm._s(invoice.invoice_number)),
+                        ]),
+                      ]
                     ),
                     _vm._v(" "),
                     _c(
@@ -34844,7 +34888,15 @@ var render = function () {
                         staticClass: "invoice-cell invoice-cell-date",
                         class: { empty: !invoice.invoice_date },
                       },
-                      [_vm._v(_vm._s(invoice.invoice_date))]
+                      [
+                        _c("div", { staticClass: "invoice-cell-label" }, [
+                          _vm._v("Invoice date"),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "invoice-cell-value" }, [
+                          _vm._v(_vm._s(invoice.invoice_date)),
+                        ]),
+                      ]
                     ),
                     _vm._v(" "),
                     _c(
@@ -34853,7 +34905,15 @@ var render = function () {
                         staticClass: "invoice-cell invoice-cell-company",
                         class: { empty: !invoice.company },
                       },
-                      [_vm._v(_vm._s(invoice.company))]
+                      [
+                        _c("div", { staticClass: "invoice-cell-label" }, [
+                          _vm._v("Company"),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "invoice-cell-value" }, [
+                          _vm._v(_vm._s(invoice.company)),
+                        ]),
+                      ]
                     ),
                     _vm._v(" "),
                     _c(
@@ -34862,7 +34922,15 @@ var render = function () {
                         staticClass: "invoice-cell invoice-cell-author",
                         class: { empty: !invoice.author.first_name },
                       },
-                      [_vm._v(_vm._s(invoice.author.first_name))]
+                      [
+                        _c("div", { staticClass: "invoice-cell-label" }, [
+                          _vm._v("Author"),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "invoice-cell-value" }, [
+                          _vm._v(_vm._s(invoice.author.first_name)),
+                        ]),
+                      ]
                     ),
                     _vm._v(" "),
                     _c(
@@ -34871,7 +34939,15 @@ var render = function () {
                         staticClass: "invoice-cell invoice-cell-total",
                         class: { empty: !invoice.total_tax },
                       },
-                      [_vm._v(_vm._s(invoice.total_tax))]
+                      [
+                        _c("div", { staticClass: "invoice-cell-label" }, [
+                          _vm._v("Total"),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "invoice-cell-value" }, [
+                          _vm._v(_vm._s(invoice.total_tax)),
+                        ]),
+                      ]
                     ),
                     _vm._v(" "),
                     _c(
@@ -34880,7 +34956,15 @@ var render = function () {
                         staticClass: "invoice-cell invoice-cell-received-date",
                         class: { empty: !invoice.received_date },
                       },
-                      [_vm._v(_vm._s(invoice.received_date))]
+                      [
+                        _c("div", { staticClass: "invoice-cell-label" }, [
+                          _vm._v("Received date"),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "invoice-cell-value" }, [
+                          _vm._v(_vm._s(invoice.received_date)),
+                        ]),
+                      ]
                     ),
                     _vm._v(" "),
                     _c(
@@ -34890,11 +34974,19 @@ var render = function () {
                         class: { empty: !invoice.status },
                       },
                       [
-                        invoice.status
-                          ? _c("span", [
-                              _vm._v(_vm._s(invoice.status.replace(/_/g, " "))),
-                            ])
-                          : _vm._e(),
+                        _c("div", { staticClass: "invoice-cell-label" }, [
+                          _vm._v("Status"),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "invoice-cell-value" }, [
+                          invoice.status
+                            ? _c("span", [
+                                _vm._v(
+                                  _vm._s(invoice.status.replace(/_/g, " "))
+                                ),
+                              ])
+                            : _vm._e(),
+                        ]),
                       ]
                     ),
                     _vm._v(" "),
@@ -35289,6 +35381,48 @@ var render = function () {
             ),
             _vm._v(" "),
             _c("div", { staticClass: "invoice-filter-wrapper" }, [
+              _c("h2", { staticClass: "h4 invoice-sorting-block-title" }, [
+                _vm._v("Sorting"),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "invoice-sorting-list" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "invoice-sorting-list-item",
+                    class: {
+                      asc: _vm.sort.orderBy === "asc",
+                      desc: _vm.sort.orderBy === "desc",
+                      active: _vm.sort.order === "invoice_number",
+                    },
+                    on: {
+                      click: function ($event) {
+                        return _vm.actionSort("invoice_number")
+                      },
+                    },
+                  },
+                  [_vm._v("Serial number")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "invoice-sorting-list-item",
+                    class: {
+                      asc: _vm.sort.orderBy === "asc",
+                      desc: _vm.sort.orderBy === "desc",
+                      active: _vm.sort.order === "total_tax",
+                    },
+                    on: {
+                      click: function ($event) {
+                        return _vm.actionSort("total_tax")
+                      },
+                    },
+                  },
+                  [_vm._v("Total")]
+                ),
+              ]),
+              _vm._v(" "),
               _c("h2", { staticClass: "h4 invoice-filter-block-title" }, [
                 _vm._v("Filter"),
               ]),

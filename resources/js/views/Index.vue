@@ -32,14 +32,33 @@
                     </div>
                 </div>
                 <div class="invoice-row" v-for="(invoice, index) in invoicesList" :key="index">
-                    <div class="invoice-cell invoice-cell-number" :class="{empty: !invoice.invoice_number}">{{ invoice.invoice_number }}</div>
-                    <div class="invoice-cell invoice-cell-date" :class="{empty: !invoice.invoice_date}">{{ invoice.invoice_date }}</div>
-                    <div class="invoice-cell invoice-cell-company" :class="{empty: !invoice.company}">{{ invoice.company }}</div>
-                    <div class="invoice-cell invoice-cell-author" :class="{empty: !invoice.author.first_name}">{{ invoice.author.first_name }}</div>
-                    <div class="invoice-cell invoice-cell-total" :class="{empty: !invoice.total_tax}">{{ invoice.total_tax }}</div>
-                    <div class="invoice-cell invoice-cell-received-date" :class="{empty: !invoice.received_date}">{{ invoice.received_date }}</div>
+                    <div class="invoice-cell invoice-cell-number" :class="{empty: !invoice.invoice_number}">
+                        <div class="invoice-cell-label">#</div>
+                        <div class="invoice-cell-value">{{ invoice.invoice_number }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-date" :class="{empty: !invoice.invoice_date}">
+                        <div class="invoice-cell-label">Invoice date</div>
+                        <div class="invoice-cell-value">{{ invoice.invoice_date }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-company" :class="{empty: !invoice.company}">
+                        <div class="invoice-cell-label">Company</div>
+                        <div class="invoice-cell-value">{{ invoice.company }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-author" :class="{empty: !invoice.author.first_name}">
+                        <div class="invoice-cell-label">Author</div>
+                        <div class="invoice-cell-value">{{ invoice.author.first_name }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-total" :class="{empty: !invoice.total_tax}">
+                        <div class="invoice-cell-label">Total</div>
+                        <div class="invoice-cell-value">{{ invoice.total_tax }}</div>
+                    </div>
+                    <div class="invoice-cell invoice-cell-received-date" :class="{empty: !invoice.received_date}">
+                        <div class="invoice-cell-label">Received date</div>
+                        <div class="invoice-cell-value">{{ invoice.received_date }}</div>
+                    </div>
                     <div class="invoice-cell invoice-cell-status" :class="{empty: !invoice.status}">
-                        <span v-if="invoice.status">{{ invoice.status.replace(/_/g, ' ') }}</span>
+                        <div class="invoice-cell-label">Status</div>
+                        <div class="invoice-cell-value"><span v-if="invoice.status">{{ invoice.status.replace(/_/g, ' ') }}</span></div>
                     </div>
                     <div class="invoice-cell invoice-cell-action">
                         <div class="btn-wrapper btn-edit-wrapper">
@@ -114,6 +133,11 @@
                 </div>
             </div>
             <div class="invoice-filter-wrapper">
+                <h2 class="h4 invoice-sorting-block-title">Sorting</h2>
+                <div class="invoice-sorting-list">
+                    <div class="invoice-sorting-list-item" :class="{asc: sort.orderBy === 'asc', desc: sort.orderBy === 'desc', active: sort.order === 'invoice_number'}" @click="actionSort('invoice_number')">Serial number</div>
+                    <div class="invoice-sorting-list-item" :class="{asc: sort.orderBy === 'asc', desc: sort.orderBy === 'desc', active: sort.order === 'total_tax'}" @click="actionSort('total_tax')">Total</div>
+                </div>
                 <h2 class="h4 invoice-filter-block-title">Filter</h2>
                 <div class="invoice-filter-item invoice-filter-item-companies" v-if="filterData.companies">
                     <h3 class="h5 invoice-filter-item-title">Companies :</h3>
@@ -336,7 +360,15 @@
                 this.loadPageData();
             },
             showFilter() {
+                var body = document.querySelector('body');
                 this.filterShow = !this.filterShow;
+                if (this.filterShow) {
+                    body.classList.add('stop-scroll');
+                } else {
+                    if (!document.querySelector('.nav-toggle').classList.contains('opened')) {
+                        body.classList.remove('stop-scroll');
+                    }
+                }
             },
             getFilterValue(key, value, event) {
                 if (!event.target.classList.contains('selected')) {

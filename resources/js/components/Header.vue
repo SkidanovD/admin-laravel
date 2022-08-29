@@ -74,7 +74,9 @@
                     navBlock = document.querySelector('.main-navigation'),
                     navToggle = document.querySelector('.nav-toggle');
                 if (navToggle.classList.contains('opened')) {
-                    body.classList.remove('stop-scroll');
+                    if (!document.querySelector('.invoice-filter-block').classList.contains('show')) {
+                        body.classList.remove('stop-scroll');
+                    }
                     header.classList.remove('nav-opened');
                     navBlock.classList.remove('opened');
                     navToggle.classList.remove('opened');
