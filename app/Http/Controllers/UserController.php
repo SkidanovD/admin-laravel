@@ -11,6 +11,13 @@ use Carbon\Carbon;
 
 class UserController extends Controller
 {
+    public function unAuthenticated()
+    {
+        return [
+            'message' => 'authenticated'
+        ];
+    }
+
     public function getAuthUser(Request $request)
     {
         $auth_user = Auth::user();
@@ -40,7 +47,7 @@ class UserController extends Controller
         ]);
         if ($validator->fails()) {
             return [
-                'status' => 'error',
+                'status' => 'not validated',
                 'messages' => $validator->messages(),
                 'form_field' => $request->all()
             ];
@@ -82,6 +89,12 @@ class UserController extends Controller
                 'message' => trans('error.authentication'),
             ];
         }
+        if ($auth_user->role === 'user' && $auth_user->id !== (int) $request->id) {
+            return [
+                'status' => 'warning',
+                'message' => trans('warning.cannot_change_data'),
+            ];
+        }
         $user_old_data = User::find($request->id, ['first_name', 'last_name', 'photo', 'user_post', 'email', 'role']);
         $query_data = [];
         $query_validator = [
@@ -89,8 +102,8 @@ class UserController extends Controller
             'last_name' => 'string|nullable|max:255',
             'photo' => 'image|nullable|max:2048',
             'user_post' => 'string|nullable|max:255',
-            'email' => 'nullable|string|email|max:255',
-            'role' => 'nullable|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'role' => 'required|string|max:255',
         ];
         foreach ($request->all() as $key => $item) {
             if ($item === null) {
@@ -109,14 +122,16 @@ class UserController extends Controller
         if (empty($query_data)) {
             return [
                 'status' => 'error',
-                'messages' => trans('error.notChanged'),
+                'message' => trans('error.notChanged'),
                 'form_field' => $request->all(),
             ];
         }
+        $query_data['role'] = $request->role;
+        $query_data['email'] = $request->email;
         $validator = Validator::make($query_data, $query_validator);
         if ($validator->fails()) {
             return [
-                'status' => 'error',
+                'status' => 'not validated',
                 'messages' => $validator->messages(),
                 'form_field' => $request->all()
             ];
@@ -159,6 +174,12 @@ class UserController extends Controller
                 'message' => trans('error.authentication'),
             ];
         }
+        if ($auth_user->id === (int) $request->id) {
+            return [
+                'status' => 'warning',
+                'message' => trans('warning.re_login_for_delete'),
+            ];
+        }
         if ($auth_user->role !== 'admin') {
             return [
                 'status' => 'error',
@@ -181,7 +202,7 @@ class UserController extends Controller
         }
         return [
             'status' => 'success',
-            'message' => trans('succes.delete', ['model' => 'User']),
+            'message' => trans('success.delete', ['model' => 'User']),
         ];
     }
 
@@ -200,7 +221,7 @@ class UserController extends Controller
                 'message' => trans('error.authorization'),
             ];
         }
-        $all_users = User::all();
+        $all_users = User::orderBy('first_name', 'asc')->get();
         if (empty($all_users->all())) {
             return [
                 'status' => 'error',

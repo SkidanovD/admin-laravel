@@ -6,8 +6,16 @@ Vue.use(vueRouter);
 import Index from './views/Index'
 import Register from './views/auth/Register'
 import Login from './views/auth/Login'
-import UsersList from './views/UsersList'
-import EditUser from './views/EditUser'
+import UsersList from './views/Users/UsersList'
+import EditUser from './views/Users/EditUser'
+import MyAccount from './views/Users/MyAccount'
+import CompaniesList from './views/Companies/CompaniesList'
+import AddCompany from './views/Companies/AddCompany'
+import EditCompany from './views/Companies/EditCompany'
+import Company from './views/Companies/Company'
+import AddInvoice from './views/Invoices/AddInvoice'
+import EditInvoice from './views/Invoices/EditInvoice'
+import DraftInvoices from './views/Invoices/DraftInvoices'
 
 const routes = [
     {
@@ -29,6 +37,38 @@ const routes = [
     {
         path: '/edit-user/:id',
         component: EditUser,
+    },
+    {
+        path: '/my-account/:id',
+        component: MyAccount,
+    },
+    {
+        path: '/companies-list',
+        component: CompaniesList,
+    },
+    {
+        path: '/add-company',
+        component: AddCompany,
+    },
+    {
+        path: '/edit-company/:id',
+        component: EditCompany,
+    },
+    {
+        path: '/company/:id',
+        component: Company,
+    },
+    {
+        path: '/add-invoice',
+        component: AddInvoice,
+    },
+    {
+        path: '/edit-invoice/:id',
+        component: EditInvoice,
+    },
+    {
+        path: '/draft-invoices',
+        component: DraftInvoices,
     },
 ];
 

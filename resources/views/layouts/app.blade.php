@@ -9,7 +9,15 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <link rel="shortcut icon" type="image/png" href="{{ asset('img/favicon.png') }}"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/meta/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/meta/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/meta/favicon-16x16.png">
+    <link rel="manifest" href="/img/meta/site.webmanifest">
+    <link rel="mask-icon" href="/img/meta/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/img/meta/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/img/meta/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +28,7 @@
     <link href="{{ asset('css/bootstrap-grid.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="site-body">
     @yield('content')
     <script src="/js/app.js"></script>
 </body>

@@ -34,6 +34,7 @@ Route::get('/getPageRegister', [PageController::class, 'showRegisterForm'])->nam
 // User API
 
 Route::get('/getAuthUser', [UserController::class, 'getAuthUser'])->name('getAuthUser');
+Route::middleware('auth:sanctum')->get('/unAuthenticated', [UserController::class, 'unAuthenticated'])->name('unAuthenticated');
 Route::middleware('auth:sanctum')->post('/actionAddUser', [UserController::class, 'actionAddUser'])->name('actionAddUser');
 Route::middleware('auth:sanctum')->post('/actionEditUser', [UserController::class, 'actionEditUser'])->name('actionEditUser');
 Route::middleware('auth:sanctum')->post('/actionDeleteUser', [UserController::class, 'actionDeleteUser'])->name('actionDeleteUser');
@@ -58,9 +59,12 @@ Route::middleware('auth:sanctum')->post('/actionEditInvoice', [InvoiceController
 Route::middleware('auth:sanctum')->post('/actionDeleteInvoice', [InvoiceController::class, 'actionDeleteInvoice'])->name('actionDeleteInvoice');
 Route::middleware('auth:sanctum')->post('/actionPublicInvoice', [InvoiceController::class, 'actionPublicInvoice'])->name('actionPublicInvoice');
 Route::middleware('auth:sanctum')->post('/actionEditStatus', [InvoiceController::class, 'actionEditStatus'])->name('actionEditStatus');
+Route::middleware('auth:sanctum')->post('/actionEditReceivedDate', [InvoiceController::class, 'actionEditReceivedDate'])->name('actionEditReceivedDate');
 Route::middleware('auth:sanctum')->match(['get', 'post'], '/getAllInvoices', [InvoiceController::class, 'getAllInvoices'])->name('getAllInvoices');
+Route::middleware('auth:sanctum')->match(['get', 'post'], '/getDraftInvoices', [InvoiceController::class, 'getDraftInvoices'])->name('getDraftInvoices');
 Route::middleware('auth:sanctum')->get('/getInvoice/{invoice}', [InvoiceController::class, 'getInvoice'])->name('getInvoice');
 Route::middleware('auth:sanctum')->post('/arrangeFormData', [InvoiceController::class, 'arrangeFormData'])->name('arrangeFormData');
+Route::middleware('auth:sanctum')->get('/getFilterData', [InvoiceController::class, 'getFilterData'])->name('getFilterData');
 
 
 
